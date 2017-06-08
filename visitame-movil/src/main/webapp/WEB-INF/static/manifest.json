@@ -1,0 +1,7 @@
+{
+  "name": "visitame",
+  "short_name": "visitame",
+  "description": "App Visitame",
+  "start_url": "/",
+  "display": "standalone"
+}
