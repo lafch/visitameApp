@@ -1,4 +1,5 @@
-target
+.classpath
 .project
-styles.css
-
+.settings/
+target/
+META-INF/
