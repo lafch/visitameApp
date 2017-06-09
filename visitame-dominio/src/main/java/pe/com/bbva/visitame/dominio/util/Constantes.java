@@ -1383,4 +1383,42 @@ public final class Constantes {
 		public final static String NOMBRE_ARCHIVO = "TARJETA_";
 		
 	}
+	
+	public static class ETIQUETAS_POIS {
+		
+		public final static String TYPE_CAJERO = "C";
+		public final static String TYPE_OFICINA = "O";
+		public final static String ADDRESS1 = "address1";
+		public final static String DESCRIPTION = "description";
+		public final static String TELEPHONE = "telephone";
+		public final static String CITY = "city";
+		public final static String ACCESIBILITY = "accesibility";
+		public final static String ID = "id";
+		public final static String ZIP = "zip";
+		public final static String ADDRESS2 = "address2";
+		public final static String BANK = "bank";
+		public final static String PROVINCE = "province";
+		public final static String ADDRESS = "address";
+		public final static String ACCESIBILITY_ACTION = "accesibility_action";
+		public final static String DISTANCE = "distance";
+		public final static String HOURS_SAT = "hours_sat";
+		public final static String HOURS_MF = "hours_mf";
+		public final static String CODOFICINA = "codoficina";
+		public final static String HOURS_SUN = "hours_sun";
+		public final static String STATUS = "status";
+		public final static String BRANCH_CODE = "branch_code";
+		public final static String TAG_RESULT = "Result";
+		public final static String TAG_POI = "Poi";
+		public final static String ATTR_VALUE = "Value";
+		public final static String ATTR_NAME = "Name";
+		public final static String ATTR_IDPOI = "IdPoi";
+		public final static String ATTR_CATEGORY = "Category";
+		public final static String ATTR_LATITUDE = "Latitude";
+		public final static String ATTR_LONGITUDE = "Longitude";
+		public final static String ATTR_COUNTRY = "Country";
+		public final static String FILTER_OFICINA = "banking.branch.branch_pe_bbva";
+		public final static String FILTER_CAJERO = "banking.atm.atm_pe_bbva";
+		
+	}
+	
 }
