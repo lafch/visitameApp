@@ -32,6 +32,7 @@
 		</RollingFile>
 	</Appenders>
 	<Loggers>
+		<AsyncLogger name="pe.com.bbva.visitame"          level="info"  includeLocation="true" additivity="false"><AppenderRef ref="visitameAppender"/></AsyncLogger>
 		<logger name="log4jdbc.log4j2" level="info" includeLocation="false" additivity="false">
         	<MarkerFilter marker="LOG4JDBC_NON_STATEMENT" onMatch="DENY" onMismatch="NEUTRAL"/>
 			<appender-ref ref="consola"/> 
