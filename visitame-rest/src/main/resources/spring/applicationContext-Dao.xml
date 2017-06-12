@@ -13,8 +13,8 @@
 						http://www.springframework.org/schema/jee 
 						http://www.springframework.org/schema/jee/spring-jee-4.0.xsd">	
 	<context:annotation-config/>  
-	<context:component-scan base-package="pe.com.bbva.visitame.dao.impl" />
-	<!--<tx:annotation-driven transaction-manager="transactionManager" />	
+	<context:component-scan base-package="pe.com.bbva.visitame.dao" />
+	<tx:annotation-driven transaction-manager="transactionManager" />	
 	 <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean> 
@@ -30,6 +30,6 @@
 	</bean>
 	 <bean id="dataSource" class="net.sf.log4jdbc.sql.jdbcapi.DataSourceSpy" >         
          <constructor-arg ref="dataSourceSpied" />         
-    </bean> -->
+    </bean> 
 	<jee:jndi-lookup id="dataSource" jndi-name="${jdbc.jdni}" lookup-on-startup="true" cache="true" proxy-interface="javax.sql.DataSource" />
 </beans>

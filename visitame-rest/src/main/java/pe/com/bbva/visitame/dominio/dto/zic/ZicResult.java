@@ -1,5 +1,5 @@
 
-package pe.com.bbva.visitame.dominio.zic;
+package pe.com.bbva.visitame.dominio.dto.zic;
 
 import java.net.ConnectException;
 import java.util.HashMap;

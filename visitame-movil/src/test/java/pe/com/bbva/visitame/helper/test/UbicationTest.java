@@ -1,5 +1,6 @@
 package pe.com.bbva.visitame.helper.test;
 import java.net.ConnectException;
+
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -9,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import pe.com.bbva.visitame.dominio.zic.ZicResult;
-import pe.com.bbva.visitame.helper.UbicacionServiceHelper;
+import pe.com.bbva.visitame.dominio.dto.zic.ZicResult;
+import pe.com.bbva.visitame.helper.geolocalizacion.GoogleMapsServiceHelper;
 
 
 
@@ -19,13 +20,13 @@ import pe.com.bbva.visitame.helper.UbicacionServiceHelper;
 public class UbicationTest {
 
 	@Autowired
-	private UbicacionServiceHelper ubicacionServiceHelper;
+	private GoogleMapsServiceHelper GoogleMapsServiceHelper;
 	
 	@Test
 	public void ubicacion() throws InterruptedException, ExecutionException {
 		Future<ZicResult> tsec = null;
 		try {
-			tsec = ubicacionServiceHelper.obtenerDatosUbicacion("-12.1481427", "-77.0223221", "-12.142867", "-77.015037");
+			tsec = GoogleMapsServiceHelper.obtenerDatosUbicacion("-12.1481427", "-77.0223221", "-12.142867", "-77.015037");
 
 			System.out.println("-----");
 			System.out.println(tsec.get().getEntidad().toString());

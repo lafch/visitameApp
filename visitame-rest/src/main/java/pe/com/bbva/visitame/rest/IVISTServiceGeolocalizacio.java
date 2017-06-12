@@ -12,7 +12,7 @@ import pe.com.bbva.visitame.exception.NegocioException;
 import pe.com.bbva.visitame.exception.ValidacionException;
 
 @Path("/geolocalizacion")
-public interface IVISTServicePois {
+public interface IVISTServiceGeolocalizacio {
 	
 	@GET
 	@Path("/pois")

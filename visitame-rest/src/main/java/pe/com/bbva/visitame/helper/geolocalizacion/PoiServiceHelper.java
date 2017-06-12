@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import pe.com.bbva.visitame.dominio.dto.geolocalizacion.GeolocalizacionRequestParam;
-import pe.com.bbva.visitame.dominio.zic.ZicResult;
+import pe.com.bbva.visitame.dominio.dto.zic.ZicResult;
 import pe.com.bbva.visitame.exception.NegocioException;
 
 @Component

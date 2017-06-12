@@ -22,7 +22,7 @@ import pe.com.bbva.visitame.util.Busqueda;
 public class ConfiguracionServiceImpl extends BaseServiceImpl implements ConfiguracionService {
 	
 	private static final long serialVersionUID = -2560214004070561624L;
-	/*
+
 	@Autowired
 	private ValorDAO valorDAO;
 	
@@ -106,37 +106,6 @@ public class ConfiguracionServiceImpl extends BaseServiceImpl implements Configu
 		} catch (DAOException e) {
 			lanzarExcepcionGrave(NegocioException.CODIGO.NEG_CONSULTA_FALLIDA, new Object[] { e.getMessage() }, "No se pudo ejecutar satisfactoriamente la consulta: " + e.getMessage(), e);
 		}
-		return null;
-	}
-*/
-
-	@Override
-	public List<Valor> listarValores(String listaCodigo) throws NegocioException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Valor> listarValores(Busqueda busqueda) throws NegocioException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Parametro obtenerParametro(String parametroCodigo) throws NegocioException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Valor obtenerValor(String listaCodigo, String valorCodigo) throws NegocioException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Parametro> obtenerParametros(List<String> parametros) throws NegocioException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	

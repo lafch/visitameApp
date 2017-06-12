@@ -11,11 +11,11 @@ import pe.com.bbva.visitame.dominio.dto.geolocalizacion.PoiDetail;
 import pe.com.bbva.visitame.dominio.util.Constantes;
 import pe.com.bbva.visitame.exception.NegocioException;
 import pe.com.bbva.visitame.exception.ValidacionException;
-import pe.com.bbva.visitame.rest.IVISTServicePois;
+import pe.com.bbva.visitame.rest.IVISTServiceGeolocalizacio;
 import pe.com.bbva.visitame.service.GeolocalizacionService;
 
 @Component
-public class IVISTServiceGeolocalizacionImpl implements IVISTServicePois {
+public class IVISTServiceGeolocalizacionImpl implements IVISTServiceGeolocalizacio {
 
 	@Autowired
 	private GeolocalizacionService geolocalizacionService;

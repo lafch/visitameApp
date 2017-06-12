@@ -1,4 +1,4 @@
-package pe.com.bbva.visitame.helper;
+package pe.com.bbva.visitame.helper.geolocalizacion;
 
 
 import java.net.ConnectException;
@@ -20,11 +20,11 @@ import org.springframework.web.client.RestTemplate;
 import com.google.gson.Gson;
 
 import pe.com.bbva.visitame.domain.geo.UbicationParser;
-import pe.com.bbva.visitame.dominio.zic.ZicResult;
+import pe.com.bbva.visitame.dominio.dto.zic.ZicResult;
 
 @Component
 @EnableAsync
-public class UbicacionServiceHelper {
+public class GoogleMapsServiceHelper {
 
 	private static final String INICIO_PARM = "?";
 	private static final String IGUAL = "=";

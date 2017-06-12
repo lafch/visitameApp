@@ -1,6 +1,5 @@
 package pe.com.bbva.visitame.rest;
 
-import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -8,7 +7,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import pe.com.bbva.visitame.dominio.dto.geolocalizacion.PoiDetail;
+import pe.com.bbva.visitame.dominio.dto.cuenta.CustomerDetail;
 import pe.com.bbva.visitame.exception.NegocioException;
 import pe.com.bbva.visitame.exception.ValidacionException;
 
@@ -16,16 +15,11 @@ import pe.com.bbva.visitame.exception.ValidacionException;
 public interface IVISTServiceAccount {
 	
 	@GET
-	@Path("/listCustomers")
+	@Path("/getCustomer")
 	@Produces({MediaType.APPLICATION_JSON})
-	public Map<String, PoiDetail> obtenerOficinas(
-			@QueryParam("latitud") String latitud,
-			@QueryParam("longitud") String longitud,
-			@QueryParam("radius") String radius,
-			@QueryParam("filter") String filter,
-			@QueryParam("startAt") String startAt,
-			@QueryParam("limit") String limit,
-			@QueryParam("type") String type
+	public CustomerDetail getCustomer(
+			@QueryParam("documentNumber") String documentNumber,
+			@QueryParam("documentType") String documentType
 			) throws ValidacionException, NegocioException;
 
 }
