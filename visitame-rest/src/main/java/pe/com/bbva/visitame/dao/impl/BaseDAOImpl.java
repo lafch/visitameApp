@@ -25,7 +25,8 @@ public abstract class BaseDAOImpl<Entidad extends Serializable, Id extends Seria
 
 	protected Class<Entidad> clase;
 	
-	@Autowired private SessionFactory sessionFactory;
+	@Autowired(required=true)
+	private SessionFactory sessionFactory;
 	
 	public BaseDAOImpl() {
 		super();
