@@ -1,14 +1,15 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>pe.com.bbva.visitame</groupId>
-    <artifactId>visitame-project</artifactId>
-    <version>1.0</version>
-  </parent>
-  <artifactId>visitame-movil</artifactId>
-  <packaging>war</packaging>
-  
-  <properties>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>pe.com.bbva.visitame</groupId>
+		<artifactId>visitame-project</artifactId>
+		<version>1.0</version>
+	</parent>
+	<artifactId>visitame-movil</artifactId>
+	<packaging>war</packaging>
+
+	<properties>
 		<springframework.version>4.3.1.RELEASE</springframework.version>
 		<jackson.version>1.9.10</jackson.version>
 		<jackson.library>2.7.5</jackson.library>
@@ -18,6 +19,8 @@
 	</properties>
 
 	<dependencies>
+
+
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -125,7 +128,7 @@
 			<version>1.4.7</version>
 		</dependency>
 
-	<!-- Log4j -->
+		<!-- Log4j -->
 		<dependency>
 			<groupId>com.lmax</groupId>
 			<artifactId>disruptor</artifactId>
@@ -146,11 +149,11 @@
 			<artifactId>log4j-slf4j-impl</artifactId>
 			<version>${log4j.version}</version>
 		</dependency>
-	<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
 		<dependency>
-		    <groupId>javax.servlet</groupId>
-		    <artifactId>javax.servlet-api</artifactId>
-		    <version>3.1.0</version>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
 		</dependency>
 
 		<dependency>
@@ -163,6 +166,25 @@
 			<artifactId>visitame-dominio</artifactId>
 			<version>1</version>
 		</dependency>
+		<!-- TEST -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit-dep</artifactId>
+			<version>4.10</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${springframework.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Otras dependencias de proyecto -->
+		<dependency>
+			<groupId>pe.com.bbva.visitame</groupId>
+			<artifactId>visitame-rest</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -173,9 +195,9 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-					  <encoding>${project.encoding}</encoding>
-					  <source>1.7</source>
-            		  <target>1.7</target>
+					<encoding>${project.encoding}</encoding>
+					<source>1.7</source>
+					<target>1.7</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -201,5 +223,5 @@
 			</plugin>
 		</plugins>
 	</build>
-  
+
 </project> 

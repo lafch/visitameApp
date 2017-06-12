@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:sec="http://www.springframework.org/schema/security"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+						http://www.springframework.org/schema/context 
+						http://www.springframework.org/schema/context/spring-context-4.0.xsd
+						http://www.springframework.org/schema/mvc
+        				http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+						http://www.springframework.org/schema/security
+						http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+	
+	<mvc:annotation-driven/>
+	
+	<context:component-scan base-package="pe.com.bbva.visitame.server" />
+	
+	<sec:http pattern="/static/**" security="none" />
+	
+	<sec:http auto-config="true">
+		<sec:intercept-url pattern="/visitameMOVIL/**" access="ROLE_USER"/>
+	</sec:http>
+
+	<sec:authentication-manager>
+	  <sec:authentication-provider ref="customAuthenticationProvider"/>
+	</sec:authentication-manager>
+	
+	<bean name="requestDataValueProcessor" class="pe.com.bbva.visitame.server.CSRFRequestDataValueProcessor"/>
+	
+    <mvc:interceptors>
+         <bean class="pe.com.bbva.visitame.server.CSRFHandlerInterceptor"/>
+    </mvc:interceptors>
+    
+	<bean id="customAuthenticationProvider" class="pe.com.bbva.visitame.server.CustomAuthenticationProvider"/>
+</beans>
