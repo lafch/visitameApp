@@ -1,12 +1,12 @@
+
 package pe.com.bbva.visitame.dominio.zic;
 
 import java.net.ConnectException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
@@ -42,14 +42,6 @@ public class ZicResult {
 	private Object[] entidades;
 	public Object[] getEntidades() { return entidades; }
 	public void setEntidades(Object[] entidades) { this.entidades = entidades; }
-	
-	private String tSecGenerado;
-	public String gettSecGenerado() { return tSecGenerado; }
-	public void settSecGenerado(String tSecGenerado) { this.tSecGenerado = tSecGenerado; }
-	
-	private Date tSecUltimaGeneracion;
-	public Date gettSecUltimaGeneracion() { return tSecUltimaGeneracion; }
-	public void settSecUltimaGeneracion(Date tSecUltimaGeneracion) { this.tSecUltimaGeneracion = tSecUltimaGeneracion; }
 	
 	public void calcularError(Exception e) throws ConnectException{
 		if(e instanceof UnknownHttpStatusCodeException){
@@ -116,7 +108,7 @@ public class ZicResult {
 			JsonObject jObject = (JsonObject) jsonParser.parse(responseBodyAsString.trim());				
 			for(Entry<String, JsonElement> element : jObject.entrySet()){
 				map.put(element.getKey(), element.getValue().toString().replace("\"", ""));
-			}
+			}	
 		} else {
 			map = new HashMap<String, String>(); 
 		}
