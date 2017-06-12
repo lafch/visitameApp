@@ -5,13 +5,13 @@ import java.net.ConnectException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import pe.com.bbva.visitame.dominio.dto.gelocalizacion.GeolocalizacionRequestParam;
-import pe.com.bbva.visitame.dominio.dto.gelocalizacion.Poi;
-import pe.com.bbva.visitame.dominio.dto.gelocalizacion.ResultGeolocalizacion;
+import pe.com.bbva.visitame.dominio.dto.geolocalizacion.GeolocalizacionRequestParam;
+import pe.com.bbva.visitame.dominio.dto.geolocalizacion.Poi;
+import pe.com.bbva.visitame.dominio.dto.geolocalizacion.PoiDetail;
 import pe.com.bbva.visitame.dominio.util.Constantes;
 import pe.com.bbva.visitame.dominio.zic.ZicResult;
 import pe.com.bbva.visitame.exception.NegocioException;
-import pe.com.bbva.visitame.helper.GeolocalizacionServiceHelper;
+import pe.com.bbva.visitame.helper.geolocalizacion.PoiServiceHelper;
 import pe.com.bbva.visitame.service.GeolocalizacionService;
 
 import java.io.StringReader;
@@ -38,11 +38,11 @@ import org.xml.sax.InputSource;
 public class GeolocalizacionServiceImpl implements GeolocalizacionService {
 
 	@Autowired
-	private GeolocalizacionServiceHelper geolocalizacionServiceHelper;
+	private PoiServiceHelper geolocalizacionServiceHelper;
 	
 	@Override
-	public ResultGeolocalizacion obtenerPois(GeolocalizacionRequestParam param) throws NegocioException {
-		ResultGeolocalizacion resultGeolocalizacion = new ResultGeolocalizacion();
+	public PoiDetail obtenerPois(GeolocalizacionRequestParam param) throws NegocioException {
+		PoiDetail resultGeolocalizacion = new PoiDetail();
 		resultGeolocalizacion.setType(param.getType());
 		try {
 			ZicResult resultStringXml = geolocalizacionServiceHelper.obtenerGeolocalizaconsPois(param);

@@ -1,4 +1,4 @@
-package pe.com.bbva.visitame.helper;
+package pe.com.bbva.visitame.helper.geolocalizacion;
 
 import java.net.ConnectException;
 import java.text.MessageFormat;
@@ -10,12 +10,13 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import pe.com.bbva.visitame.dominio.dto.gelocalizacion.GeolocalizacionRequestParam;
+
+import pe.com.bbva.visitame.dominio.dto.geolocalizacion.GeolocalizacionRequestParam;
 import pe.com.bbva.visitame.dominio.zic.ZicResult;
 import pe.com.bbva.visitame.exception.NegocioException;
 
 @Component
-public class GeolocalizacionServiceHelper {
+public class PoiServiceHelper {
 
 	@Value("${visitame.servicio.rest.pois.url}")
 	private String urlPois;	

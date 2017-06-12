@@ -1,4 +1,4 @@
-package pe.com.bbva.visitame.dominio.dto.gelocalizacion;
+package pe.com.bbva.visitame.dominio.dto.geolocalizacion;
 
 import java.io.Serializable;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class ResultGeolocalizacion implements Serializable{
+public class PoiDetail implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	

@@ -23,7 +23,7 @@
       <param-name>com.sun.jersey.config.property.packages</param-name>
       <param-value>
       	pe.com.bbva.visitame.rest.impl.VISTServiceConfiguracionImpl,
-      	pe.com.bbva.visitame.rest.impl.IVISTServiceGeolocalizacionImpl,
+      	pe.com.bbva.visitame.rest.impl.IVISTServicePois,
       	pe.com.bbva.visitame.exception,
       	pe.com.bbva.visitame.provider
       </param-value>

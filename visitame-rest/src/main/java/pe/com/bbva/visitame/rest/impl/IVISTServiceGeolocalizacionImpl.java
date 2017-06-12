@@ -6,22 +6,22 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import pe.com.bbva.visitame.dominio.dto.gelocalizacion.GeolocalizacionRequestParam;
-import pe.com.bbva.visitame.dominio.dto.gelocalizacion.ResultGeolocalizacion;
+import pe.com.bbva.visitame.dominio.dto.geolocalizacion.GeolocalizacionRequestParam;
+import pe.com.bbva.visitame.dominio.dto.geolocalizacion.PoiDetail;
 import pe.com.bbva.visitame.dominio.util.Constantes;
 import pe.com.bbva.visitame.exception.NegocioException;
 import pe.com.bbva.visitame.exception.ValidacionException;
-import pe.com.bbva.visitame.rest.IVISTServiceGeolocalizacion;
+import pe.com.bbva.visitame.rest.IVISTServicePois;
 import pe.com.bbva.visitame.service.GeolocalizacionService;
 
 @Component
-public class IVISTServiceGeolocalizacionImpl implements IVISTServiceGeolocalizacion {
+public class IVISTServiceGeolocalizacionImpl implements IVISTServicePois {
 
 	@Autowired
 	private GeolocalizacionService geolocalizacionService;
 
 	@Override
-	public Map<String, ResultGeolocalizacion> obtenerOficinas(String latitud, String longitud, String radius,
+	public Map<String, PoiDetail> obtenerOficinas(String latitud, String longitud, String radius,
 			String filter, String startAt, String limit,String type) throws ValidacionException, NegocioException {
 		GeolocalizacionRequestParam param = new GeolocalizacionRequestParam();
 		
@@ -34,7 +34,7 @@ public class IVISTServiceGeolocalizacionImpl implements IVISTServiceGeolocalizac
 		param.setLatitud(latitud);
 		param.setLongitud(longitud);
 		param.setRadius(radius);
-		Map<String, ResultGeolocalizacion> data = new HashMap<String, ResultGeolocalizacion>();
+		Map<String, PoiDetail> data = new HashMap<String, PoiDetail>();
 		data.put("data", geolocalizacionService.obtenerPois(param));
 		return data;
 	}

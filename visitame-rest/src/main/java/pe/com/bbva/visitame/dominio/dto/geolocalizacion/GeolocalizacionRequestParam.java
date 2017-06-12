@@ -1,4 +1,4 @@
-package pe.com.bbva.visitame.dominio.dto.gelocalizacion;
+package pe.com.bbva.visitame.dominio.dto.geolocalizacion;
 
 import java.io.Serializable;
 
