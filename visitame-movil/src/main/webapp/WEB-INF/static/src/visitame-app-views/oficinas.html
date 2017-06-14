@@ -1,7 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../visitame-app-styles/main-style.html">
 <link rel="import" href="../visitame-app-styles/oficinas-style.html">
+<link rel="import" href="../visitame-app-services/geolocalizacion-service.html">
 
 <dom-module id="oficinas-view">
   <template>
@@ -18,13 +18,8 @@
     <div class="main-list-oficina">
       <ul>
 
-        <iron-ajax
-           auto
-            url="http://localhost:8080/VISITAMEREST/api/geolocalizacion/pois"
-            handle-as="json"
-           params='{"latitud":"-12.092055", "longitud":"-77.022102", "radius": "15000", "type": "O"}'
-            on-response="handleResponse"
-            debounce-duration="100"></iron-ajax>
+		<geolocalizacion-service id = "geoServ"  ></geolocalizacion-service>
+      
 
         <template is="dom-repeat" items="{{listOficinas}}">
           <li>
@@ -92,21 +87,19 @@
       }
 
       ready() {
-        //  params='{"latitud":"-12.092055", "longitud":"-77.022102", "radius": "15000", "type": "O"}'
-
              super.ready();
-
-            //var servicePois = this.$.requestPois;
-            // setTimeout(()=>{
-            //            this.$.requestPois.toRequestOptions({params: {"latitud":"-12.092055", "longitud":"-77.022102", "radius": "15000", "type": "O"}});
-            //             this.$.requestPois.generateRequest();
-            //         }, 1000);
-
-
-
-            // servicePois.toRequestOptions().params = {"latitud":"-12.092055", "longitud":"-77.022102", "radius": "15000", "type": "O"};
-            // console.log(servicePois);
-
+			navigator.geolocation.getCurrentPosition((position) =>{
+				 var geolocalizacionService = this.$.geoServ;
+			     geolocalizacionService.obtenerOficinas({
+			
+						params : {
+							type:'O',
+							position : position
+						}
+			
+			         });
+			});
+             
       }
 
 

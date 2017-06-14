@@ -9,5 +9,26 @@
   </style>
   <template>
 
+	 <iron-ajax
+           id = "ajaxPois"
+           url="http://localhost:8080/VISITAMEREST/api/geolocalizacion/pois"
+           handle-as="json" 
+           ></iron-ajax>
+
   </template>
+  
+    <script>
+    class GeolocalizacionService extends Polymer.Element {
+      static get is() { return 'geolocalizacion-service'; }
+      listarOficinas(options){
+          console.log(options);
+          if(!options){ return;}
+          this.$.ajaxPois.set( 'params' , options.params);
+          this.$.ajaxPois.set( 'onResponse' , options.onResponse);
+          this.$.ajaxPois.generateRequest();
+      }
+    }
+    window.customElements.define(GeolocalizacionService.is, GeolocalizacionService);
+  </script>
+  
 </dom-module>

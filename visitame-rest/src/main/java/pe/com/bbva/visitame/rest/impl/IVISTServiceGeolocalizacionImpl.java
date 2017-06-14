@@ -34,6 +34,8 @@ public class IVISTServiceGeolocalizacionImpl implements IVISTServiceGeolocalizac
 		param.setLatitud(latitud);
 		param.setLongitud(longitud);
 		param.setRadius(radius);
+		param.setStartAt(startAt);
+		param.setLimit(limit);
 		Map<String, PoiDetail> data = new HashMap<String, PoiDetail>();
 		data.put("data", geolocalizacionService.obtenerPois(param));
 		return data;

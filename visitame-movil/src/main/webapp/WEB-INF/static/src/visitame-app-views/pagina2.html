@@ -1,4 +1,16 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+ <link rel="import" href="../../bower_components/iron-form/iron-form.html">
+
+ 
+ <link rel="import" href="../../bower_components/paper-input/paper-input.html">
+ 
+ <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+ <link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
+ <link rel="import" href="../../bower_components/paper-item/paper-item.html">
+ <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+ <link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu-light.html">
+
 <link rel="import" href="../visitame-app-styles/main-style.html">
 
 <dom-module id="my-view2">
@@ -11,18 +23,30 @@
       }
     </style>
 
-    <div class="card">
-      <div class="circle">2</div>
-      <h1>View 2</h1>
-      <p>Ut labores minimum atomorum pro. Laudem tibique ut has.</p>
-      <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
-    </div>
+   <iron-form id="login"> 
+      <form method="get" >
+          <paper-dropdown-menu-light label="Cars" required>
+          <paper-listbox slot="dropdown-content" class="dropdown-content">
+            <paper-item>allosaurus</paper-item>
+            <paper-item>brontosaurus</paper-item>
+            <paper-item>carcharodontosaurus</paper-item>
+            <paper-item>diplodocus</paper-item>
+          </paper-listbox>
+          </paper-dropdown-menu-light>
+          <paper-input id="hola" name="name" label="Name" required></paper-input>
+          <br>
+          <paper-button raised on-click="cenas">Reservar</paper-button>
+          <paper-button raised on-tap="_reset">Cancelar</paper-button>
+          <div class="output"></div>
+      </form>
+      </iron-form>
   </template>
 
   <script>
     class MyView2 extends Polymer.Element {
       static get is() { return 'my-view2'; }
     }
+    
 
     window.customElements.define(MyView2.is, MyView2);
   </script>
