@@ -1,0 +1,117 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../visitame-app-styles/main-style.html">
+<link rel="import" href="../visitame-app-styles/oficinas-style.html">
+
+<dom-module id="oficinas-view">
+  <template>
+    <style include="main-styles">
+      :host {
+
+      }
+    </style>
+
+    <style include="oficinas-styles">
+
+    </style>
+
+    <div class="main-list-oficina">
+      <ul>
+
+        <iron-ajax
+           auto
+            url="http://localhost:8080/VISITAMEREST/api/geolocalizacion/pois"
+            handle-as="json"
+           params='{"latitud":"-12.092055", "longitud":"-77.022102", "radius": "15000", "type": "O"}'
+            on-response="handleResponse"
+            debounce-duration="100"></iron-ajax>
+
+        <template is="dom-repeat" items="{{listOficinas}}">
+          <li>
+            <img src="{{pathParent}}images/icon_{{item.iconColor}}.png" />
+            <h3>{{item.name}}</h3>
+            <p>{{item.description}}</p>
+          </li>
+        </template>
+
+
+      </ul>
+    </div>
+  </template>
+
+  <script>
+    class OficinasView extends Polymer.Element {
+      static get is() { return 'oficinas-view'; }
+
+      static get properties(){
+        return {
+              pathParent : {
+                  type : String,
+                  value :'static/'
+              },
+              listOficinas : {
+                type : Array,
+                value : []
+              }
+        }
+      }
+
+      handleResponse(xhrResponse) {
+        console.log('llego!')
+        let response = xhrResponse.detail.response;
+        let data = [];
+        if(response.data.hasMoreData){
+          let i = 1;
+          let iconColor;
+          response.data.pois.forEach((poi,index)=>{
+              if(i > 3){ i = 1; }
+
+              if(i == 1){
+                iconColor = 'amarillo';
+              }else if(i == 2){
+                iconColor = 'rojo';
+              }else if(i == 3){
+                iconColor = 'verde';
+              }
+
+              data.push(
+                {
+                  name : 'OFICINA ' + poi.description + ' ' + poi.address2,
+                  description : poi.address,
+                  iconColor : iconColor
+                }
+              );
+              i++;
+
+          });
+
+          this.listOficinas = data;
+
+        }
+
+      }
+
+      ready() {
+        //  params='{"latitud":"-12.092055", "longitud":"-77.022102", "radius": "15000", "type": "O"}'
+
+             super.ready();
+             console.log(this.pathParent);
+            //var servicePois = this.$.requestPois;
+            // setTimeout(()=>{
+            //            this.$.requestPois.toRequestOptions({params: {"latitud":"-12.092055", "longitud":"-77.022102", "radius": "15000", "type": "O"}});
+            //             this.$.requestPois.generateRequest();
+            //         }, 1000);
+
+
+
+            // servicePois.toRequestOptions().params = {"latitud":"-12.092055", "longitud":"-77.022102", "radius": "15000", "type": "O"};
+            // console.log(servicePois);
+
+      }
+
+
+    }
+
+    window.customElements.define(OficinasView.is, OficinasView);
+  </script>
+</dom-module>

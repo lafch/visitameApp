@@ -1,7 +1,7 @@
 {
   "name": "visitame",
   "short_name": "visitame",
-  "description": "App Visitame",
+  "description": "App de Visitas BBVA",
   "start_url": "/",
   "display": "standalone"
 }

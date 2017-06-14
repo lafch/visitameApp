@@ -1,6 +1,6 @@
 # \<visitame\>
 
-App Visitame
+App de Visitas BBVA
 
 ## Install the Polymer-CLI
 

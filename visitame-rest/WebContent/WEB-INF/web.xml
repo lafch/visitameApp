@@ -39,4 +39,14 @@
     <servlet-name>VisitameRestServlet</servlet-name>
     <url-pattern>/api/*</url-pattern>
   </servlet-mapping>
+  
+  <filter>
+    <filter-name>CORSFilter</filter-name>
+    <filter-class>pe.com.bbva.visitame.filter.CORSFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>CORSFilter</filter-name>
+    <url-pattern>/api/*</url-pattern>
+  </filter-mapping>
+  
 </web-app>
