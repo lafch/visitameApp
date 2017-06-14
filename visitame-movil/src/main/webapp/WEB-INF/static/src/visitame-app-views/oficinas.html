@@ -90,13 +90,11 @@
              super.ready();
 			navigator.geolocation.getCurrentPosition((position) =>{
 				 var geolocalizacionService = this.$.geoServ;
-			     geolocalizacionService.obtenerOficinas({
+			     geolocalizacionService.listarOficinas({
 			
-						params : {
-							type:'O',
-							position : position
+						params : {"latitud":"-12.092055", "longitud":"-77.022102", "radius": "15000", "type": "O"}
+						,onResponse: function(){
 						}
-			
 			         });
 			});
              
