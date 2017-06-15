@@ -2,6 +2,7 @@ package pe.com.bbva.visitame.domain.geo;
 
 import java.util.List;
 
+
 import com.google.maps.model.LatLng;
 
 public class Direction {

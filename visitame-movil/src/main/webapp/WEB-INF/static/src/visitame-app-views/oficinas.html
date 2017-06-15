@@ -1,7 +1,9 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="../visitame-app-styles/main-style.html">
 <link rel="import" href="../visitame-app-styles/oficinas-style.html">
 <link rel="import" href="../visitame-app-services/geolocalizacion-service.html">
+
 
 <dom-module id="oficinas-view">
   <template>
@@ -9,28 +11,45 @@
       :host {
 
       }
+      
+      paper-spinner{
+      
+      position: fixed;
+  z-index: 999;
+  height: 2em;
+  width: 2em;
+  overflow: show;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  font-size: 3.2em;
+      
+      }
+      
     </style>
 
     <style include="oficinas-styles">
 
     </style>
 
+	<geolocalizacion-service id = "geoLocalizacionService"  ></geolocalizacion-service>
+	
     <div class="main-list-oficina">
-      <ul>
-
-		<geolocalizacion-service id = "geoServ"  ></geolocalizacion-service>
-      
-
-        <template is="dom-repeat" items="{{listOficinas}}">
-          <li>
-            <img src="{{pathParent}}images/icon_{{item.iconColor}}.png" />
-            <h3>{{item.name}}</h3>
-            <p>{{item.description}}</p>
-          </li>
-        </template>
-
-
-      </ul>
+     	  <paper-spinner id="loadingLista" active></paper-spinner>
+	      <ul>
+	        <template is="dom-repeat" items="{{listOficinas}}">
+	        
+	          <li>
+	            <img src="{{pathParent}}images/icon_{{item.iconColor}}.png" />
+	            <h3>{{item.name}}</h3>
+	            <p>{{item.description}}</p>
+	          </li>
+	        </template>
+	
+	
+	      </ul>
     </div>
   </template>
 
@@ -51,9 +70,7 @@
         }
       }
 
-      handleResponse(xhrResponse) {
-
-        let response = xhrResponse.detail.response;
+      handleResponse(response) {
         let data = [];
         if(response.data.hasMoreData){
           let i = 1;
@@ -77,11 +94,9 @@
                 }
               );
               i++;
-
           });
-
+          this.$.loadingLista.active = false;
           this.listOficinas = data;
-
         }
 
       }
@@ -89,13 +104,13 @@
       ready() {
              super.ready();
 			navigator.geolocation.getCurrentPosition((position) =>{
-				 var geolocalizacionService = this.$.geoServ;
-			     geolocalizacionService.listarOficinas({
-			
+				 var geolocalizacionService = this.$.geoLocalizacionService;
+			     var requestOficinas = geolocalizacionService.listarOficinas({
 						params : {"latitud":"-12.092055", "longitud":"-77.022102", "radius": "15000", "type": "O"}
-						,onResponse: function(){
-						}
-			         });
+			     });
+			     requestOficinas.then((xhr) => {
+						this.handleResponse(xhr.response);
+			    });
 			});
              
       }

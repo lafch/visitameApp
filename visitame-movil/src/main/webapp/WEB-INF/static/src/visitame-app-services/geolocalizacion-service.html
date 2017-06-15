@@ -24,8 +24,7 @@
           console.log(options);
           if(!options){ return;}
           this.$.ajaxPois.set( 'params' , options.params);
-          this.$.ajaxPois.set( 'onResponse' , options.onResponse);
-          this.$.ajaxPois.generateRequest();
+          return this.$.ajaxPois.generateRequest().completes;
       }
     }
     window.customElements.define(GeolocalizacionService.is, GeolocalizacionService);
