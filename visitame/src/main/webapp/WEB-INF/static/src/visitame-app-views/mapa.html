@@ -6,75 +6,121 @@
 <link rel="import"  href="../visitame-app-styles/main-style.html">
 <link rel="import"	href="../visitame-app-services/geolocalizacion-service.html">
 
-
 <dom-module id="mapa-view"> 
-<template>
+	<template>
+		<geolocalizacion-service id="geoLocalizacionService">
+		</geolocalizacion-service>
 
-<geolocalizacion-service id="geoLocalizacionService"></geolocalizacion-service>
-
-<style>
-  google-map {
-    height: 600px !important;
-  }
-    html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-</style>
-<google-map id="mapPois" api-key="AIzaSyDqyFz0Q9ZZLMmgqJhck4soRfa0V1s71jQ"  ></google-map>
-</template> 
-<script>
-    class MapaView extends Polymer.Element {
-      static get is() { return 'mapa-view'; }
-
-      static get properties(){
-        return {
-              pathParent : {
-                  type : String,
-                  value :'static/'
-              },
-              centroide : {
-                type : Object
-              }
-        }
-      }
-
-     setMarkers(data){
-    	 navigator.geolocation.getCurrentPosition((position) =>{
-			if(this.$.mapPois.map){
-			var map = this.$.mapPois.map;
-
-			google.maps.event.trigger(map, "resize");
-
-
-	          if(data){
-	        	  data.forEach((a,b)=>{
-						
-						 var marker = document.createElement('google-map-marker');
-						  marker.setAttribute('latitude', parseFloat(a.latitude));
-				          marker.setAttribute('longitude', parseFloat(a.longitude));
-				          marker.setAttribute('title', a.name);
-				          marker.innerHTML = a.name;
-				          this.$.mapPois.appendChild(marker); 
-		          });
-		      }
-
-	      	setTimeout(() => {
-				map.setZoom(16);
-				var center = {lat: position.coords.latitude, lng: position.coords.longitude};
-				map.setCenter(center);
-			}, 100);
-	          
+		<style>
+		  google-map {
+		    height: 600px !important;
+		  }
+		    html, body {
+		        height: 100%;
+		        margin: 0;
+		        padding: 0;
+		     }
+		     #divCentrarGps{
+				position: fixed;
+				left: 15px;
+				bottom: 15px;
+				z-index:2; 
+				background: white;
 			}
-		});
-     } 
+			#imgGps{
+			    width: 23px;
+			    padding: 8px;
+			    height: 23px;
+			}
+		</style>
 
-     ready() {
-            super.ready();
-            console.log('mapa Ready!');
-      }
-    }
+		<div id="divCentrarGps" on-click="centrarUbicacion" >
+		 	<img id="imgGps" src="static/images/ic_gps.svg">
+		</div>
+		
+		<google-map id="mapPois" api-key="AIzaSyDqyFz0Q9ZZLMmgqJhck4soRfa0V1s71jQ"/>
+	</template> 
+	<script>
+	    class MapaView extends Polymer.Element {
+	      static get is() { return 'mapa-view'; }
+	
+	      static get properties(){
+	        return {
+	              pathParent : {
+	                  type : String,
+	                  value :'static/'
+	              },
+	              centroide : {
+		                type : Object
+		          },
+		          errorDescripcion : {
+			           type : String
+			      }
+	        }
+	      }
+	      
+	     setMarkers(data){
+	    	 navigator.geolocation.getCurrentPosition(
+	    		(position) =>{
+					if(this.$.mapPois.map){
+						
+						var map = this.$.mapPois.map;
+			
+						google.maps.event.trigger(map, "resize");
+						
+				          if(data){
+				        	  data.forEach((a,b)=>{
+									
+									 var marker = document.createElement('google-map-marker');
+									  marker.setAttribute('latitude', parseFloat(a.latitude));
+							          marker.setAttribute('longitude', parseFloat(a.longitude));
+							          marker.setAttribute('title', a.name);
+							          marker.innerHTML = a.name;
+							          this.$.mapPois.appendChild(marker); 
+					          });
+					      }
+			
+				      	setTimeout(() => {
+							map.setZoom(16);
+							var center = {lat: position.coords.latitude, lng: position.coords.longitude};
+							map.setCenter(center);
+			
+				            var geoloccontrol = new klokantech.GeolocationControl(map, 12);
+						}, 100);
+			          
+					}
+			},(error) =>{
+	
+	     	  	console.log("error" + error.code); 
+	     	  	switch(error.code) {
+	      	    	case error.PERMISSION_DENIED:
+	      	    		this.errorDescripcion = "Usuario deneg&#243; utilizar la ubicación GPS."
+	        	      break;
+	        	    case error.POSITION_UNAVAILABLE:
+	        	    	this.errorDescripcion = "La información de ubicación es inhabilitada."
+	        	      break;
+	        	    case error.TIMEOUT:
+	        	    	this.errorDescripcion = "La solicitud para obtener la ubicación del usuario se ha agotado."
+	        	      break;
+	        	    case error.UNKNOWN_ERROR:
+	        	    	this.errorDescripcion = "Un error desconocido ocurrió."
+	        	      break;
+	        	}
+			});
+	     } 
+	     centrarUbicacion() {
+	         navigator.geolocation.getCurrentPosition((position) =>{
+	        		var map = this.$.mapPois.map;
+					var center = {lat: position.coords.latitude, lng: position.coords.longitude};
+	        		map.setCenter(center);
+	 		});
+	     }
+	     ready() {
+	            super.ready();
+	            console.log('mapa Ready!');
+	     }
+   		}
 
-    window.customElements.define(MapaView.is, MapaView);
-  </script> </dom-module>
+    	window.customElements.define(MapaView.is, MapaView);
+  		</script>
+ </dom-module>

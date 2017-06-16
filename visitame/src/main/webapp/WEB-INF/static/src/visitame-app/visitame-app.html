@@ -15,6 +15,8 @@
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/iron-input/iron-input.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/google-map/google-map-search.html">
+
 <link rel="import" href="../visitame-app-icons/main-icons.html">
 <link rel="lazy-import" href="../visitame-app-views/oficinas.html">
 <link rel="lazy-import" href="../visitame-app-views/pagina2.html">
@@ -261,7 +263,9 @@
             <paper-icon-button icon="maps:streetview" class="boton-mapa" on-click = "_verMapa"></paper-icon-button>
             <div class="buscador-contenedor">
             <iron-icon icon="search" class="icono-buscar"></iron-icon>
-            <input is="iron-input" class="buscador-input">
+            <input id="buscador" is="iron-input" class="buscador-input">
+            <!-- <google-map-search id="idMap" query="Pizza" results="{{results}}">
+      			</google-map-search>-->
             </div>
         </app-toolbar>
       </app-header>
@@ -294,6 +298,11 @@
             reflectToAttribute: true,
             observer: '_pageChanged',
           },
+          results : {
+              type : Array,
+              value : []
+          },
+          map: Object,
           rootPattern: String,
           routeData: Object,
           subroute: String,
@@ -335,9 +344,16 @@
       _verMapa(){
   	  	this.$.viewVisitas.cargarMapa();
       }
-    
+      
+      ready(){
+    	  super.ready();
+
+    	  this.$.idMap.search();
+      }
+      
     }
 
     window.customElements.define(VisitameApp.is, VisitameApp);
   </script>
+    
 </dom-module>
