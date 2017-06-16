@@ -24,7 +24,7 @@ display: none;
 
 <geolocalizacion-service id="geoLocalizacionService"></geolocalizacion-service>
 
-<div class="main-list-oficina">
+<div class="main-list-oficina" id="containerOficina">
 	<paper-spinner class="paper-spinner-loading" id="loadingLista" active></paper-spinner>
 	<ul id = "oficinasRecords">
 		<template is="dom-repeat" items="{{listOficinas}}">
@@ -52,7 +52,10 @@ display: none;
               listOficinas : {
                 type : Array,
                 value : []
-              }
+              },
+	          errorDescripcion : {
+		           type : String
+		      }
         }
       }
 
@@ -109,8 +112,6 @@ display: none;
                   longitude : poi.longitude
                 }
               );
-
-              
               i++;
           });
           this.$.loadingLista.active = false;
@@ -118,10 +119,11 @@ display: none;
         }
 
       }
-
+  
       ready() {
             super.ready();
-			navigator.geolocation.getCurrentPosition((position) =>{
+			navigator.geolocation.getCurrentPosition(
+				(position) =>{
 				 var geolocalizacionService = this.$.geoLocalizacionService;
 			     var requestOficinas = geolocalizacionService.listarOficinas({
 						params : {"latitud": position.coords.latitude , "longitud": position.coords.longitude , "radius": "5000", "type": "O"}
@@ -129,11 +131,35 @@ display: none;
 			     requestOficinas.then((xhr) => {
 					this.handleResponse(xhr.response);
 			    });
+			},(error) =>{
+ 
+	     	  	switch(error.code) {
+	      	    	case error.PERMISSION_DENIED:
+	      	    		this.errorDescripcion = "Usuario deneg&#243; utilizar la ubicaci&#243;n GPS."
+	        	      break;
+	        	    case error.POSITION_UNAVAILABLE:
+	        	    	this.errorDescripcion = "La informaci&#243;n de ubicaci&#243;n es inhabilitada."
+	        	      break;
+	        	    case error.TIMEOUT:
+	        	    	this.errorDescripcion = "La solicitud para obtener la ubicaci&#243;n del usuario se ha agotado."
+	        	      break;
+	        	    case error.UNKNOWN_ERROR:
+	        	    	this.errorDescripcion = "Un error desconocido ocurri&#243;."
+	        	      break;
+	        	}
+	     	  	
+	     	   	this.$.loadingLista.active = false;
+	        	
+
+				var divContainer = document.createElement('div');
+				divContainer.innerHTML = this.errorDescripcion;
+	            this.$.containerOficina.appendChild(divContainer);
+	            
 			});
              
       }
-
-
+      
+      
     }
 
     window.customElements.define(OficinasView.is, OficinasView);
