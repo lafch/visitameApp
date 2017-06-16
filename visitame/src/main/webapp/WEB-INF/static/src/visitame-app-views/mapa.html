@@ -1,0 +1,80 @@
+<link rel="import"	href="../../bower_components/polymer/polymer-element.html">
+<link rel="import"	href="../../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import"	href="../../bower_components/google-map/google-map.html">
+<link rel="import"  href="../../bower_components/google-map/google-map-marker.html">
+<link rel="import"  href="../visitame-app-icons/main-icons.html">
+<link rel="import"  href="../visitame-app-styles/main-style.html">
+<link rel="import"	href="../visitame-app-services/geolocalizacion-service.html">
+
+
+<dom-module id="mapa-view"> 
+<template>
+
+<geolocalizacion-service id="geoLocalizacionService"></geolocalizacion-service>
+
+<style>
+  google-map {
+    height: 600px !important;
+  }
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+</style>
+<google-map id="mapPois" api-key="AIzaSyDqyFz0Q9ZZLMmgqJhck4soRfa0V1s71jQ"  ></google-map>
+</template> 
+<script>
+    class MapaView extends Polymer.Element {
+      static get is() { return 'mapa-view'; }
+
+      static get properties(){
+        return {
+              pathParent : {
+                  type : String,
+                  value :'static/'
+              },
+              centroide : {
+                type : Object
+              }
+        }
+      }
+
+     setMarkers(data){
+    	 navigator.geolocation.getCurrentPosition((position) =>{
+			if(this.$.mapPois.map){
+			var map = this.$.mapPois.map;
+
+			google.maps.event.trigger(map, "resize");
+
+
+	          if(data){
+	        	  data.forEach((a,b)=>{
+						
+						 var marker = document.createElement('google-map-marker');
+						  marker.setAttribute('latitude', parseFloat(a.latitude));
+				          marker.setAttribute('longitude', parseFloat(a.longitude));
+				          marker.setAttribute('title', a.name);
+				          marker.innerHTML = a.name;
+				          this.$.mapPois.appendChild(marker); 
+		          });
+		      }
+
+	      	setTimeout(() => {
+				map.setZoom(16);
+				var center = {lat: position.coords.latitude, lng: position.coords.longitude};
+				map.setCenter(center);
+			}, 100);
+	          
+			}
+		});
+     } 
+
+     ready() {
+            super.ready();
+            console.log('mapa Ready!');
+      }
+    }
+
+    window.customElements.define(MapaView.is, MapaView);
+  </script> </dom-module>

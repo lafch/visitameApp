@@ -1,52 +1,72 @@
-<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import"
+	href="../../bower_components/polymer/polymer-element.html">
 
-<dom-module id="oficinas-styles">
-  <template>
-    <style>
-    * {margin: 0; padding: 0; }
+<dom-module id="oficinas-styles"> <template>
+<style>
+* {
+	margin: 0;
+	padding: 0;
+}
 
-    div {
-      margin: 0px;
-    }
+div {
+	margin: 0px;
+}
 
-    ul {
-      list-style-type: none;
-      width: 100%;
-      padding: 0;
-      margin: 0;
-    }
+ul {
+	list-style-type: none;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+}
 
-    h3 {
-      margin-top: 9px;
-      font: bold 13px/1.5 'Roboto', 'Noto', sans-serif;
-      color:#666;
-	padding-right: 15px;	
-    }
+li img {
+	float: left;
+	margin: 0px 5px 0 0;
+	width: 45px;
+	height: 45px;
+	display: inline-block;
+}
 
-    li img {
-      float: left;
-      margin: 0 10px 0 0;
-      width: 50px;
-      height: 50px;
-    }
+h3 {
+	margin-top: 4px;
+	margin-bottom: 3px;
+	font-size: 3.5vw;
+	font-weight: bold;
+	font-family: 'Roboto', 'Noto', sans-serif;
+	color: #666;
+	padding-right: 15px;
+}
 
-    li p {
-      font: 12px/1.5 'Roboto', 'Noto', sans-serif;
-      color: #666;
-      padding-right: 15px;
-    }
+li p {
+	font-size: 3.1vw;
+	font-weight: bold;
+	font-family: 'Roboto', 'Noto', sans-serif;
+	color: #ACACAC;
+	padding-right: 10px;
+	margin-left: 50px;
+}
 
-    li {
-      padding: 10px;
-      overflow: auto;
-      border-bottom: 1px #e1e1e1 solid;
-    }
+li {
+	padding: 15px;
+	overflow: auto;
+	border-bottom: 1px #e1e1e1 solid;
+	position: relative;
+}
 
+paper-icon-button {
+	position: absolute;
+	right: 0;
+	top: 20px;
+	color: #ACACAC;
+}
 
-    li:hover {
-      background: #eee;
-      cursor: pointer;
-    }
-    </style>
-  </template>
-</dom-module>
+@media ( min-width : 500px) {
+	h3 {
+		font-size: 1.6vw !important;
+	}
+	li p {
+		font-size: 1.2vw !important;
+	}
+}
+</style>
+</template> </dom-module>

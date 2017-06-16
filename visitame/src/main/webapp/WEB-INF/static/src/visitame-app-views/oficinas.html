@@ -1,49 +1,45 @@
-<link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import"	href="../../bower_components/polymer/polymer-element.html">
+<link rel="import"	href="../../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="../visitame-app-icons/main-icons.html">
 <link rel="import" href="../visitame-app-styles/main-style.html">
 <link rel="import" href="../visitame-app-styles/oficinas-style.html">
-<link rel="import" href="../visitame-app-services/geolocalizacion-service.html">
+<link rel="import"	href="../visitame-app-services/geolocalizacion-service.html">
+<link rel="import"	href="../visitame-app-views/mapa.html">
 
+<dom-module id="oficinas-view"> <template>
 
-<dom-module id="oficinas-view">
-  <template>
-    <style include="main-styles">
-      :host {
-
-      }
-      paper-icon-button{
-      
-float: right;
-      
-      }
-    </style>
-
-    <style include="oficinas-styles">
-
-    </style>
-
-	<geolocalizacion-service id = "geoLocalizacionService"  ></geolocalizacion-service>
+<style include="main-styles">
+:host {
 	
-    <div class="main-list-oficina">
-     	  <paper-spinner class = "paper-spinner-loading" id="loadingLista" active></paper-spinner>
-	      <ul>
-	        <template is="dom-repeat" items="{{listOficinas}}">
-	        
-	          <li>
-	            <img src="{{pathParent}}images/icon_{{item.iconColor}}.png" />
-	            <h3>{{item.name}}</h3>
-	            <p>{{item.description}}</p>
-	            <paper-icon-button icon="my-icons:chevron-right" ></paper-icon-button>
-	          </li>
-	        </template>
-	
-	
-	      </ul>
-    </div>
-  </template>
+}
 
-  <script>
+mapa-view{
+display: none;
+}
+
+</style>
+
+<style include="oficinas-styles">
+</style>
+
+<geolocalizacion-service id="geoLocalizacionService"></geolocalizacion-service>
+
+<div class="main-list-oficina">
+	<paper-spinner class="paper-spinner-loading" id="loadingLista" active></paper-spinner>
+	<ul id = "oficinasRecords">
+		<template is="dom-repeat" items="{{listOficinas}}">
+
+		<li><img src="{{pathParent}}images/icon_{{item.iconColor}}.png" />
+			<h3>{{item.name}}</h3>
+			<p>{{item.description}}</p> <paper-icon-button
+				icon="my-icons:chevron-right"></paper-icon-button></li>
+		</template>
+	</ul>
+	
+	<mapa-view id = "mapaOficinas"></mapa-view>
+	
+</div>
+</template> <script>
     class OficinasView extends Polymer.Element {
       static get is() { return 'oficinas-view'; }
 
@@ -60,6 +56,9 @@ float: right;
         }
       }
 
+      constructor() {
+    	    super();
+    	  }
 
       formatoDistancia(metros){
           if(!metros) { return ''; }
@@ -70,6 +69,20 @@ float: right;
             	return metros.toFixed(1)+' M'  
           }
       }	
+
+      cargarMapa(){
+    	  
+          if(this.$.mapaOficinas.style.display == 'block'){
+        	  this.$.oficinasRecords.style.display = 'block';
+    		  this.$.mapaOficinas.style.display = 'none';
+            }else{
+              this.$.oficinasRecords.style.display = 'none';
+       		  this.$.mapaOficinas.style.display = 'block';
+          }
+
+          this.$.mapaOficinas.setMarkers(this.listOficinas);
+    	 
+      }
       
       handleResponse(response) {
         let data = [];
@@ -91,7 +104,9 @@ float: right;
                 {
                   name : 'OFICINA ' + poi.description + ' '+this.formatoDistancia(poi.distance),
                   description : poi.address,
-                  iconColor : iconColor
+                  iconColor : iconColor,
+                  latitude : poi.latitude,
+                  longitude : poi.longitude
                 }
               );
 
@@ -105,9 +120,8 @@ float: right;
       }
 
       ready() {
-             super.ready();
+            super.ready();
 			navigator.geolocation.getCurrentPosition((position) =>{
-				console.log(position)
 				 var geolocalizacionService = this.$.geoLocalizacionService;
 			     var requestOficinas = geolocalizacionService.listarOficinas({
 						params : {"latitud": position.coords.latitude , "longitud": position.coords.longitude , "radius": "5000", "type": "O"}
@@ -123,5 +137,4 @@ float: right;
     }
 
     window.customElements.define(OficinasView.is, OficinasView);
-  </script>
-</dom-module>
+  </script> </dom-module>
