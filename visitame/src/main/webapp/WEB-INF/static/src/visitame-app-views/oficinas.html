@@ -1,0 +1,122 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../visitame-app-styles/main-style.html">
+<link rel="import" href="../visitame-app-styles/oficinas-style.html">
+<link rel="import" href="../visitame-app-services/geolocalizacion-service.html">
+
+
+<dom-module id="oficinas-view">
+  <template>
+    <style include="main-styles">
+      :host {
+
+      }
+    </style>
+
+    <style include="oficinas-styles">
+
+    </style>
+
+	<geolocalizacion-service id = "geoLocalizacionService"  ></geolocalizacion-service>
+	
+    <div class="main-list-oficina">
+     	  <paper-spinner class = "paper-spinner-loading" id="loadingLista" active></paper-spinner>
+	      <ul>
+	        <template is="dom-repeat" items="{{listOficinas}}">
+	        
+	          <li>
+	            <img src="{{pathParent}}images/icon_{{item.iconColor}}.png" />
+	            <h3>{{item.name}}</h3>
+	            <p>{{item.description}}a aaa</p>
+	            <iron-icon icon="icons:chevron-right"></iron-icon>
+	          </li>
+	        </template>
+	
+	
+	      </ul>
+    </div>
+  </template>
+
+  <script>
+    class OficinasView extends Polymer.Element {
+      static get is() { return 'oficinas-view'; }
+
+      static get properties(){
+        return {
+              pathParent : {
+                  type : String,
+                  value :'static/'
+              },
+              listOficinas : {
+                type : Array,
+                value : []
+              }
+        }
+      }
+
+
+      formatoDistancia(metros){
+          if(!metros) { return ''; }
+          metros = parseFloat(metros);
+          if(metros >= 1000){
+				return parseFloat(metros/1000).toFixed(1)+' KM';
+              }else{
+            	return metros.toFixed(1)+' M'  
+          }
+      }	
+      
+      handleResponse(response) {
+        let data = [];
+        if(response.data.hasMoreData){
+          let i = 1;
+          let iconColor;
+          response.data.pois.forEach((poi,index)=>{
+              if(i > 3){ i = 1; }
+
+              if(i == 1){
+                iconColor = 'amarillo';
+              }else if(i == 2){
+                iconColor = 'rojo';
+              }else if(i == 3){
+                iconColor = 'verde';
+              }
+
+              data.push(
+                {
+                  name : 'OFICINA ' + poi.description + ' '+this.formatoDistancia(poi.distance),
+                  description : poi.address,
+                  iconColor : iconColor
+                }
+              );
+
+              
+              i++;
+          });
+          this.$.loadingLista.active = false;
+          this.listOficinas = data;
+        }
+
+      }
+
+      ready() {
+             super.ready();
+			navigator.geolocation.getCurrentPosition((position) =>{
+				console.log(position)
+				 var geolocalizacionService = this.$.geoLocalizacionService;
+			     var requestOficinas = geolocalizacionService.listarOficinas({
+						params : {"latitud": position.coords.latitude , "longitud": position.coords.longitude , "radius": "5000", "type": "O"}
+			     });
+			     requestOficinas.then((xhr) => {
+					this.handleResponse(xhr.response);
+			    });
+			});
+             
+      }
+
+
+    }
+
+    window.customElements.define(OficinasView.is, OficinasView);
+  </script>
+</dom-module>

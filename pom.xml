@@ -13,5 +13,6 @@
   	<module>visitame-rest</module>
   	<module>visitame-movil</module>
   	<module>visitame-ear</module>
+  	<module>visitame</module>
   </modules>
 </project>
