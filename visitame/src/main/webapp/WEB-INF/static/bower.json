@@ -12,7 +12,8 @@
     "neon-animation": "polymerelements/neon-animation#^2.0.1",
     "paper-spinner": "PolymerElements/paper-spinner#^2.0.0",
     "paper-buttons-group": "NeilujD/paper-buttons-group#^2.0.0",
-    "iron-icons": "PolymerElements/iron-icons#^2.0.1"
+    "iron-icons": "PolymerElements/iron-icons#^2.0.1",
+    "iron-icon": "PolymerElements/iron-icon#^2.0.0"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0",
