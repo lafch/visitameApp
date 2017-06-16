@@ -9,7 +9,11 @@
 <link rel="import" href="../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/maps-icons.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-input/iron-input.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../visitame-app-icons/main-icons.html">
 <link rel="lazy-import" href="../visitame-app-views/oficinas.html">
@@ -83,6 +87,113 @@
           :host(:not([pagina=pagina2])) .ver{
             display: block;
           }
+          
+           paper-tab[link] a {
+    /* These mixins (from iron-flex-layout) center the link text. */
+    @apply(--layout-horizontal);
+    @apply(--layout-center-center);
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  paper-tab{
+  	border-left: 1px solid;
+	border-color: #FFF;
+  }
+  
+  paper-tab{
+  	--paper-tab-content: {
+  	 	line-height:2.5;
+  	 	text-align: center;
+  	 	color: #fff;
+  	}
+  }
+  
+  paper-input paper-input-container {
+  	background-color: white;
+  	 `--paper-input-container-label-floating:{
+		display: none;  	 	
+  	 }
+  
+  }
+  
+  paper-input{
+  	`--paper-input-container-label-floating:{
+		display: none;  	 	
+  	 }
+  	background-color: white;
+  }
+  
+
+  
+  paper-tabs[no-bar] paper-tab.iron-selected a{
+    color: #2196F3;
+  }
+  
+  paper-tabs[no-bar] paper-tab a{
+    color: #fff;
+    font-size: 1.3em;
+    text-decoration:none;  
+  }
+  
+  
+  
+  
+  
+  paper-tabs{
+  	width: 100%;
+  	border: 1px solid;
+  	border-radius: 5px;
+  	color: #fff;
+  }
+  
+  
+  
+  
+  .iron-selected{
+  	background-color: white;
+  }
+  
+  app-toolbar.buscador{
+  	width: 92%;
+  	margin-right: 5%;
+  	
+  }
+  
+/*   app-toolbar{ */
+/*   	height: 54px; */
+/*   } */
+  
+  paper-icon-button.boton-mapa{
+  	float: left;
+  	display: block;
+  	background-color: var(--paper-grey-400);
+  	border-radius: 3px;
+  	margin-right: 2%;
+  }
+  
+  .buscador-input{
+  	border: 0px;
+    width: 86%;
+    font-size: 1.54em;
+    
+  }
+  
+  .buscador-contenedor{
+  	float: left;
+  	display: inline-block;
+  	background-color: white;
+  	border: solid 1px;
+  	width: 76%;
+  	border-radius: 3px;
+  	padding-left: 2%;
+  
+  }
+  
+  iron-icon.icono-buscar{
+  	color: black;
+  	margin-top: -5px;
+  }
 
   </style>
   <app-location route="{{route}}"></app-location>
@@ -96,6 +207,11 @@
     <!-- Drawer content -->
     <app-drawer id="drawer" slot="drawer">
       <iron-selector selected="[[pagina]]" attr-for-selected="name" class="drawer-list" role="navigation">
+<!--       <paper-tabs selected="[[pagina]]" attr-for-selected="name" link> -->
+<!--       	<paper-tab name="oficinas"><a   href="visitame/oficinas">Oficinas</a></paper-tab> -->
+<!--       	<paper-tab name="pagina2"><a  href="visitame/pagina2">View Two</a></paper-tab> -->
+<!--       	<paper-tab name="pagina3"><a  href="visitame/pagina3">View Three</a></paper-tab> -->
+<!--       </paper-tabs> -->
         <a name="oficinas"  href="visitame/oficinas">Oficinas</a>
         <a name="pagina2" href="visitame/pagina2">View Two</a>
         <a name="pagina3" href="visitame/pagina3">View Three</a>
@@ -117,17 +233,36 @@
 
         <app-toolbar class="ver">
 
-          <paper-tabs selected="[[pagina]]" attr-for-selected="name" role="navigation">
-            <paper-tab>
-              <a name="oficinas"  href="visitame/oficinas" >Oficinas</a>
-            </paper-tab>
+<!--           <paper-tabs selected="[[pagina]]" attr-for-selected="name" role="navigation"> -->
+<!--             <paper-tab> -->
+<!--               <a name="oficinas"  href="visitame/oficinas" >Oficinas</a> -->
+<!--             </paper-tab> -->
 
-            <paper-tab>
-              <a name="pagina2"  href="visitame/pagina2" >Cajeros</a>
-            </paper-tab>
+<!--             <paper-tab> -->
+<!--               <a name="pagina2"  href="visitame/pagina2" >Cajeros</a> -->
+<!--             </paper-tab> -->
 
-          </paper-tabs>
+<!--           </paper-tabs> -->
+<!--           <iron-selector selected="[[pagina]]" attr-for-selected="name"> -->
+<!--           	<div name="oficinas"><a href="visitame/oficinas">Oficinas</a></div> -->
+<!--           	<div name="pagina2"><a href="visitame/pagina2">Cajeros</a></div> -->
+<!--           </iron-selector> -->
+          
+          <paper-tabs selected="[[pagina]]" attr-for-selected="name" no-bar>
+      	<paper-tab  name="oficinas"><a   href="visitame/oficinas">Oficinas</a></paper-tab>
+      	<paper-tab name="pagina2"><a  href="visitame/pagina2">Cajeros</a></paper-tab>
+      	<paper-tab  name="pagina3"><a  href="visitame/pagina3">Cajeros</a></paper-tab>
+      </paper-tabs>
+          
+          
 
+        </app-toolbar>
+        <app-toolbar class="ver buscador">
+        	<paper-icon-button icon="maps:streetview" class="boton-mapa"></paper-icon-button>
+        	<div class="buscador-contenedor">
+        	<iron-icon icon="search" class="icono-buscar"></iron-icon>
+        	<input is="iron-input" class="buscador-input">
+        	</div>
         </app-toolbar>
       </app-header>
 
