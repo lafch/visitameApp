@@ -40,6 +40,7 @@
     <script src="<%=request.getContextPath()%>/static/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
 
     <link rel="import" href="<%=request.getContextPath()%>/static/src/visitame-app/visitame-app.html">
+    <link rel="import" href="<%=request.getContextPath()%>/static/src/visitame-app-views/view-error-dialog.html">
 
     <style>
       body {
@@ -53,5 +54,30 @@
   </head>
   <body>
     <visitame-app></visitame-app>
+    <view-error-dialog id="dialog-error"></view-error-dialog>	
   </body>
+  <script>
+  	function mostrarError(mapaMensaje) {
+		var SEVERIDAD_ALTA 	= "ALTA";
+		var SEVERIDAD_MEDIA = "MEDIA";
+		
+		var ventaMensaje = document.getElementById('mensaje-error');
+		var dialogError = document.getElementById('dialog-error');
+		document.getElementById('mensaje_texto').innerHTML = mapaMensaje.mensajeError;
+		dialogError.severidad = mensaje.severidad;
+		
+		var tipoSeveridad = mapaMensaje.severidad;
+		if(tipoSeveridad == SEVERIDAD_ALTA){
+			dialogError.estiloAlerta = "alerta-alta";
+			dialogError.iconoAlerta = "icons:cancel"
+		}else if(tipoSeveridad == SEVERIDAD_MEDIA){
+			dialogError.estiloAlerta = "alerta-media";
+			dialogError.iconoAlerta = "icons:report-problem";
+		}else{
+			dialogError.estiloAlerta = "alerta-baja";
+			dialogError.iconoAlerta = "icons:report";
+		}
+		ventaMensaje.open();
+	}
+  </script>
 </html>

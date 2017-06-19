@@ -1,7 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 
-<dom-module id="geolocalizacion-service">
+<dom-module id="configuracion-service">
   <style>
     :host {
       display: none;
@@ -11,22 +11,31 @@
 
 	 <iron-ajax
            id = "ajaxPois"
-           url="http://localhost:8090/VISITAMEREST/api/geolocalizacion/pois"
+           url="{{urlParametro}}"
            handle-as="json" 
            ></iron-ajax>
 
   </template>
   
     <script>
-    class GeolocalizacionService extends Polymer.Element {
-      static get is() { return 'geolocalizacion-service'; }
-      listarOficinas(options){
+    class ConfiguracionService extends Polymer.Element {
+      static get is() { return 'configuracion-service'; }
+      static get properties() {
+          return {
+            urlParametro: {
+            	type: String,
+            	value: 'http://localhost:8090/VISITAMEREST/api/configuracion/valores'
+            }
+          };
+      }
+      
+      listarTiposDoi(options){
           if(!options){ return;}
           this.$.ajaxPois.set( 'params' , options.params);
           return this.$.ajaxPois.generateRequest().completes;
       }
     }
-    window.customElements.define(GeolocalizacionService.is, GeolocalizacionService);
+    window.customElements.define(ConfiguracionService.is, ConfiguracionService);
   </script>
   
 </dom-module>
