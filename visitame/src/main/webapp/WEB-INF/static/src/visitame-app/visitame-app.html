@@ -76,13 +76,18 @@
               :host([pagina=pagina2]) .menu-btn, .ver{
                   display: none;
               }
+              
+              :host([pagina=pagina2]) app-header-layout {
+              			padding-top: 64px;	
+              }
 
               :host([pagina=pagina2]) .ver{
                   display: none;
+                  
               }
           }
 
-          :host(:not([pagina=pagina2])) .back-btn{
+          :host(:not([pagina=pagina2])) paper-icon-button.back-btn{
             display: none;
           }
 
@@ -196,6 +201,10 @@
       color: black;
       margin-top: -5px;
   }
+  
+  .back-btn{
+  	color: white;
+  }
 
   </style>
   <app-location route="{{route}}"></app-location>
@@ -226,10 +235,10 @@
 
       <app-header slot="header" condenses reveals effects="waterfall">
         <app-toolbar >
-          <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
-          <a class="back-btn"  href="#" tabindex="-1">
-          <paper-icon-button icon="arrow-back" aria-label="Atrás"></paper-icon-button>
-        </a>
+          <paper-icon-button class="ver" icon="my-icons:menu" drawer-toggle></paper-icon-button>
+<!--           <a class="back-btn"  href="visitame/oficinas"> -->
+          <paper-icon-button class="back-btn" icon="arrow-back" aria-label="Atrás" on-click="_regresar"></paper-icon-button>
+<!--         </a> -->
           <div main-title>Visitame</div>
         </app-toolbar>
 
@@ -260,7 +269,7 @@
 
         </app-toolbar>
         <app-toolbar class="ver buscador">
-            <paper-icon-button icon="maps:streetview" class="boton-mapa" on-click = "_verMapa"></paper-icon-button>
+            <paper-icon-button icon="[[iconoMapa]]" class="boton-mapa" on-click = "_verMapa" style="color:white;"></paper-icon-button>
             <div class="buscador-contenedor">
             <iron-icon icon="search" class="icono-buscar"></iron-icon>
             <input id="buscador" is="iron-input" class="buscador-input">
@@ -306,6 +315,10 @@
           rootPattern: String,
           routeData: Object,
           subroute: String,
+          iconoMapa: {
+        	  type: String,
+        	  value: 'maps:streetview'
+          }
         };
       }
 
@@ -335,6 +348,8 @@
             null,
             this._showPage404.bind(this),
             true);
+        
+        this.iconoMapa = "list";
       }
 
       _showPage404() {
@@ -342,15 +357,18 @@
       }
 
       _verMapa(){
+   	  if(this.iconoMapa === 'maps:streetview'){
+    			this.iconoMapa = 'list';
+    	  	}else{
+    	  		this.iconoMapa = 'maps:streetview';
+    	  	}
   	  	this.$.viewVisitas.cargarMapa();
       }
       
-      ready(){
-    	  super.ready();
-
-    	  this.$.idMap.search();
+      _regresar(){
+    	  window.location.href='visitame/oficinas';
+    	  this.pagina ="oficinas";
       }
-      
     }
 
     window.customElements.define(VisitameApp.is, VisitameApp);
