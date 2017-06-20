@@ -13,10 +13,12 @@
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-icons/maps-icons.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/iron-input/iron-input.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/google-map/google-map.html">
 <link rel="import" href="../../bower_components/google-map/google-map-search.html">
-
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../visitame-app-icons/main-icons.html">
 <link rel="lazy-import" href="../visitame-app-views/oficinas.html">
 <link rel="lazy-import" href="../visitame-app-views/pagina2.html">
@@ -273,11 +275,23 @@
             <div class="buscador-contenedor">
             <iron-icon icon="search" class="icono-buscar"></iron-icon>
             <input id="buscador" is="iron-input" class="buscador-input">
-            <!-- <google-map-search id="idMap" query="Pizza" results="{{results}}">
-      			</google-map-search>-->
+            
             </div>
         </app-toolbar>
       </app-header>
+
+<paper-input value = "{{query}}">
+
+</paper-input>
+
+<google-map-search id="idMap" map = {{map}} query="{{query}}" results="{{results}}">
+      			</google-map-search>
+      			
+      	<ul >
+		<template is="dom-repeat" items="{{results}}">
+			<li style="border-bottom: 1px #ccc solid;">{{item.name}}</li>
+		</template>
+	</ul>
 
       <iron-pages
           selected="[[pagina]]"
@@ -320,6 +334,34 @@
         	  value: 'maps:streetview'
           }
         };
+      }
+
+      buildBusquedaDireccions(map){
+          console.log(map);
+          if(map && !this.$.map){
+              this.$.map = map;
+              this.$.idMap.set( 'map' , map);
+              console.log(this.$.idMap.get('map'))
+              this.$.idMap.search();
+          }
+      }
+      
+      initBusquedaDireccions(){
+    	  setTimeout(()=>{
+        	try{
+        			this.buildBusquedaDireccions(this.$.viewVisitas.getMap());
+            	}catch(e){
+            		setTimeout(()=>{
+                		try{
+            			this.buildBusquedaDireccions(this.$.viewVisitas.getMap());
+                		}catch(e){
+                			setTimeout(()=>{
+                    			this.buildBusquedaDireccions(this.$.viewVisitas.getMap());
+                           	  },500);
+                        }
+                   	  },500);
+              }  
+       	  },500);
       }
 
       static get observers() {
@@ -367,13 +409,14 @@
       
       ready(){
     	  super.ready();
+    	  this.initBusquedaDireccions();
       }
 
       _regresar(){
     	  window.location.href='visitame/oficinas';
     	  this.pagina ="oficinas";
       }
-
+    }
     window.customElements.define(VisitameApp.is, VisitameApp);
   </script>
     

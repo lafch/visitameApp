@@ -86,6 +86,10 @@ display: none;
           this.$.mapaOficinas.setMarkers(this.listOficinas);
     	 
       }
+
+      getMap(){
+			return this.$.mapaOficinas.getMap();
+	   }
       
       handleResponse(response) {
         let data = [];
