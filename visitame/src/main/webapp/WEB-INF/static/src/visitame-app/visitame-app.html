@@ -26,6 +26,8 @@
 
 <link rel="lazy-import" href="../visitame-app-views/pagina3.html">
 
+<link rel="import" href="../visitame-app-commons/parametros-commons.html">
+
 
 <dom-module id="visitame-app">
   <template>
@@ -209,8 +211,50 @@
   .back-btn{
   	color: white;
   }
+  
+   paper-progress{
+  width: 100%;
+
+  --paper-progress-active-color: #0d47a1;
+  }
+  
+     .mask-loading{
+      position: absolute;
+      background-color:#fff;
+      height: 100%;
+      width: 100%;
+      z-index: 100;  
+       margin: auto;
+  top: 0; left: 0; bottom: 0; right: 0;
+
+  
+
+    }
+    .child-element{
+ display: inline-block;
+  position: absolute;
+  top: 30%;
+  left:50%;
+  transform:translateX(-50%);
+
+
+
+    }
+.child-element img{
+margin-bottom: 15px;
+}
 
   </style>
+  
+  <parametros-commons id = "parametrosConfiguracion" ></parametros-commons>
+    
+  <div id = "loadingMain" class="mask-loading">
+	<div class="child-element">
+			<img src = "/VISITAME/static/images/logo.png" />
+			<paper-progress indeterminate class="slow"></paper-progress>
+	</div>
+</div>
+  
   <app-location route="{{route}}"></app-location>
   <app-route
       route="{{route}}"
@@ -350,21 +394,14 @@
       }
       
       initBusquedaDireccions(){
-    	  setTimeout(()=>{
-        	try{
-        			this.buildBusquedaDireccions(this.$.viewVisitas.getMap());
-            	}catch(e){
-            		setTimeout(()=>{
-                		try{
-            			this.buildBusquedaDireccions(this.$.viewVisitas.getMap());
-                		}catch(e){
-                			setTimeout(()=>{
-                    			this.buildBusquedaDireccions(this.$.viewVisitas.getMap());
-                           	  },500);
-                        }
-                   	  },500);
-              }  
-       	  },500);
+
+    	  let verify = setInterval(() => { 
+ 			 if(this.$.viewVisitas && this.$.viewVisitas.getMap){
+ 				this.buildBusquedaDireccions(this.$.viewVisitas.getMap());
+ 			 	clearInterval(verify);
+ 			 }
+ 		  }, 100);
+          
       }
 
       static get observers() {
@@ -412,9 +449,21 @@
 	  			this.$.viewAgentes.cargarMapa();	
 	  		}
       }
+
+ 	 init(loading){
+		 this.$.parametrosConfiguracion.init(loading);
+		 let verify = setInterval(() => { 
+			 if(this.$.viewVisitas && this.$.viewVisitas.init){
+			 	this.$.viewVisitas.init();
+			 	this.jobRefreshParametros();
+			 	clearInterval(verify);
+			 }
+		  }, 100);
+	  }
       
       ready(){
     	  super.ready();
+    	  this.init(this.$.loadingMain);
     	  this.initBusquedaDireccions();
       }
 
@@ -422,6 +471,17 @@
     	  window.location.href='visitame/oficinas';
     	  this.pagina ="oficinas";
       }
+
+      jobRefreshParametros(){
+
+     	 setInterval(() => { 
+ 			 if(this.$.parametrosConfiguracion && this.$.parametrosConfiguracion.init){
+ 				 this.$.parametrosConfiguracion.buildParametros();
+ 			 }
+ 		  }, 1000*60);
+
+      }
+      
     }
     window.customElements.define(VisitameApp.is, VisitameApp);
   </script>
