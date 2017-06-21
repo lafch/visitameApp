@@ -1,13 +1,13 @@
 <link rel="import"	href="../../bower_components/polymer/polymer-element.html">
 <link rel="import"	href="../visitame-app-views/unidadAtencion.html">
 
-<dom-module id="oficinas-view"> 
+<dom-module id="agentes-view"> 
 <template>
 <unidad-atencion-view id="unidadAtencion" tipo-unidad="[[tipoUnidad]]" seleccion="[[seleccion]]"></unidad-atencion-view>
 </template>
 <script>
-	class OficinasView extends Polymer.Element {
-	      static get is() { return 'oficinas-view'; }
+	class AgentesView extends Polymer.Element {
+	      static get is() { return 'agentes-view'; }
 	
 	      static get properties(){
 	        return {
@@ -15,9 +15,6 @@
 	            	type:String
 	              },
 	              seleccion:{
-	            	  type:String
-	              },
-	              estado:{
 	            	  type:String
 	              }
 	        }
@@ -27,6 +24,6 @@
 	    	  this.$.unidadAtencion.cargarMapa();
 	      }
 	}
-    window.customElements.define(OficinasView.is, OficinasView);
+    window.customElements.define(AgentesView.is, AgentesView);
   </script>
 </dom-module>

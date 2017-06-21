@@ -19,7 +19,9 @@
 
 <link rel="import" href="../visitame-app-icons/main-icons.html">
 <link rel="lazy-import" href="../visitame-app-views/oficinas.html">
-<link rel="lazy-import" href="../visitame-app-views/pagina2.html">
+<link rel="lazy-import" href="../visitame-app-views/cajeros.html">
+<link rel="lazy-import" href="../visitame-app-views/agentes.html">
+
 <link rel="lazy-import" href="../visitame-app-views/pagina3.html">
 
 
@@ -224,8 +226,8 @@
 <!--           <paper-tab name="pagina3"><a  href="visitame/pagina3">View Three</a></paper-tab> -->
 <!--       </paper-tabs> -->
         <a name="oficinas"  href="visitame/oficinas">Oficinas</a>
-        <a name="pagina2" href="visitame/pagina2">Cajeros</a>
-        <a name="pagina3" href="visitame/pagina3">Agentes</a>
+        <a name="cajeros" href="visitame/cajeros">Cajeros</a>
+        <a name="agentes" href="visitame/agentes">Agentes</a>
       </iron-selector>
     </app-drawer>
 
@@ -261,8 +263,8 @@
           
           <paper-tabs selected="[[pagina]]" attr-for-selected="name" no-bar>
           <paper-tab  name="oficinas"><a   href="visitame/oficinas">Oficinas</a></paper-tab>
-          <paper-tab name="pagina2"><a  href="visitame/pagina2">Cajeros</a></paper-tab>
-          <paper-tab  name="pagina3"><a  href="visitame/pagina3">Cajeros</a></paper-tab>
+          <paper-tab  name="cajeros"><a   href="visitame/cajeros">Cajeros</a></paper-tab>
+          <paper-tab  name="agentes"><a  href="visitame/agentes">Agentes</a></paper-tab>
       </paper-tabs>
           
           
@@ -284,9 +286,10 @@
           attr-for-selected="name"
           fallback-selection="view404"
           role="main">
-        <oficinas-view id ="viewVisitas" name="oficinas"></oficinas-view>
-        <my-view2 name="pagina2"></my-view2>
-        <my-view3 name="pagina3"></my-view3>
+          
+        <oficinas-view id ="viewVisitas" name="oficinas" seleccion="[[pagina]]" tipo-unidad="O"></oficinas-view>
+        <cajeros-view id ="viewCajeros"  name="cajeros"  seleccion="[[pagina]]" tipo-unidad="C"></cajeros-view>
+        <cajeros-view id ="viewAgentes"  name="agentes"  seleccion="[[pagina]]" tipo-unidad="A"></agentes-view>
         <my-view404 name="view404"></my-view404>
       </iron-pages>
     </app-header-layout>
@@ -305,7 +308,7 @@
           pagina: {
             type: String,
             reflectToAttribute: true,
-            observer: '_pageChanged',
+            observer: '_pageChanged'
           },
           results : {
               type : Array,
@@ -342,13 +345,9 @@
       }
 
       _pageChanged(pagina) {
+//     	pagina = pagina === "cajeros" ? "oficinas" : pagina;  
         var resolvedPageUrl = this.resolveUrl('../visitame-app-views/'+pagina + '.html');
-        Polymer.importHref(
-            resolvedPageUrl,
-            null,
-            this._showPage404.bind(this),
-            true);
-        
+        Polymer.importHref( resolvedPageUrl,  null, this._showPage404.bind(this), true);
         this.iconoMapa = "list";
       }
 
@@ -357,12 +356,19 @@
       }
 
       _verMapa(){
-   	  if(this.iconoMapa === 'maps:streetview'){
+   	  		if(this.iconoMapa === 'maps:streetview'){
     			this.iconoMapa = 'list';
     	  	}else{
     	  		this.iconoMapa = 'maps:streetview';
     	  	}
-  	  	this.$.viewVisitas.cargarMapa();
+   	  		
+   	  		if(this.pagina === "oficinas"){
+   	  			this.$.viewVisitas.cargarMapa();	
+   	  		}else if(this.pagina === "cajeros"){
+	  			this.$.viewCajeros.cargarMapa();	
+	  		}if(this.pagina === "agentes"){
+	  			this.$.viewAgentes.cargarMapa();	
+	  		}
       }
       
       _regresar(){
