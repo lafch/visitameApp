@@ -1,7 +1,7 @@
 <link rel="import"	href="../../bower_components/polymer/polymer-element.html">
 <link rel="import"	href="../../bower_components/paper-spinner/paper-spinner.html">
-<link rel="import"	href="../../bower_components/google-map/google-map.html">
-<link rel="import"  href="../../bower_components/google-map/google-map-marker.html">
+<!-- <link rel="import"	href="../../bower_components/google-map/google-map.html">
+<link rel="import"  href="../../bower_components/google-map/google-map-marker.html"> -->
 <link rel="import"  href="../visitame-app-icons/main-icons.html">
 <link rel="import"  href="../visitame-app-styles/main-style.html">
 <link rel="import"	href="../visitame-app-services/geolocalizacion-service.html">
@@ -37,7 +37,9 @@
 		 	<img id="imgGps" src="static/images/ic_gps.svg">
 		</div>
 		
-		<google-map id="mapPois"  api-key="AIzaSyDqyFz0Q9ZZLMmgqJhck4soRfa0V1s71jQ" > </google-map>
+		<div id = "mapContent" style="height:600px;width:100%;"></div>
+		
+<!-- 		<google-map id="mapPois"  api-key="AIzaSyDqyFz0Q9ZZLMmgqJhck4soRfa0V1s71jQ" > </google-map> -->
 	</template> 
 	<script>
 	    class MapaView extends Polymer.Element {
@@ -55,33 +57,46 @@
 		          errorDescripcion : {
 			           type : String
 			      }
+			      ,
+			      mapPois:{
+			    	  type : Object,
+			    	  value:{}
+				    }
 	        }
 	      }
 
 	      getMap(){
-				return this.$.mapPois.map;
+
+				return this.mapPois; 
 		   }
 	      clearMap(){
-				this.$.mapPois.map.fitBounds(null);
+				this.mapPois.fitBounds(null);
 		   }
 	     setMarkers(data){
 	    	 navigator.geolocation.getCurrentPosition(
 	    		(position) =>{
-					if(this.$.mapPois.map){
+					if(this.mapPois){
 						
-						var map = this.$.mapPois.map;
+						var map = this.mapPois;
 			
 						google.maps.event.trigger(map, "resize");
 						
 				          if(data){
 				        	  data.forEach((a,b)=>{
 									
-									 var marker = document.createElement('google-map-marker');
+									/*  var marker = document.createElement('google-map-marker');
 									  marker.setAttribute('latitude', parseFloat(a.latitude));
 							          marker.setAttribute('longitude', parseFloat(a.longitude));
 							          marker.setAttribute('title', a.name);
 							          marker.innerHTML = a.name;
-							          this.$.mapPois.appendChild(marker); 
+							          this.$.mapPois.appendChild(marker);  */
+								 let point = {lat: parseFloat(a.latitude), lng: parseFloat(a.longitude)};
+				        		  let marker = new google.maps.Marker({
+				        	          position: point,
+				        	          map: this.mapPois,
+				        	          title: a.name
+				        	        });
+						          
 					          });
 					      }
 			
@@ -115,7 +130,7 @@
 	     } 
 	     centrarUbicacion() {
 	         navigator.geolocation.getCurrentPosition((position) =>{
-	        		var map = this.$.mapPois.map;
+	        		var map = this.mapPois;
 					var center = {lat: position.coords.latitude, lng: position.coords.longitude};
 	        		map.setCenter(center);
 
@@ -124,6 +139,14 @@
 	 
 	     ready() {
 	            super.ready();
+
+	            this.mapPois =new google.maps.Map(this.$.mapContent, {
+	                center: {lat: -34.397, lng: 150.644},
+	                zoom: 16
+	              });
+	            
+	            /* this.$.mapContent */
+	            
 	            console.log('mapa Ready!');
 	     }
    		}

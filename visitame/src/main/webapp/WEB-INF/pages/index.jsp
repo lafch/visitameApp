@@ -44,7 +44,7 @@
 
     <link rel="import" href="<%=request.getContextPath()%>/static/src/visitame-app/visitame-app.html">
     <link rel="import" href="<%=request.getContextPath()%>/static/src/visitame-app-views/view-error-dialog.html">
-
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqyFz0Q9ZZLMmgqJhck4soRfa0V1s71jQ&libraries=places"></script>
     <style>
       body {
         margin: 0;

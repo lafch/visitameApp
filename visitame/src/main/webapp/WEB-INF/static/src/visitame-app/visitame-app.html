@@ -16,29 +16,25 @@
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/iron-input/iron-input.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="../../bower_components/google-map/google-map.html">
-<link rel="import" href="../../bower_components/google-map/google-map-search.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../visitame-app-icons/main-icons.html">
-
 <link rel="import" href="../visitame-app-styles/visitame-style.html">
-
 <link rel="lazy-import" href="../visitame-app-views/oficinas.html">
 <link rel="lazy-import" href="../visitame-app-views/cajeros.html">
 <link rel="lazy-import" href="../visitame-app-views/agentes.html">
-
 <link rel="lazy-import" href="../visitame-app-views/pagina3.html">
-
 <link rel="import" href="../visitame-app-commons/parametros-commons.html">
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqyFz0Q9ZZLMmgqJhck4soRfa0V1s71jQ&libraries=places"
-        async defer></script>
+
 
 <dom-module id="visitame-app">
   <template>
+  
   <style include="visitame-styles"></style>
   
+  <!-- Uso de Parametros -->
   <parametros-commons id = "parametrosConfiguracion" ></parametros-commons>
     
+  <!-- Routing -->
   <app-location route="{{route}}"></app-location>
   <app-route
       route="{{route}}"
@@ -46,31 +42,23 @@
       data="{{routeData}}"
       tail="{{subroute}}"></app-route>
 
+  <!-- Menu Toolbar -->
   <app-drawer-layout fullbleed>
-    <!-- Drawer content -->
     <app-drawer id="drawer" slot="drawer">
       <iron-selector selected="[[pagina]]" attr-for-selected="name" class="drawer-list" role="navigation">
-<!--       <paper-tabs selected="[[pagina]]" attr-for-selected="name" link> -->
-<!--           <paper-tab name="oficinas"><a   href="visitame/oficinas">Oficinas</a></paper-tab> -->
-<!--           <paper-tab name="pagina2"><a  href="visitame/pagina2">View Two</a></paper-tab> -->
-<!--           <paper-tab name="pagina3"><a  href="visitame/pagina3">View Three</a></paper-tab> -->
-<!--       </paper-tabs> -->
         <a name="oficinas"  href="visitame/oficinas">Oficinas</a>
         <a name="cajeros" href="visitame/cajeros">Cajeros</a>
         <a name="agentes" href="visitame/agentes">Agentes</a>
       </iron-selector>
-    </app-drawer>
+  </app-drawer>
 
     <!-- Main content -->
     <app-header-layout has-scrolling-region>
 
-
       <app-header slot="header" condenses reveals effects="waterfall">
         <app-toolbar >
           <paper-icon-button class="ver" icon="my-icons:menu" drawer-toggle></paper-icon-button>
-<!--           <a class="back-btn"  href="visitame/oficinas"> -->
           <paper-icon-button class="back-btn" icon="arrow-back" aria-label="Atrás" on-click="_regresar"></paper-icon-button>
-<!--         </a> -->
           <div main-title>Visitame</div>
         </app-toolbar>
 
@@ -81,30 +69,14 @@
           	<paper-tab  name="agentes"><a  href="visitame/agentes">Agentes</a></paper-tab>
       	  </paper-tabs>
         </app-toolbar>
+        
         <app-toolbar class="ver buscador">
             <paper-icon-button icon="[[iconoMapa]]" class="boton-mapa" on-click = "_verMapa" style="color:white;"></paper-icon-button>
             <div class="buscador-contenedor">
-            <!-- <iron-icon icon="search" class="icono-buscar"></iron-icon>-->
-            <!-- <input id="buscador" is="iron-input" class="buscador-input">-->
-            
-            <paper-input  id="buscador" class="buscador-input" 	type="text" placeholder="Buscar Direcci&#243;n">
-              <!-- width: 86%-->
+            	<paper-input  id="buscador" class="buscador-input" 	type="text" placeholder="Buscar Direcci&#243;n">
             </div>
         </app-toolbar>
       </app-header>
-
-<paper-input value = "{{query}}">
-
-</paper-input>
-
-<google-map-search id="idMap" map = {{map}} query="{{query}}" results="{{results}}">
-      			</google-map-search>
-      			
-      	<ul >
-		<template is="dom-repeat" items="{{results}}">
-			<li style="border-bottom: 1px #ccc solid;">{{item.name}}</li>
-		</template>
-	</ul>
 
       <iron-pages
           selected="[[pagina]]"
@@ -116,7 +88,9 @@
         <cajeros-view id ="viewCajeros"  name="cajeros"  seleccion="[[pagina]]" tipo-unidad="C"></cajeros-view>
         <cajeros-view id ="viewAgentes"  name="agentes"  seleccion="[[pagina]]" tipo-unidad="A"></agentes-view>
         <my-view404 name="view404"></my-view404>
+        
       </iron-pages>
+      
     </app-header-layout>
   </app-drawer-layout>
   </template>
@@ -126,186 +100,182 @@
      * @customElement
      * @polymer
      */
-    class VisitameApp extends Polymer.Element {
-      static get is() { return 'visitame-app'; }
-      static get properties() {
-        return {
-          pagina: {
-            type: String,
-            reflectToAttribute: true,
-            observer: '_pageChanged'
-          },
-          results : {
-              type : Array,
-              value : []
-          },
-          map: Object,
-          rootPattern: String,
-          routeData: Object,
-          subroute: String,
-          iconoMapa: {
-        	  type: String,
-        	  value: 'maps:streetview'
-          }
-        };
-      }
+     class VisitameApp extends Polymer.Element {
+         static get is() { return 'visitame-app'; }
+         static get properties() {
+           return {
+             pagina: {
+               type: String,
+               reflectToAttribute: true,
+               observer: '_pageChanged'
+             },
+             results : {
+                 type : Array,
+                 value : []
+             },
+             map: Object,
+             rootPattern: String,
+             routeData: Object,
+             subroute: String,
+             iconoMapa: {
+           	  type: String,
+           	  value: 'maps:streetview'
+             }
+           };
+         }
 
 
-      buildBusquedaDireccions(map){
-          
-          if(map && !this.$.map){
-        	  this.$.map = map;
-              var input = this.$.buscador;
-              var context = this;
-              var searchBox = new google.maps.places.SearchBox(input);
-              
-              map.addListener('bounds_changed', function() {
-                 searchBox.setBounds(map.getBounds());
-              });
+         buildBusquedaDireccions(map){
+             
+             if(map && !this.$.map){
+           	  this.$.map = map;
+                 var input = this.$.buscador;
+                 var context = this;
+                 var searchBox = new google.maps.places.SearchBox(input);
+                 
+                 map.addListener('bounds_changed', function() {
+                    searchBox.setBounds(map.getBounds());
+                 });
 
-              var markers = [];
-              
-              searchBox.addListener('places_changed', function() {
-            	
-            	context.$.viewVisitas.clearListOficinas();
-            	context.$.viewVisitas.clearMapa();
-            	
-				var places = searchBox.getPlaces();
-				
-				if (places.length == 0) {
-					return;
-				}
+                 var markers = [];
+                 
+                 searchBox.addListener('places_changed', function() {
+               	
+               	context.$.viewVisitas.clearListOficinas();
+               	context.$.viewVisitas.clearMapa();
+               	
+   				var places = searchBox.getPlaces();
+   				
+   				if (places.length == 0) {
+   					return;
+   				}
 
-	            markers.forEach(function(marker) {
-	            	marker.setMap(null);
-	            });
-	            markers = [];
-	
-	            var bounds = new google.maps.LatLngBounds();
-	            places.forEach(function(place) {
-					if (!place.geometry) {
-	                	console.log("Returned place contains no geometry");
-	                	return;
-	              	}
-	              	var icon = {
-		                url: place.icon,
-		                size: new google.maps.Size(71, 71),
-		                origin: new google.maps.Point(0, 0),
-		                anchor: new google.maps.Point(17, 34),
-		                scaledSize: new google.maps.Size(25, 25)
-	              	};
+   	            markers.forEach(function(marker) {
+   	            	marker.setMap(null);
+   	            });
+   	            markers = [];
+   	
+   	            var bounds = new google.maps.LatLngBounds();
+   	            places.forEach(function(place) {
+   					if (!place.geometry) {
+   	                	console.log("Returned place contains no geometry");
+   	                	return;
+   	              	}
+   	              	var icon = {
+   		                url: place.icon,
+   		                size: new google.maps.Size(71, 71),
+   		                origin: new google.maps.Point(0, 0),
+   		                anchor: new google.maps.Point(17, 34),
+   		                scaledSize: new google.maps.Size(25, 25)
+   	              	};
 
-	              	markers.push(new google.maps.Marker({
-		                map: map,
-		                icon: icon,
-		                title: place.name,
-		                position: place.geometry.location
-		            }));
-		
-					if (place.geometry.viewport) {
-					 	bounds.union(place.geometry.viewport);
-					} else {
-						bounds.extend(place.geometry.location);
-					}
-					
-					context.$.viewVisitas.getOficinasxUbicacion(place.geometry.location.lat(),place.geometry.location.lng());
-					
-				});
-	            map.fitBounds(bounds);
-	         });
-          }
-      }
-      
-      
-      initBusquedaDireccions(){
+   	              	markers.push(new google.maps.Marker({
+   		                map: map,
+   		                icon: icon,
+   		                title: place.name,
+   		                position: place.geometry.location
+   		            }));
+   		
+   					if (place.geometry.viewport) {
+   					 	bounds.union(place.geometry.viewport);
+   					} else {
+   						bounds.extend(place.geometry.location);
+   					}
+   					
+   					context.$.viewVisitas.getOficinasxUbicacion(place.geometry.location.lat(),place.geometry.location.lng());
+   					
+   				});
+   	            map.fitBounds(bounds);
+   	         });
+             }
+         }
+         
+         initBusquedaDireccions(){
+       	  let verify = setInterval(() => { 
+    			 if(this.$.viewVisitas && this.$.viewVisitas.getMap){
+    				this.buildBusquedaDireccions(this.$.viewVisitas.getMap());
+    			 	clearInterval(verify);
+    			 }
+    		  }, 100);
+         }
 
-          
+         static get observers() {
+           return [
+             '_routePageChanged(routeData.pagina)',
+           ];
+         }
 
-    	  let verify = setInterval(() => { 
- 			 if(this.$.viewVisitas && this.$.viewVisitas.getMap){
- 				this.buildBusquedaDireccions(this.$.viewVisitas.getMap());
- 			 	clearInterval(verify);
- 			 }
- 		  }, 100);
-          
-      }
+         constructor() {
+           super();
+           this.rootPattern = (new URL(this.rootPath)).pathname;
+         }
 
-      static get observers() {
-        return [
-          '_routePageChanged(routeData.pagina)',
-        ];
-      }
+         _routePageChanged(pagina) {
+           this.pagina = pagina || 'oficinas';
 
-      constructor() {
-        super();
-        this.rootPattern = (new URL(this.rootPath)).pathname;
-      }
+           if (!this.$.drawer.persistent) {
+             this.$.drawer.close();
+           }
+         }
 
-      _routePageChanged(pagina) {
-        this.pagina = pagina || 'oficinas';
+         _pageChanged(pagina) {
+//        	pagina = pagina === "cajeros" ? "oficinas" : pagina;v
+   		this.$.buscador.value = null;
+           var resolvedPageUrl = this.resolveUrl('../visitame-app-views/'+pagina + '.html');
+           Polymer.importHref( resolvedPageUrl,  null, this._showPage404.bind(this), true);
+           
+           this.iconoMapa = "list";
+         }
 
-        if (!this.$.drawer.persistent) {
-          this.$.drawer.close();
-        }
-      }
+         _showPage404() {
+           this.pagina = 'view404';
+         }
 
-      _pageChanged(pagina) {
-//     	pagina = pagina === "cajeros" ? "oficinas" : pagina;v
-		this.$.buscador.value = null;
-        var resolvedPageUrl = this.resolveUrl('../visitame-app-views/'+pagina + '.html');
-        Polymer.importHref( resolvedPageUrl,  null, this._showPage404.bind(this), true);
-        
-        this.iconoMapa = "list";
-      }
+         _verMapa(){
+      	  		if(this.iconoMapa === 'maps:streetview'){
+       			this.iconoMapa = 'list';
+       	  	}else{
+       	  		this.iconoMapa = 'maps:streetview';
+       	  	}
+      	  		
+      	  		if(this.pagina === "oficinas"){
+      	  			this.$.viewVisitas.cargarMapa();	
+      	  		}else if(this.pagina === "cajeros"){
+   	  			this.$.viewCajeros.cargarMapa();	
+   	  		}if(this.pagina === "agentes"){
+   	  			this.$.viewAgentes.cargarMapa();	
+   	  		}
+         }
 
-      _showPage404() {
-        this.pagina = 'view404';
-      }
+    	 init(loading){
+   		 this.$.parametrosConfiguracion.init(loading);
+   		 this.jobRefreshParametros();
+   	  }
+         
+         ready(){
+       	  super.ready();
+       	  this.init(this.$.loadingMain);
+       	  this.initBusquedaDireccions();
+         }
 
-      _verMapa(){
-   	  		if(this.iconoMapa === 'maps:streetview'){
-    			this.iconoMapa = 'list';
-    	  	}else{
-    	  		this.iconoMapa = 'maps:streetview';
-    	  	}
-   	  		
-   	  		if(this.pagina === "oficinas"){
-   	  			this.$.viewVisitas.cargarMapa();	
-   	  		}else if(this.pagina === "cajeros"){
-	  			this.$.viewCajeros.cargarMapa();	
-	  		}if(this.pagina === "agentes"){
-	  			this.$.viewAgentes.cargarMapa();	
-	  		}
-      }
+         _regresar(){
+       	  window.location.href='visitame/oficinas';
+       	  this.pagina ="oficinas";
+         }
 
- 	 init(loading){
-		 this.$.parametrosConfiguracion.init(loading);
-		 this.jobRefreshParametros();
-	  }
-      
-      ready(){
-    	  super.ready();
-    	  this.init(this.$.loadingMain);
-    	  this.initBusquedaDireccions();
-      }
+         jobRefreshParametros(){
 
-      _regresar(){
-    	  window.location.href='visitame/oficinas';
-    	  this.pagina ="oficinas";
-      }
+        	 setInterval(() => { 
+    			 if(this.$.parametrosConfiguracion && this.$.parametrosConfiguracion.init){
+    				 this.$.parametrosConfiguracion.buildParametros();
+    			 }
+    		  }, 1000*60);
 
-      jobRefreshParametros(){
-
-     	 setInterval(() => { 
- 			 if(this.$.parametrosConfiguracion && this.$.parametrosConfiguracion.init){
- 				 this.$.parametrosConfiguracion.buildParametros();
- 			 }
- 		  }, 1000*60);
-
-      }
-      
-    }
-    window.customElements.define(VisitameApp.is, VisitameApp);
+         }
+         
+       }
+       window.customElements.define(VisitameApp.is, VisitameApp);
+     
   </script>
     
 </dom-module>
