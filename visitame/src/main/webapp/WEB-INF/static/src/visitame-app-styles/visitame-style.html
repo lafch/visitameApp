@@ -68,11 +68,12 @@
           }
 
           :host(:not([pagina=pagina2])) .ver{
-            display: block;
+            display: var(--layout-horizontal_-_display);
           }
           
           paper-tabs {
           	--paper-tabs-selection-bar-color: #FFF;
+          	width: 100%;
           }
 		          
 		  paper-tab[link] a {
@@ -123,7 +124,6 @@
 		  }
 		  
 		  app-toolbar.buscador{
-		      width: 100%;
 		      background-color: #0051A9;
 		  }
 		  
@@ -146,17 +146,34 @@
 		  
 		  .buscador-input{
 		      border: 0px;
-		    width: 86%;
-		    font-size: 1.54em;
+		   
 		    
 		  }
 		  
+		  paper-input {
+		  	 --paper-input-container: {
+        		padding: 3px;
+/*         		display: inline-flex; */
+    		}
+    		
+    		--paper-input-container-focus-color: white;
+    		--paper-input-container-underline:{
+    			border:0px;
+    		}
+		  }
+		  
+		  :host.underline{
+		  	height: 0px;
+		  
+		  }
+		  
 		  .buscador-contenedor{
-		      float: left;
-		      display: inline-block;
+		      
+		      
 		      background-color: white;
 		      border: solid 1px;
-		      width: 82.9%;
+		      width: 100%;
+		      height: 39px;
 		      border-radius: 3px;
 		      padding-left: 2%;
 		  
@@ -169,6 +186,10 @@
 		  .toolbarNavegador	{
 		  	padding: 0px  !important;
 		  	height: inherit !important;
+		  }
+		  
+		  iron-icon.iconoBuscar{
+		  	color: #0078D2;
 		  }
 		</style>
 	</template> 
