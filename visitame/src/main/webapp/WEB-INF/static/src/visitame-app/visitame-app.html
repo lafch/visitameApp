@@ -30,120 +30,12 @@
 <link rel="lazy-import" href="../visitame-app-views/pagina3.html">
 
 <link rel="import" href="../visitame-app-commons/parametros-commons.html">
-
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqyFz0Q9ZZLMmgqJhck4soRfa0V1s71jQ&libraries=places"
+        async defer></script>
 
 <dom-module id="visitame-app">
   <template>
   <style include="visitame-styles"></style>
-  
-  paper-tab{
-      border-left: 1px solid;
-    border-color: #FFF;
-  }
-  
-  paper-tab{
-      --paper-tab-content: {
-           line-height:2.5;
-           text-align: center;
-           color: #fff;
-      }
-  }
-  
-  paper-input paper-input-container {
-      background-color: white;
-       `--paper-input-container-label-floating:{
-        display: none;           
-       }
-  
-  }
-  
-  paper-input{
-      `--paper-input-container-label-floating:{
-        display: none;           
-       }
-      background-color: white;
-  }
-  
-
-  
-  paper-tabs[no-bar] paper-tab.iron-selected a{
-    color: #2196F3;
-  }
-  
-  paper-tabs[no-bar] paper-tab a{
-    color: #fff;
-    font-size: 1.3em;
-    text-decoration:none;  
-  }
-  
-  
-  
-  
-  
-  paper-tabs{
-      width: 100%;
-      border: 1px solid;
-      border-radius: 5px;
-      color: #fff;
-  }
-  
-  
-  
-  
-  .iron-selected{
-      background-color: white;
-  }
-  
-  app-toolbar.buscador{
-      width: 92%;
-      margin-right: 5%;
-      
-  }
-  
-/*   app-toolbar{ */
-/*       height: 54px; */
-/*   } */
-  
-  paper-icon-button.boton-mapa{
-      float: left;
-      display: block;
-      background-color: var(--paper-grey-400);
-      border-radius: 3px;
-      margin-right: 2%;
-  }
-  
-  .buscador-input{
-      border: 0px;
-    
-    font-size: 1.54em;
-    
-  }
-
-  .buscador-contenedor{
-      float: left;
-      display: inline-block;
-      background-color: white;
-      border: solid 1px;
-      width: 82.9%;
-      border-radius: 3px;
-      padding-left: 2%;
-      height: 60%;
-  
-  }
-  
-  iron-icon.icono-buscar{
-      color: black;
-      margin-top: -5px;
-  }
-  
-  .back-btn{
-  	color: white;
-  }
-
- 
- 
- 
-  </style>
   <app-location route="{{route}}"></app-location>
   <app-route
       route="{{route}}"
