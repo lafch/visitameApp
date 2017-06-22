@@ -36,8 +36,8 @@
   <template>
   <style include="visitame-styles"></style>
   
- 
-  </style>
+  <parametros-commons id = "parametrosConfiguracion" ></parametros-commons>
+    
   <app-location route="{{route}}"></app-location>
   <app-route
       route="{{route}}"
@@ -167,7 +167,6 @@
       }
 
       buildBusquedaDireccions(map){
-          console.log(map);
           if(map && !this.$.map){
               this.$.map = map;
               this.$.idMap.set( 'map' , map);
@@ -179,7 +178,7 @@
       initBusquedaDireccions(){
 
     	  let verify = setInterval(() => { 
- 			 if(this.$.viewVisitas && this.$.viewVisitas.getMap){
+ 			 if(this.$.viewVisitas && this.$.viewVisitas.getMap && this.$.viewVisitas.getMap()){
  				this.buildBusquedaDireccions(this.$.viewVisitas.getMap());
  			 	clearInterval(verify);
  			 }
@@ -235,13 +234,7 @@
 
  	 init(loading){
 		 this.$.parametrosConfiguracion.init(loading);
-		 let verify = setInterval(() => { 
-			 if(this.$.viewVisitas && this.$.viewVisitas.init){
-			 	this.$.viewVisitas.init();
-			 	this.jobRefreshParametros();
-			 	clearInterval(verify);
-			 }
-		  }, 100);
+		 this.jobRefreshParametros();
 	  }
       
       ready(){
