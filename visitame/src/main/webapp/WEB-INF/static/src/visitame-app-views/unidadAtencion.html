@@ -142,15 +142,18 @@ display: none;
       }
   
       _seleccionar() {
-    	    console.log(this.tipoUnidad);
+    	  
+		    console.log(this.tipoUnidad);
     	    console.log(this.seleccion);
     	    this.resetearMapa();
 			navigator.geolocation.getCurrentPosition(
 				(position) =>{
 				 var geolocalizacionService = this.$.geoLocalizacionService;
 			     var requestOficinas = geolocalizacionService.listarOficinas({
-						params : {"latitud": position.coords.latitude , "longitud": position.coords.longitude , "radius": "5000", "type": this.tipoUnidad}
-			     });
+						params : {"latitud": position.coords.latitude ,
+								  "longitud": position.coords.longitude ,
+							    "radius": "5000", "type": this.tipoUnidad}
+				});
 			     requestOficinas.then((xhr) => {
 					this.handleResponse(xhr.response);
 			    });
@@ -178,10 +181,33 @@ display: none;
 				divContainer.innerHTML = this.errorDescripcion;
 	            this.$.containerOficina.appendChild(divContainer);
 	            
-			});
-             
+			});   
       }
+      getOficinasxUbicacion(latitude, longitude){
+
+    	  console.log("lat " + latitude);
+    	  console.log("log " +longitude);
+          this.$.loadingLista.active = true;
+    	  var geolocalizacionService = this.$.geoLocalizacionService;
+		     var requestOficinas = geolocalizacionService.listarOficinas({
+					params : {"latitud": latitude , "longitud":longitude , "radius": "5000", "type": "O"}
+		     });
+		     requestOficinas.then((xhr) => {
+				this.handleResponse(xhr.response);
+				this.$.mapaOficinas.setMarkers(this.listOficinas);
+		    });
+      }
+     
+      getMap(){
+    	  return this.$.mapaOficinas.getMap();
+	   }
       
+      clearMapa(){
+    	//  return this.$.mapaOficinas.clearMap();
+      }
+      clearListOficinas(){
+    	  this.listOficinas = [];
+      }
       
     }
 
