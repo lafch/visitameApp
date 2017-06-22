@@ -20,13 +20,25 @@
 	        }
 	      }
 	      
-	      cargarMapa(){
-	    	  this.$.unidadAtencion.cargarMapa();
+	      cargarMapa(center){
+	    	  this.$.unidadAtencion.cargarMapa(center);
 	      }
+	      getOficinasxUbicacion(latitude, longitude){
+				return this.$.unidadAtencion.getOficinasxUbicacion(latitude, longitude);
+		  }
 	      
 	      resetearMapa(){
 	    	  this.$.unidadAtencion.resetearMapa();
 	      }
+
+
+	      clearListOficinas(){
+				return this.$.unidadAtencion.clearListOficinas();
+	 		  }
+	    	  clearMapa(){
+				return this.$.unidadAtencion.clearMapa();  
+	 		  }
+	      
 	}
     window.customElements.define(CajerosView.is, CajerosView);
   </script>

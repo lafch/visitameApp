@@ -132,6 +132,11 @@
            	  type: String,
            	  value: 'maps:streetview'
              }
+             ,
+             center :{
+                 type: Object,
+                 value : {}
+                 }
            };
          }
 
@@ -151,75 +156,33 @@
                  
                  searchBox.addListener('places_changed', () =>{
 
-                	 console.log('1.places_changed');
-                	 this.$.viewVisitas.clearListOficinas();
-                	 //this.$.viewVisitas.clearMapa();
-                	 console.log('1.2.places_changed');
-
+                	 //this.$.viewVisitas.clearListOficinas();
                 	 var places = searchBox.getPlaces();
         				
         				if (places.length == 0) {
         					return;
         				}
-        				 console.log(places);
-        				 console.log('1.2.places_changed');
-        				
 
+        				let viewOrigen = null;
+
+        				if(this.pagina === "oficinas"){
+        					viewOrigen = this.$.viewVisitas;	
+        	   	  		}else if(this.pagina === "cajeros"){
+        	   	  			viewOrigen = this.$.viewCajeros;	
+        	   	  		}if(this.pagina === "agentes"){
+        	   	  			viewOrigen = this.$.viewAgentes;	
+        	   	  		}
+	        	   	  	viewOrigen.clearListOficinas();
+	        	   	    viewOrigen.getOficinasxUbicacion(places[0].geometry.location.lat(),places[0].geometry.location.lng());
+	        	   	 	this.center = {
+								latitude : places[0].geometry.location.lat(),
+								longitude : places[0].geometry.location.lng()
+		    				};
+	        	   	    
                  } );
 
                  
-         /*         
-
-                 var markers = [];
-                 
-                 searchBox.addListener('places_changed', function() {
-               	
-               	context.$.viewVisitas.clearListOficinas();
-               	context.$.viewVisitas.clearMapa();
-               	
-   				var places = searchBox.getPlaces();
-   				
-   				if (places.length == 0) {
-   					return;
-   				}
-
-   	            markers.forEach(function(marker) {
-   	            	marker.setMap(null);
-   	            });
-   	            markers = [];
-   	
-   	            var bounds = new google.maps.LatLngBounds();
-   	            places.forEach(function(place) {
-   					if (!place.geometry) {
-   	                	console.log("Returned place contains no geometry");
-   	                	return;
-   	              	}
-   	              	var icon = {
-   		                url: place.icon,
-   		                size: new google.maps.Size(71, 71),
-   		                origin: new google.maps.Point(0, 0),
-   		                anchor: new google.maps.Point(17, 34),
-   		                scaledSize: new google.maps.Size(25, 25)
-   	              	};
-
-   	              	markers.push(new google.maps.Marker({
-   		                map: map,
-   		                icon: icon,
-   		                title: place.name,
-   		                position: place.geometry.location
-   		            }));
-   		
-   					if (place.geometry.viewport) {
-   					 	bounds.union(place.geometry.viewport);
-   					} else {
-   						bounds.extend(place.geometry.location);
-   					}
-   					
-   					context.$.viewVisitas.getOficinasxUbicacion(place.geometry.location.lat(),place.geometry.location.lng());
-   					
-   				});
-   	            map.fitBounds(bounds);
-   	         }); */
+       
              }
          }
          
@@ -252,8 +215,12 @@
          }
 
          _pageChanged(pagina) {
-//        	pagina = pagina === "cajeros" ? "oficinas" : pagina;v
-   		this.$.buscador.value = null;
+
+	        if(this.$.parametrosConfiguracion && this.$.parametrosConfiguracion.getParametros && this.$.parametrosConfiguracion.getParametros()){
+	        	this.center = this.$.parametrosConfiguracion.getParametros().posicionActual;
+	        }
+            
+   			this.$.buscador.value = null;
            var resolvedPageUrl = this.resolveUrl('../visitame-app-views/'+pagina + '.html');
            Polymer.importHref( resolvedPageUrl,  null, this._showPage404.bind(this), true);
            
@@ -271,19 +238,19 @@
        	  		this.iconoMapa = 'maps:streetview';
        	  	}
       	  		
-      	  		if(this.pagina === "oficinas"){
-      	  			this.$.viewVisitas.cargarMapa();	
-      	  		}else if(this.pagina === "cajeros"){
-   	  			this.$.viewCajeros.cargarMapa();	
+  	  		if(this.pagina === "oficinas"){
+    	  			this.$.viewVisitas.cargarMapa(this.center);	
+    	  		}else if(this.pagina === "cajeros"){
+ 	  			this.$.viewCajeros.cargarMapa(this.center);	
    	  		}if(this.pagina === "agentes"){
-   	  			this.$.viewAgentes.cargarMapa();	
+   	  			this.$.viewAgentes.cargarMapa(this.center);	
    	  		}
          }
 
     	 init(loading){
-   		 this.$.parametrosConfiguracion.init(loading);
-   		 this.jobRefreshParametros();
-   	  	}
+	   		 this.$.parametrosConfiguracion.init(loading);
+	   		 this.jobRefreshParametros();
+   	  	 }
          
          ready(){
        	  super.ready();

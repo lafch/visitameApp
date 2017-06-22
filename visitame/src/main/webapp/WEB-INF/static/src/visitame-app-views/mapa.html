@@ -74,7 +74,7 @@
 	      clearMap(){
 				this.mapPois.fitBounds(null);
 		   }
-	     setMarkers(data){
+	     setMarkers(data,center){
 
 	    	 console.log(this.$.parametrosConfiguracion.getParametros())
 		     
@@ -104,8 +104,17 @@
 			
 				      	setTimeout(() => {
 							map.setZoom(16);
-							var center = {lat: this.$.parametrosConfiguracion.getParametros().posicionActual.latitude, lng: this.$.parametrosConfiguracion.getParametros().posicionActual.longitude};
-							map.setCenter(center);
+							if(!center){
+							}
+							var centroide = null;
+
+							if(center){
+								centroide = {lat: center.latitude, lng: center.longitude};
+							}else{
+								centroide = {lat: this.$.parametrosConfiguracion.getParametros().posicionActual.latitude, lng: this.$.parametrosConfiguracion.getParametros().posicionActual.longitude};
+							}
+							
+							map.setCenter(centroide);
 						}, 100);
 			          
 					}

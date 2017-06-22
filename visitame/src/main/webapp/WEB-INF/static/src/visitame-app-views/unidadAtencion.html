@@ -66,9 +66,13 @@ display: none;
 		      },
               seleccion:{
             	  type:String,
-//             	  reflectToAttribute: true,
                   observer: '_seleccionar',
-              }
+              },
+              tiposUnidad : {
+						oficinas : 'oficinas',
+						cajeros : 'cajeros',
+						agentes : 'agentes'
+                 }
         }
       }
 
@@ -87,7 +91,7 @@ display: none;
           }
       }	
 
-      cargarMapa(){
+      cargarMapa(center){
     	  
           if(this.$.mapaOficinas.style.display == 'block'){
         	  this.$.oficinasRecords.style.display = 'block';
@@ -97,7 +101,7 @@ display: none;
        		  this.$.mapaOficinas.style.display = 'block';
           }
 
-          this.$.mapaOficinas.setMarkers(this.listOficinas);
+          this.$.mapaOficinas.setMarkers(this.listOficinas,center);
     	 
       }
       
@@ -151,42 +155,57 @@ display: none;
       getMap(){
     	  return  this.$.mapaOficinas.getMap();
       }
-  
-      _seleccionar(nuevo , antiguo) {
-          console.log(nuevo);
-          console.log(antiguo);
-          
-          	SyncObjects(()=>{
-          		//console.log(this.$.parametrosConfiguracion.getParametros())
-          		this.resetearMapa();
+
+      loadMapa(latitud,longitud,tipo){
+
+    	  SyncObjects(()=>{
+        		//console.log(this.$.parametrosConfiguracion.getParametros())
+        		this.resetearMapa();
 				 var geolocalizacionService = this.$.geoLocalizacionService;
 			     var requestOficinas = geolocalizacionService.listarOficinas({
-						params : {"latitud": this.$.parametrosConfiguracion.getParametros().posicionActual.latitude ,
-								  "longitud": this.$.parametrosConfiguracion.getParametros().posicionActual.longitude ,
-							    "radius": this.$.parametrosConfiguracion.getParametros().radAlcance, "type": this.tipoUnidad}
+						params : {
+									"latitud": latitud,
+								  	"longitud": longitud,
+							    	"radius": this.$.parametrosConfiguracion.getParametros().radAlcance, 
+							    	"type": tipo || this.tipoUnidad
+							    }
 				});
 			     requestOficinas.then((xhr) => {
 					this.handleResponse(xhr.response);
 			    });
 
-            });
+          });	
+    	  
+      }
+  
+      _seleccionar(view) {
+
+    	  if(this.tiposUnidad){
+	    	  if(this.tiposUnidad.oficinas == view){
+	    		  this.tipoUnidad = 'O';
+	          }else if(this.tiposUnidad.cajeros == view){
+	        	  this.tipoUnidad = 'C';
+	          }else if(this.tiposUnidad.agentes == view){
+	        	  this.tipoUnidad = 'A';
+	          }
+    	  }
+          
+    	  SyncObjects(()=>{
+          	this.loadMapa(this.$.parametrosConfiguracion.getParametros().posicionActual.latitude,this.$.parametrosConfiguracion.getParametros().posicionActual.longitude);
+    	  });
       }
       getOficinasxUbicacion(latitude, longitude){
 
     	  console.log("lat " + latitude);
     	  console.log("log " +longitude);
-          this.$.loadingLista.active = true;
-    	  var geolocalizacionService = this.$.geoLocalizacionService;
-
-    	  	console.log(this.$.parametrosConfiguracion.getParametros());
+		  console.log(this.tipoUnidad);
+    	  if(!this.$.loadingLista.active){
+    		  this.$.loadingLista.active = true;
+          }
     	  
-		     var requestOficinas = geolocalizacionService.listarOficinas({
-					params : {"latitud": latitude , "longitud":longitude , "radius": "5000", "type": "O"}
-		     });
-		     requestOficinas.then((xhr) => {
-				this.handleResponse(xhr.response);
-				this.$.mapaOficinas.setMarkers(this.listOficinas);
-		    });
+    	  this.loadMapa(latitude,longitude);
+    	 
+    
       }
      
       getMap(){
