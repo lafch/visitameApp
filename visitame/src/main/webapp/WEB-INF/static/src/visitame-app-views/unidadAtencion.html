@@ -131,7 +131,8 @@ display: none;
                   description : poi.address,
                   iconColor : iconColor,
                   latitude : poi.latitude,
-                  longitude : poi.longitude
+                  longitude : poi.longitude,
+                  type: this.tipoUnidad 
                 }
               );
               i++;
@@ -150,7 +151,10 @@ display: none;
     	  return  this.$.mapaOficinas.getMap();
       }
   
-      _seleccionar() {
+      _seleccionar(nuevo , antiguo) {
+          console.log(nuevo);
+          console.log(antiguo);
+          
           	SyncObjects(()=>{
           		//console.log(this.$.parametrosConfiguracion.getParametros())
           		this.resetearMapa();
