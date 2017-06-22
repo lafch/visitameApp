@@ -268,6 +268,33 @@ paper-tab[link] a {
 		  iron-icon.iconoBuscar{
 		  	color: #0078D2;
 		  }
+		  
+		   paper-progress{
+ 			width: 100%;
+ 			--paper-progress-active-color: #0d47a1;
+ 		  }
+ 
+	    .mask-loading{
+	     	position: absolute;
+	     	background-color:#fff;
+	     	height: 100%;
+	     	width: 100%;
+	     	z-index: 100;  
+	      	margin: auto;
+	 		top: 0; left: 0; bottom: 0; right: 0;
+	   }
+   
+   		.child-element{
+			display: inline-block;
+ 			position: absolute;
+ 			top: 30%;
+ 			left:50%;
+ 			transform:translateX(-50%);
+	   }
+
+		.child-element img{
+			margin-bottom: 15px;
+		}
 		</style>
 	</template> 
 </dom-module>
