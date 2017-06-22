@@ -68,6 +68,16 @@
     <view-error-dialog id="dialog-error"></view-error-dialog>	
   </body>
   <script>
+
+  	function SyncObjects(callback){
+  		var verify = setInterval(() => { 
+				try{
+					callback();
+					clearInterval(verify);
+				}catch(e){}
+		  }, 100);
+  	}
+  
   	function mostrarError(mapaMensaje) {
 		var SEVERIDAD_ALTA 	= "ALTA";
 		var SEVERIDAD_MEDIA = "MEDIA";

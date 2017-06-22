@@ -5,8 +5,11 @@
 <link rel="import" href="../visitame-app-styles/oficinas-style.html">
 <link rel="import"	href="../visitame-app-services/geolocalizacion-service.html">
 <link rel="import"	href="../visitame-app-views/mapa.html">
+<link rel="import" href="../visitame-app-commons/parametros-commons.html">
 
-<dom-module id="unidad-atencion-view"> <template>
+<dom-module id="unidad-atencion-view"> 
+
+<template>
 
 <style include="main-styles">
 :host {
@@ -21,15 +24,17 @@ display: none;
 
 <style include="oficinas-styles">
 </style>
-
+ <!-- Uso de Parametros -->
+ <parametros-commons id = "parametrosConfiguracion" ></parametros-commons>
+ 
 <geolocalizacion-service id="geoLocalizacionService"></geolocalizacion-service>
 
 <div class="main-list-oficina" id="containerOficina">
 	<paper-spinner class="paper-spinner-loading" id="loadingLista" active></paper-spinner>
 	<ul id = "oficinasRecords">
 		<template is="dom-repeat" items="{{listOficinas}}">
-
-		<li><img src="{{pathParent}}images/icon_{{item.iconColor}}.png" />
+<!-- class ="card"  -->
+		<li ><img src="{{pathParent}}images/icon_{{item.iconColor}}.png" />
 				<h3>{{item.name}}</h3>
 			<p>{{item.description}}</p> <paper-icon-button
 				icon="my-icons:chevron-right"></paper-icon-button></li>
@@ -146,46 +151,20 @@ display: none;
       }
   
       _seleccionar() {
-    	  
-		    console.log(this.tipoUnidad);
-    	    console.log(this.seleccion);
-    	    this.resetearMapa();
-			navigator.geolocation.getCurrentPosition(
-				(position) =>{
+          	SyncObjects(()=>{
+          		//console.log(this.$.parametrosConfiguracion.getParametros())
+          		this.resetearMapa();
 				 var geolocalizacionService = this.$.geoLocalizacionService;
 			     var requestOficinas = geolocalizacionService.listarOficinas({
-						params : {"latitud": position.coords.latitude ,
-								  "longitud": position.coords.longitude ,
-							    "radius": "5000", "type": this.tipoUnidad}
+						params : {"latitud": this.$.parametrosConfiguracion.getParametros().posicionActual.latitude ,
+								  "longitud": this.$.parametrosConfiguracion.getParametros().posicionActual.longitude ,
+							    "radius": this.$.parametrosConfiguracion.getParametros().radAlcance, "type": this.tipoUnidad}
 				});
 			     requestOficinas.then((xhr) => {
 					this.handleResponse(xhr.response);
 			    });
-			},(error) =>{
- 
-	     	  	switch(error.code) {
-	      	    	case error.PERMISSION_DENIED:
-	      	    		this.errorDescripcion = "Usuario deneg&#243; utilizar la ubicaci&#243;n GPS."
-	        	      break;
-	        	    case error.POSITION_UNAVAILABLE:
-	        	    	this.errorDescripcion = "La informaci&#243;n de ubicaci&#243;n es inhabilitada."
-	        	      break;
-	        	    case error.TIMEOUT:
-	        	    	this.errorDescripcion = "La solicitud para obtener la ubicaci&#243;n del usuario se ha agotado."
-	        	      break;
-	        	    case error.UNKNOWN_ERROR:
-	        	    	this.errorDescripcion = "Un error desconocido ocurri&#243;."
-	        	      break;
-	        	}
-	     	  	
-	     	   	this.$.loadingLista.active = false;
-	        	
 
-				var divContainer = document.createElement('div');
-				divContainer.innerHTML = this.errorDescripcion;
-	            this.$.containerOficina.appendChild(divContainer);
-	            
-			});   
+            });
       }
       getOficinasxUbicacion(latitude, longitude){
 
@@ -193,6 +172,9 @@ display: none;
     	  console.log("log " +longitude);
           this.$.loadingLista.active = true;
     	  var geolocalizacionService = this.$.geoLocalizacionService;
+
+    	  	console.log(this.$.parametrosConfiguracion.getParametros());
+    	  
 		     var requestOficinas = geolocalizacionService.listarOficinas({
 					params : {"latitud": latitude , "longitud":longitude , "radius": "5000", "type": "O"}
 		     });
@@ -207,7 +189,7 @@ display: none;
 	   }
       
       clearMapa(){
-    	//  return this.$.mapaOficinas.clearMap();
+    	  return this.$.mapaOficinas.clearMap();
       }
       clearListOficinas(){
     	  this.listOficinas = [];

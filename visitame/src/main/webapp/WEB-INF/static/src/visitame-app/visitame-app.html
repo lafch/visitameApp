@@ -14,7 +14,6 @@
 <link rel="import" href="../../bower_components/iron-icons/maps-icons.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
-<link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
 <link rel="import" href="../../bower_components/iron-input/iron-input.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
@@ -31,15 +30,18 @@
   <template>
   
   <style include="visitame-styles"></style>
+
 	
+<parametros-commons id="parametrosConfiguracion"></parametros-commons>
+<div id="loadingMain" class="mask-loading">
+	<div class="child-element">
+		<img src="/VISITAME/static/images/logo.png" />
+		<paper-progress indeterminate class="slow"></paper-progress>
+	</div>
+</div>
+
   <!-- Uso de Parametros -->
   <parametros-commons id = "parametrosConfiguracion" ></parametros-commons>
-  <div id="loadingMain" class="mask-loading">
-		<div class="child-element">
-			<img src="/VISITAME/static/images/logo.png" />
-			<paper-progress indeterminate class="slow"></paper-progress>
-		</div>
-	</div>
     
   <!-- Routing -->
   <app-location route="{{route}}"></app-location>
@@ -139,10 +141,32 @@
                  var input = this.$.buscador;
                  var context = this;
                  var searchBox = new google.maps.places.SearchBox(input);
+
+
+                 map.addListener('bounds_changed', () => {
+                     searchBox.setBounds(map.getBounds());
+                  });
                  
-                 map.addListener('bounds_changed', function() {
-                    searchBox.setBounds(map.getBounds());
-                 });
+                 searchBox.addListener('places_changed', () =>{
+
+                	 console.log('1.places_changed');
+                	 this.$.viewVisitas.clearListOficinas();
+                	 //this.$.viewVisitas.clearMapa();
+                	 console.log('1.2.places_changed');
+
+                	 var places = searchBox.getPlaces();
+        				
+        				if (places.length == 0) {
+        					return;
+        				}
+        				 console.log(places);
+        				 console.log('1.2.places_changed');
+        				
+
+                 } );
+
+                 
+         /*         
 
                  var markers = [];
                  
@@ -193,7 +217,7 @@
    					
    				});
    	            map.fitBounds(bounds);
-   	         });
+   	         }); */
              }
          }
          
@@ -254,10 +278,10 @@
    	  		}
          }
 
-      init(loading){
+    	 init(loading){
    		 this.$.parametrosConfiguracion.init(loading);
    		 this.jobRefreshParametros();
-   	  }
+   	  	}
          
          ready(){
        	  super.ready();
@@ -276,7 +300,15 @@
     			 if(this.$.parametrosConfiguracion && this.$.parametrosConfiguracion.init){
     				 this.$.parametrosConfiguracion.buildParametros();
     			 }
-    		  }, 1000*60);
+    		  }, 1000*60*60);
+
+
+        	 setInterval(() => { 
+    			 if(this.$.parametrosConfiguracion && this.$.parametrosConfiguracion.init){
+    				 this.$.parametrosConfiguracion.refreshGeLocation();
+    			 }
+    		  }, 1000*30);
+     		  
 
          }
          

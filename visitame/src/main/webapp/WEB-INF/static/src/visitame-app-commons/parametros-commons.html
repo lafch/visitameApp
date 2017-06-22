@@ -1,4 +1,4 @@
-<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+ï»¿<link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import"	href="../visitame-app-services/configuracion-service.html">
 
 <dom-module id="parametros-commons">
@@ -33,6 +33,16 @@
 					parametros : {
 							type : Object,
 							value: {}
+					}
+					,
+					errorDescripcionGps :{
+							type : String,
+							value : ''
+					}
+					,
+					tituloErrorDescripcionGps :{
+							type : String,
+							value : 'Error GPS'
 					}
 				}
       }
@@ -72,14 +82,79 @@
     	return JSON.parse(localStorage.getItem(this.nameParametros));
     }  
 
+    showErrorGps(error){
+    	console.log("error" + error.code); 
+ 	  	switch(error.code) {
+  	    	case error.PERMISSION_DENIED:
+  	    		this.errorDescripcionGps = "Usuario deneg&#243; utilizar la ubicación GPS."
+    	      break;
+    	    case error.POSITION_UNAVAILABLE:
+    	    	this.errorDescripcionGps = "La información de ubicación es inhabilitada."
+    	      break;
+    	    case error.TIMEOUT:
+    	    	this.errorDescripcionGps = "La solicitud para obtener la ubicación del usuario se ha agotado."
+    	      break;
+    	    case error.UNKNOWN_ERROR:
+    	    	this.errorDescripcionGps = "Un error desconocido ocurrió."
+    	      break;
+    	}
+
+ 	  	swal(
+				  this.tituloErrorDescripcionGps,
+				  this.errorDescripcionGps,
+				  'error'
+		);
+     }
+
+    refreshGeLocation(){
+    	SyncObjects(()=>{
+    		navigator.geolocation.getCurrentPosition(
+					(position) => {
+						this.parametros = this.parametros || {};
+	    				this.parametros.posicionActual = {
+									latitude : position.coords.latitude,
+									longitude : position.coords.longitude
+			    				};
+					}
+					,
+					(error) =>{
+						this.showErrorGps(error);
+					}
+    	    	);
+    	});
+    	
+    }
+
     buildParametros(loading){
     	var request = this.$.configuracionService.listarParametrosByLista(this.codListaParametros);
 	     request.then((xhr) => {
 	    	xhr.response.valores.forEach((item) => {
 	    		this.parametros[this.formatCamell(item.cdAlterno)] = item.nbValor;
 			});
-	    	localStorage.setItem(this.nameParametros, JSON.stringify(this.parametros));
-	    	setTimeout(()=>{ if(loading){ loading.style.display = 'none'; } },500)
+
+	    	SyncObjects(()=>{
+	    		navigator.geolocation.getCurrentPosition(
+	    				(position) =>{
+		    				this.parametros = this.parametros || {};
+		    				this.parametros.posicionActual = {
+										latitude : position.coords.latitude,
+										longitude : position.coords.longitude
+				    				};
+		    				localStorage.setItem(this.nameParametros, JSON.stringify(this.parametros));
+		    		    	setTimeout(()=>{ if(loading){ loading.style.display = 'none'; } },500)
+		    			}
+		    			,
+		    			(error) =>{
+		    				localStorage.setItem(this.nameParametros, JSON.stringify(this.parametros));
+		    		    	setTimeout(()=>{ if(loading){ loading.style.display = 'none'; } },500)
+		    		    	this.showErrorGps(error);
+			    		}
+	    	    	);
+		    });
+	    	
+	    	
+			
+	    	
 	    }); 
     }
 
