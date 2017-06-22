@@ -85,21 +85,26 @@
 						google.maps.event.trigger(map, "resize");
 						
 				          if(data){
-				        	  data.forEach((a,b)=>{
+				        	  data.forEach((item,index)=>{
 									
-								 let point = {lat: parseFloat(a.latitude), lng: parseFloat(a.longitude)};
+								 let point = {lat: parseFloat(item.latitude), lng: parseFloat(item.longitude)};
 				        		  let marker = new google.maps.Marker({
 				        	          position: point,
 				        	          map: this.mapPois,
-				        	          title: a.name
+				        	          title: item.name
 				        	        });
+
+				        		  marker.addListener('click', function(e) {
+				        			  console.log(item);
+				        			    console.log(e);
+				        		  });
 						          
 					          });
 					      }
 			
 				      	setTimeout(() => {
 							map.setZoom(16);
-							var center = {lat: this.$.parametrosConfiguracion.posicionActual.latitude, lng: this.$.parametrosConfiguracion.posicionActual.longitude};
+							var center = {lat: this.$.parametrosConfiguracion.getParametros().posicionActual.latitude, lng: this.$.parametrosConfiguracion.getParametros().posicionActual.longitude};
 							map.setCenter(center);
 						}, 100);
 			          
