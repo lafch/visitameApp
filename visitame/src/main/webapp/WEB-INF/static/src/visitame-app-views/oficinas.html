@@ -4,6 +4,7 @@
 <dom-module id="oficinas-view"> 
 <template>
 <unidad-atencion-view id="unidadAtencion" tipo-unidad="[[tipoUnidad]]" seleccion="[[seleccion]]"></unidad-atencion-view>
+
 </template>
 <script>
 	class OficinasView extends Polymer.Element {
@@ -22,10 +23,21 @@
 	              }
 	        }
 	      }
-	      
+	      getMap(){
+			return this.$.unidadAtencion.getMap();
+	      }
 	      cargarMapa(){
 	    	  this.$.unidadAtencion.cargarMapa();
 	      }
+	      getOficinasxUbicacion(latitude, longitude){
+			return this.$.unidadAtencion.getOficinasxUbicacion(latitude, longitude);
+	      }
+ 		  clearListOficinas(){
+			return this.$.unidadAtencion.clearListOficinas();
+ 		  }
+    	  clearMapa(){
+			return this.$.unidadAtencion.clearMapa();  
+ 		  }
 	}
     window.customElements.define(OficinasView.is, OficinasView);
   </script>

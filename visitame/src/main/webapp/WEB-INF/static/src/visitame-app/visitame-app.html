@@ -25,6 +25,8 @@
 <link rel="lazy-import" href="../visitame-app-views/agentes.html">
 
 <link rel="lazy-import" href="../visitame-app-views/pagina3.html">
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqyFz0Q9ZZLMmgqJhck4soRfa0V1s71jQ&libraries=places"
+         async defer></script>
 
 
 <dom-module id="visitame-app">
@@ -185,11 +187,11 @@
   
   .buscador-input{
       border: 0px;
-    width: 86%;
+    
     font-size: 1.54em;
     
   }
-  
+
   .buscador-contenedor{
       float: left;
       display: inline-block;
@@ -198,6 +200,7 @@
       width: 82.9%;
       border-radius: 3px;
       padding-left: 2%;
+      height: 60%;
   
   }
   
@@ -275,25 +278,21 @@
         <app-toolbar class="ver buscador">
             <paper-icon-button icon="[[iconoMapa]]" class="boton-mapa" on-click = "_verMapa" style="color:white;"></paper-icon-button>
             <div class="buscador-contenedor">
-            <iron-icon icon="search" class="icono-buscar"></iron-icon>
-            <input id="buscador" is="iron-input" class="buscador-input">
+            <!-- <iron-icon icon="search" class="icono-buscar"></iron-icon>-->
+            <!-- <input id="buscador" is="iron-input" class="buscador-input">-->
             
+            <paper-input  id="buscador" class="buscador-input" 	type="text" placeholder="Buscar Direcci&#243;n">
+              <!-- width: 86%-->
             </div>
         </app-toolbar>
       </app-header>
-
+<!-- 
 <paper-input value = "{{query}}">
 
-</paper-input>
+</paper-input>-->
 
 <google-map-search id="idMap" map = {{map}} query="{{query}}" results="{{results}}">
       			</google-map-search>
-      			
-      	<ul >
-		<template is="dom-repeat" items="{{results}}">
-			<li style="border-bottom: 1px #ccc solid;">{{item.name}}</li>
-		</template>
-	</ul>
 
       <iron-pages
           selected="[[pagina]]"
@@ -339,15 +338,72 @@
         };
       }
 
+
       buildBusquedaDireccions(map){
-          console.log(map);
+          
           if(map && !this.$.map){
-              this.$.map = map;
-              this.$.idMap.set( 'map' , map);
-              console.log(this.$.idMap.get('map'))
-              this.$.idMap.search();
+        	  this.$.map = map;
+              var input = this.$.buscador;
+              var context = this;
+              var searchBox = new google.maps.places.SearchBox(input);
+              
+              map.addListener('bounds_changed', function() {
+                 searchBox.setBounds(map.getBounds());
+              });
+
+              var markers = [];
+              
+              searchBox.addListener('places_changed', function() {
+            	
+            	context.$.viewVisitas.clearListOficinas();
+            	context.$.viewVisitas.clearMapa();
+            	
+				var places = searchBox.getPlaces();
+				
+				if (places.length == 0) {
+					return;
+				}
+
+	            markers.forEach(function(marker) {
+	            	marker.setMap(null);
+	            });
+	            markers = [];
+	
+	            var bounds = new google.maps.LatLngBounds();
+	            places.forEach(function(place) {
+					if (!place.geometry) {
+	                	console.log("Returned place contains no geometry");
+	                	return;
+	              	}
+	              	var icon = {
+		                url: place.icon,
+		                size: new google.maps.Size(71, 71),
+		                origin: new google.maps.Point(0, 0),
+		                anchor: new google.maps.Point(17, 34),
+		                scaledSize: new google.maps.Size(25, 25)
+	              	};
+
+	              	markers.push(new google.maps.Marker({
+		                map: map,
+		                icon: icon,
+		                title: place.name,
+		                position: place.geometry.location
+		            }));
+		
+					if (place.geometry.viewport) {
+					 	bounds.union(place.geometry.viewport);
+					} else {
+						bounds.extend(place.geometry.location);
+					}
+					
+					context.$.viewVisitas.getOficinasxUbicacion(place.geometry.location.lat(),place.geometry.location.lng());
+					
+				});
+	            map.fitBounds(bounds);
+	         });
           }
       }
+      
       
       initBusquedaDireccions(){
     	  setTimeout(()=>{
@@ -360,11 +416,11 @@
                 		}catch(e){
                 			setTimeout(()=>{
                     			this.buildBusquedaDireccions(this.$.viewVisitas.getMap());
-                           	  },500);
+                           	  },1000);
                         }
-                   	  },500);
+                   	  },1000);
               }  
-       	  },500);
+       	  },1000);
       }
 
       static get observers() {
@@ -387,9 +443,11 @@
       }
 
       _pageChanged(pagina) {
-//     	pagina = pagina === "cajeros" ? "oficinas" : pagina;  
+//     	pagina = pagina === "cajeros" ? "oficinas" : pagina;v
+		this.$.buscador.value = null;
         var resolvedPageUrl = this.resolveUrl('../visitame-app-views/'+pagina + '.html');
         Polymer.importHref( resolvedPageUrl,  null, this._showPage404.bind(this), true);
+        
         this.iconoMapa = "list";
       }
 
