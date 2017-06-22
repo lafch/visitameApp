@@ -36,6 +36,112 @@
   <template>
   <style include="visitame-styles"></style>
   
+  paper-tab{
+      border-left: 1px solid;
+    border-color: #FFF;
+  }
+  
+  paper-tab{
+      --paper-tab-content: {
+           line-height:2.5;
+           text-align: center;
+           color: #fff;
+      }
+  }
+  
+  paper-input paper-input-container {
+      background-color: white;
+       `--paper-input-container-label-floating:{
+        display: none;           
+       }
+  
+  }
+  
+  paper-input{
+      `--paper-input-container-label-floating:{
+        display: none;           
+       }
+      background-color: white;
+  }
+  
+
+  
+  paper-tabs[no-bar] paper-tab.iron-selected a{
+    color: #2196F3;
+  }
+  
+  paper-tabs[no-bar] paper-tab a{
+    color: #fff;
+    font-size: 1.3em;
+    text-decoration:none;  
+  }
+  
+  
+  
+  
+  
+  paper-tabs{
+      width: 100%;
+      border: 1px solid;
+      border-radius: 5px;
+      color: #fff;
+  }
+  
+  
+  
+  
+  .iron-selected{
+      background-color: white;
+  }
+  
+  app-toolbar.buscador{
+      width: 92%;
+      margin-right: 5%;
+      
+  }
+  
+/*   app-toolbar{ */
+/*       height: 54px; */
+/*   } */
+  
+  paper-icon-button.boton-mapa{
+      float: left;
+      display: block;
+      background-color: var(--paper-grey-400);
+      border-radius: 3px;
+      margin-right: 2%;
+  }
+  
+  .buscador-input{
+      border: 0px;
+    
+    font-size: 1.54em;
+    
+  }
+
+  .buscador-contenedor{
+      float: left;
+      display: inline-block;
+      background-color: white;
+      border: solid 1px;
+      width: 82.9%;
+      border-radius: 3px;
+      padding-left: 2%;
+      height: 60%;
+  
+  }
+  
+  iron-icon.icono-buscar{
+      color: black;
+      margin-top: -5px;
+  }
+  
+  .back-btn{
+  	color: white;
+  }
+
+ 
+ 
  
   </style>
   <app-location route="{{route}}"></app-location>
@@ -83,9 +189,11 @@
         <app-toolbar class="ver buscador">
             <paper-icon-button icon="[[iconoMapa]]" class="boton-mapa" on-click = "_verMapa" style="color:white;"></paper-icon-button>
             <div class="buscador-contenedor">
-            <iron-icon icon="search" class="icono-buscar"></iron-icon>
-            <input id="buscador" is="iron-input" class="buscador-input">
+            <!-- <iron-icon icon="search" class="icono-buscar"></iron-icon>-->
+            <!-- <input id="buscador" is="iron-input" class="buscador-input">-->
             
+            <paper-input  id="buscador" class="buscador-input" 	type="text" placeholder="Buscar Direcci&#243;n">
+              <!-- width: 86%-->
             </div>
         </app-toolbar>
       </app-header>
@@ -147,17 +255,76 @@
         };
       }
 
+
       buildBusquedaDireccions(map){
-          console.log(map);
+          
           if(map && !this.$.map){
-              this.$.map = map;
-              this.$.idMap.set( 'map' , map);
-              console.log(this.$.idMap.get('map'))
-              this.$.idMap.search();
+        	  this.$.map = map;
+              var input = this.$.buscador;
+              var context = this;
+              var searchBox = new google.maps.places.SearchBox(input);
+              
+              map.addListener('bounds_changed', function() {
+                 searchBox.setBounds(map.getBounds());
+              });
+
+              var markers = [];
+              
+              searchBox.addListener('places_changed', function() {
+            	
+            	context.$.viewVisitas.clearListOficinas();
+            	context.$.viewVisitas.clearMapa();
+            	
+				var places = searchBox.getPlaces();
+				
+				if (places.length == 0) {
+					return;
+				}
+
+	            markers.forEach(function(marker) {
+	            	marker.setMap(null);
+	            });
+	            markers = [];
+	
+	            var bounds = new google.maps.LatLngBounds();
+	            places.forEach(function(place) {
+					if (!place.geometry) {
+	                	console.log("Returned place contains no geometry");
+	                	return;
+	              	}
+	              	var icon = {
+		                url: place.icon,
+		                size: new google.maps.Size(71, 71),
+		                origin: new google.maps.Point(0, 0),
+		                anchor: new google.maps.Point(17, 34),
+		                scaledSize: new google.maps.Size(25, 25)
+	              	};
+
+	              	markers.push(new google.maps.Marker({
+		                map: map,
+		                icon: icon,
+		                title: place.name,
+		                position: place.geometry.location
+		            }));
+		
+					if (place.geometry.viewport) {
+					 	bounds.union(place.geometry.viewport);
+					} else {
+						bounds.extend(place.geometry.location);
+					}
+					
+					context.$.viewVisitas.getOficinasxUbicacion(place.geometry.location.lat(),place.geometry.location.lng());
+					
+				});
+	            map.fitBounds(bounds);
+	         });
           }
       }
       
+      
       initBusquedaDireccions(){
+
+          
 
     	  let verify = setInterval(() => { 
  			 if(this.$.viewVisitas && this.$.viewVisitas.getMap){
@@ -188,9 +355,11 @@
       }
 
       _pageChanged(pagina) {
-//     	pagina = pagina === "cajeros" ? "oficinas" : pagina;  
+//     	pagina = pagina === "cajeros" ? "oficinas" : pagina;v
+		this.$.buscador.value = null;
         var resolvedPageUrl = this.resolveUrl('../visitame-app-views/'+pagina + '.html');
         Polymer.importHref( resolvedPageUrl,  null, this._showPage404.bind(this), true);
+        
         this.iconoMapa = "list";
       }
 
@@ -213,21 +382,9 @@
 	  			this.$.viewAgentes.cargarMapa();	
 	  		}
       }
-
- 	 init(loading){
-		 this.$.parametrosConfiguracion.init(loading);
-		 let verify = setInterval(() => { 
-			 if(this.$.viewVisitas && this.$.viewVisitas.init){
-			 	this.$.viewVisitas.init();
-			 	this.jobRefreshParametros();
-			 	clearInterval(verify);
-			 }
-		  }, 100);
-	  }
       
       ready(){
     	  super.ready();
-    	  this.init(this.$.loadingMain);
     	  this.initBusquedaDireccions();
       }
 
@@ -235,17 +392,6 @@
     	  window.location.href='visitame/oficinas';
     	  this.pagina ="oficinas";
       }
-
-      jobRefreshParametros(){
-
-     	 setInterval(() => { 
- 			 if(this.$.parametrosConfiguracion && this.$.parametrosConfiguracion.init){
- 				 this.$.parametrosConfiguracion.buildParametros();
- 			 }
- 		  }, 1000*60);
-
-      }
-      
     }
     window.customElements.define(VisitameApp.is, VisitameApp);
   </script>
