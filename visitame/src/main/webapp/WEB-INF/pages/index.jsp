@@ -7,7 +7,9 @@
     <title>visitame</title>
     <meta name="description" content="App de Visitas BBVA">
 
-    <base href="<%=request.getContextPath()%>/">
+    <base id = "baseUrl" href="<%=request.getContextPath()%>/">
+    
+    <base id = "baseRest"  href="http://<%=request.getServerName()%>:<%=request.getServerPort()%>/VISITAMEREST/api/">
 
     <link rel="icon" href="<%=request.getContextPath()%>/static/images/favicon.ico">
 
@@ -27,14 +29,15 @@
     <meta name="apple-mobile-web-app-title" content="Visitame App">
 
     <script>
-      // Register the base URL
-      const baseUrl = document.querySelector('base').href;
-      // Load and register pre-caching Service Worker
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('<%=request.getContextPath()%>/static/service-worker.js');
-        });
-      }
+    // Register the base URL
+    const baseUrl = document.querySelector('#baseUrl').href;
+    const baseRest = document.querySelector('#baseRest').href;
+    // Load and register pre-caching Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('<%=request.getContextPath()%>/static/service-worker.js');
+      });
+    }
     </script>
 
     <script src="<%=request.getContextPath()%>/static/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
@@ -49,6 +52,7 @@
         line-height: 1.5;
         min-height: 100vh;
         background-color: #fff;
+        position: relative;
       }
     </style>
   </head>

@@ -20,94 +20,21 @@
 <link rel="import" href="../../bower_components/google-map/google-map-search.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../visitame-app-icons/main-icons.html">
+
+<link rel="import" href="../visitame-app-styles/visitame-style.html">
+
 <link rel="lazy-import" href="../visitame-app-views/oficinas.html">
 <link rel="lazy-import" href="../visitame-app-views/cajeros.html">
 <link rel="lazy-import" href="../visitame-app-views/agentes.html">
 
 <link rel="lazy-import" href="../visitame-app-views/pagina3.html">
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqyFz0Q9ZZLMmgqJhck4soRfa0V1s71jQ&libraries=places"
-         async defer></script>
+
+<link rel="import" href="../visitame-app-commons/parametros-commons.html">
 
 
 <dom-module id="visitame-app">
   <template>
-  <style>
-    :host {
-      --app-primary-color: #4285f4;
-      --app-secondary-color: black;
-
-      display: block;
-    }
-
-    app-drawer-layout:not([narrow]) [drawer-toggle] {
-      display: none;
-    }
-
-    app-header {
-      color: #fff;
-      background-color: var(--app-primary-color);
-    }
-
-    app-header paper-icon-button {
-      --paper-icon-button-ink-color: white;
-    }
-
-    .drawer-list {
-      margin: 0 20px;
-    }
-
-    .drawer-list a {
-      display: block;
-      padding: 0 16px;
-      text-decoration: none;
-      color: var(--app-secondary-color);
-      line-height: 40px;
-    }
-
-    .drawer-list a.iron-selected {
-      color: black;
-      font-weight: bold;
-    }
-
-
-    .menu-btn {
-            display: none;
-          }
-
-          @media (max-width: 767px) {
-              .menu-btn {
-                  display: block;
-              }
-
-              :host([pagina=pagina2]) .menu-btn, .ver{
-                  display: none;
-              }
-              
-              :host([pagina=pagina2]) app-header-layout {
-              			padding-top: 64px;	
-              }
-
-              :host([pagina=pagina2]) .ver{
-                  display: none;
-                  
-              }
-          }
-
-          :host(:not([pagina=pagina2])) paper-icon-button.back-btn{
-            display: none;
-          }
-
-          :host(:not([pagina=pagina2])) .ver{
-            display: block;
-          }
-          
-           paper-tab[link] a {
-    /* These mixins (from iron-flex-layout) center the link text. */
-    @apply(--layout-horizontal);
-    @apply(--layout-center-center);
-    color: #fff;
-    text-decoration: none;
-  }
+  <style include="visitame-styles"></style>
   
   paper-tab{
       border-left: 1px solid;
@@ -213,6 +140,9 @@
   	color: white;
   }
 
+ 
+ 
+ 
   </style>
   <app-location route="{{route}}"></app-location>
   <app-route
@@ -286,13 +216,19 @@
             </div>
         </app-toolbar>
       </app-header>
-<!-- 
+
 <paper-input value = "{{query}}">
 
-</paper-input>-->
+</paper-input>
 
 <google-map-search id="idMap" map = {{map}} query="{{query}}" results="{{results}}">
       			</google-map-search>
+      			
+      	<ul >
+		<template is="dom-repeat" items="{{results}}">
+			<li style="border-bottom: 1px #ccc solid;">{{item.name}}</li>
+		</template>
+	</ul>
 
       <iron-pages
           selected="[[pagina]]"
@@ -406,21 +342,16 @@
       
       
       initBusquedaDireccions(){
-    	  setTimeout(()=>{
-        	try{
-        			this.buildBusquedaDireccions(this.$.viewVisitas.getMap());
-            	}catch(e){
-            		setTimeout(()=>{
-                		try{
-            			this.buildBusquedaDireccions(this.$.viewVisitas.getMap());
-                		}catch(e){
-                			setTimeout(()=>{
-                    			this.buildBusquedaDireccions(this.$.viewVisitas.getMap());
-                           	  },1000);
-                        }
-                   	  },1000);
-              }  
-       	  },1000);
+
+          
+
+    	  let verify = setInterval(() => { 
+ 			 if(this.$.viewVisitas && this.$.viewVisitas.getMap){
+ 				this.buildBusquedaDireccions(this.$.viewVisitas.getMap());
+ 			 	clearInterval(verify);
+ 			 }
+ 		  }, 100);
+          
       }
 
       static get observers() {

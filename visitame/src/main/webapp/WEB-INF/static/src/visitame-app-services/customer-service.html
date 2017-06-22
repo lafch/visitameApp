@@ -10,8 +10,8 @@
   <template>
 
 	 <iron-ajax
-           id = "ajaxPois"
-           url="{{urlParametro}}"
+           id = "ajaxCustomer"
+           url="{{contextPath}}account/getCustomer"
            handle-as="json" 
            ></iron-ajax>
 
@@ -20,18 +20,20 @@
     <script>
     class CustomerService extends Polymer.Element {
       static get is() { return 'customer-service'; }
-      static get properties() {
-          return {
-            urlParametro: {
-            	type: String,
-            	value: 'http://localhost:8070/VISITAMEREST/api/account/getCustomer'
-            }
-          };
+      
+      static get properties(){
+			return {
+					contextPath : {
+						type: String,
+						value : baseRest
+					}
+				}
       }
+      
       _esCliente(options){
           if(!options){ return;}
-          this.$.ajaxPois.set( 'params' , options.params);
-          return this.$.ajaxPois.generateRequest().completes;
+          this.$.ajaxCustomer.set( 'params' , options.params);
+          return this.$.ajaxCustomer.generateRequest().completes;
       }
     }
     window.customElements.define(CustomerService.is, CustomerService);

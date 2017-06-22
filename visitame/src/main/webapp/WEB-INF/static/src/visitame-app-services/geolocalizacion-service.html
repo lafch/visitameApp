@@ -11,7 +11,7 @@
 
 	 <iron-ajax
            id = "ajaxPois"
-           url="http://localhost:8070/VISITAMEREST/api/geolocalizacion/pois"
+           url="{{contextPath}}geolocalizacion/pois"
            handle-as="json" 
            ></iron-ajax>
 
@@ -20,11 +20,22 @@
     <script>
     class GeolocalizacionService extends Polymer.Element {
       static get is() { return 'geolocalizacion-service'; }
+
+      static get properties(){
+			return {
+					contextPath : {
+						type: String,
+						value : baseRest
+					}
+				}
+      }
+      
       listarOficinas(options){
           if(!options){ return;}
           this.$.ajaxPois.set( 'params' , options.params);
           return this.$.ajaxPois.generateRequest().completes;
       }
+      
     }
     window.customElements.define(GeolocalizacionService.is, GeolocalizacionService);
   </script>
