@@ -87,7 +87,7 @@
          if(!this.getParametros()){
         	  this.buildParametros(loading);
          }else{
-        	 if(loading){ loading.style.display = 'none'; }
+        	 setTimeout(()=>{ if(loading){ loading.style.display = 'none'; } },500)
           }
      }
 

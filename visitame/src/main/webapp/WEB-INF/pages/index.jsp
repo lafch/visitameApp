@@ -45,6 +45,13 @@
     <link rel="import" href="<%=request.getContextPath()%>/static/src/visitame-app/visitame-app.html">
     <link rel="import" href="<%=request.getContextPath()%>/static/src/visitame-app-views/view-error-dialog.html">
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqyFz0Q9ZZLMmgqJhck4soRfa0V1s71jQ&libraries=places"></script>
+   
+   	<script src="<%=request.getContextPath()%>/static/bower_components/sweetalert2/dist/sweetalert2.min.js"></script>
+	<link rel="stylesheet" href="<%=request.getContextPath()%>/static/bower_components/sweetalert2/dist/sweetalert2.min.css">
+
+	<!-- Include a polyfill for ES6 Promises (optional) for IE11 and Android browser -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
+   
     <style>
       body {
         margin: 0;
