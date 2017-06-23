@@ -30,6 +30,10 @@ public class IVISTServiceGeolocalizacionImpl implements IVISTServiceGeolocalizac
 		}else if(Constantes.ETIQUETAS_POIS.TYPE_OFICINA.equals(type)){
 			param.setFilter(Constantes.ETIQUETAS_POIS.FILTER_OFICINA);
 		}
+		else if(Constantes.ETIQUETAS_POIS.TYPE_AGENTE.equals(type)){
+			param.setFilter(Constantes.ETIQUETAS_POIS.FILTER_AGENTE);
+		}
+		
 		param.setType(type);
 		param.setLatitud(latitud);
 		param.setLongitud(longitud);

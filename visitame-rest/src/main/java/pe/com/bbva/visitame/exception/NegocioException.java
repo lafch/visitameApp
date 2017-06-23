@@ -21,6 +21,8 @@ public class NegocioException extends Exception {
 		public static final String NEG_REGLA_BLOQUEANTE = "NEG_REGLA_BLOQUEANTE";
 		public static final String NEG_REGLA_BLOQUEANTE_CORTO = "NEG_REGLA_BLOQUEANTE_CORTO";
 		public static final String NEG_REGLA_BLOQUEANTE_PERFIL = "NEG_REGLA_BLOQUEANTE_PERFIL";
+		public static final String NEG_ERROR_INESPERADO = "NEG_ERROR_INESPERADO";
+		
 	}
 	
 	public static class SEVERIDAD {

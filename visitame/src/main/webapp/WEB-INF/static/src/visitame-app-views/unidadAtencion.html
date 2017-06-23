@@ -31,7 +31,9 @@ display: none;
 
 <div class="main-list-oficina" id="containerOficina">
 	<paper-spinner class="paper-spinner-loading" id="loadingLista" active></paper-spinner>
+	<div class = "mensaje-no-results" id = "noResultList" >La busqueda no retorno resultados.</div>
 	<ul id = "oficinasRecords">
+		
 		<template is="dom-repeat" items="{{listOficinas}}">
 <!-- class ="card"  -->
 		<li ><img src="{{pathParent}}images/icon_{{item.iconColor}}.png" />
@@ -114,7 +116,7 @@ display: none;
       
       handleResponse(response) {
         let data = [];
-        if(response.data.hasMoreData){
+        if(response.data.pois && response.data.pois.length > 0){
           let i = 1;
           let iconColor;
           response.data.pois.forEach((poi,index)=>{
@@ -145,7 +147,7 @@ display: none;
          
           this.listOficinas = data;
         }else{
-        	//swal('Any fool can use a computer');
+        	this.$.noResultList.style.display = 'block';
         }
 
         this.$.loadingLista.active = false;
@@ -157,7 +159,7 @@ display: none;
       }
 
       loadMapa(latitud,longitud,tipo){
-
+    	 
     	  SyncObjects(()=>{
         		//console.log(this.$.parametrosConfiguracion.getParametros())
         		this.resetearMapa();
@@ -172,40 +174,27 @@ display: none;
 				});
 			     requestOficinas.then((xhr) => {
 					this.handleResponse(xhr.response);
-			    });
+			    }).catch((reason) => {
+			    	 this.$.loadingLista.active = false;
+			    } );
 
           });	
     	  
       }
   
       _seleccionar(view) {
-
-    	  if(this.tiposUnidad){
-	    	  if(this.tiposUnidad.oficinas == view){
-	    		  this.tipoUnidad = 'O';
-	          }else if(this.tiposUnidad.cajeros == view){
-	        	  this.tipoUnidad = 'C';
-	          }else if(this.tiposUnidad.agentes == view){
-	        	  this.tipoUnidad = 'A';
-	          }
-    	  }
-          
+    	  this.$.noResultList.style.display = 'none';
+    	  this.$.loadingLista.active =true;
     	  SyncObjects(()=>{
           	this.loadMapa(this.$.parametrosConfiguracion.getParametros().posicionActual.latitude,this.$.parametrosConfiguracion.getParametros().posicionActual.longitude);
     	  });
       }
       getOficinasxUbicacion(latitude, longitude){
-
-    	  console.log("lat " + latitude);
-    	  console.log("log " +longitude);
-		  console.log(this.tipoUnidad);
+		  this.$.noResultList.style.display = 'none';
     	  if(!this.$.loadingLista.active){
     		  this.$.loadingLista.active = true;
           }
-    	  
     	  this.loadMapa(latitude,longitude);
-    	 
-    
       }
      
       getMap(){

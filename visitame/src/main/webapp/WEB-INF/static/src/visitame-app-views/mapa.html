@@ -70,6 +70,10 @@
 			    	  type : Array,
 			    	  value: []
 				  }
+				  ,
+				  zoom : {
+					  	type : String
+					  }
 	        }
 	      }
 
@@ -82,8 +86,6 @@
 	     setMarkers(data,center){
 	    	 
 	    	 this.clearMarkers();
-	    	 
-	    	 console.log(this.$.parametrosConfiguracion.getParametros())
 		     
 				if(this.mapPois){
 						
@@ -92,6 +94,7 @@
 						google.maps.event.trigger(map, "resize");
 						
 				          if(data){
+				        	  this.markers = [];
 				        	  data.forEach((item,index)=>{
 									
 								 let point = {lat: parseFloat(item.latitude), lng: parseFloat(item.longitude)};
@@ -112,11 +115,8 @@
 			
 				      	setTimeout(() => {
 							map.setZoom(16);
-							if(!center){
-							}
 							var centroide = null;
-
-							if(center){
+							if(center && center.latitude && center.longitude){
 								centroide = {lat: center.latitude, lng: center.longitude};
 							}else{
 								centroide = {lat: this.$.parametrosConfiguracion.getParametros().posicionActual.latitude, lng: this.$.parametrosConfiguracion.getParametros().posicionActual.longitude};
@@ -137,21 +137,32 @@
 	     }
 	     centrarUbicacion() {
 	        		var map = this.mapPois;
-					var center = {lat: this.$.parametrosConfiguracion.posicionActual.latitude, lng: this.$.parametrosConfiguracion.posicionActual.longitude};
+					var center = {lat: this.$.parametrosConfiguracion.getParametros().posicionActual.latitude, lng: this.$.parametrosConfiguracion.getParametros().posicionActual.longitude};
 	        		map.setCenter(center);
 	     }
 	 
 	     ready() {
 	            super.ready();
 
+	            let center = null;
+				let zoom  = null;
+				
+				if(this.$.parametrosConfiguracion && this.$.parametrosConfiguracion.getParametros() && this.$.parametrosConfiguracion.getParametros().posicionActual){
+					center = {lat: this.$.parametrosConfiguracion.getParametros().posicionActual.latitude, lng: this.$.parametrosConfiguracion.getParametros().posicionActual.longitude};
+			    }else{
+			    	 center =  {lat: -34.397, lng: 150.644}
+				}
+
+	            if(this.$.parametrosConfiguracion && this.$.parametrosConfiguracion.getParametros() && this.$.parametrosConfiguracion.getParametros().zoomMapGen){
+	            	zoom = parseFloat(this.$.parametrosConfiguracion.getParametros().zoomMapGen);
+			    }else{
+			    	zoom = 16;
+				}
+				
 	            this.mapPois =new google.maps.Map(this.$.mapContent, {
-	                center: {lat: -34.397, lng: 150.644},
-	                zoom: 16
+	                center: center,
+	                zoom: zoom
 	              });
-	            
-	            /* this.$.mapContent */
-	            
-	            console.log('mapa Ready!');
 	     }
    		}
 

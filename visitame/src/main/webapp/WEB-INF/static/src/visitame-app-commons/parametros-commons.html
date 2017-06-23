@@ -86,16 +86,16 @@
     	console.log("error" + error.code); 
  	  	switch(error.code) {
   	    	case error.PERMISSION_DENIED:
-  	    		this.errorDescripcionGps = "Usuario deneg&#243; utilizar la ubicación GPS."
+  	    		this.errorDescripcionGps = "Usuario deneg&#243; utilizar la ubicaciÃ³n GPS."
     	      break;
     	    case error.POSITION_UNAVAILABLE:
-    	    	this.errorDescripcionGps = "La información de ubicación es inhabilitada."
+    	    	this.errorDescripcionGps = "La informaciï¿½n de ubicaciÃ³n es inhabilitada."
     	      break;
     	    case error.TIMEOUT:
-    	    	this.errorDescripcionGps = "La solicitud para obtener la ubicación del usuario se ha agotado."
+    	    	this.errorDescripcionGps = "La solicitud para obtener la ubicaciï¿½n del usuario se ha agotado."
     	      break;
     	    case error.UNKNOWN_ERROR:
-    	    	this.errorDescripcionGps = "Un error desconocido ocurrió."
+    	    	this.errorDescripcionGps = "Un error desconocido ocurriÃ³."
     	      break;
     	}
 
@@ -119,6 +119,10 @@
 					,
 					(error) =>{
 						this.showErrorGps(error);
+					}
+					,
+					{
+						enableHighAccuracy: true
 					}
     	    	);
     	});
