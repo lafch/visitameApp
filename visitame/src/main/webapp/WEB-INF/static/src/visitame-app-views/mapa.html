@@ -93,12 +93,13 @@
 						
 				          if(data){
 				        	  data.forEach((item,index)=>{
-									
-								 let point = {lat: parseFloat(item.latitude), lng: parseFloat(item.longitude)};
+								  let pathIcon = this.pathParent+"/images/icon_marker_"+item.iconColor+".png";
+								  let point = {lat: parseFloat(item.latitude), lng: parseFloat(item.longitude)};
 				        		  let marker = new google.maps.Marker({
 				        	          position: point,
 				        	          map: this.mapPois,
-				        	          title: item.name
+				        	          title: item.name,
+				        	          icon: pathIcon
 				        	        });
 
 				        		  marker.addListener('click', function(e) {
@@ -136,20 +137,18 @@
 	    	 
 	     }
 	     centrarUbicacion() {
-	        		var map = this.mapPois;
-					var center = {lat: this.$.parametrosConfiguracion.posicionActual.latitude, lng: this.$.parametrosConfiguracion.posicionActual.longitude};
-	        		map.setCenter(center);
+	    	 	console.log(this.$.parametrosConfiguracion.posicionActual);
+				var center = {lat: this.$.parametrosConfiguracion.posicionActual.latitude, lng: this.$.parametrosConfiguracion.posicionActual.longitude};
+				this.mapPois.setCenter(center);
 	     }
 	 
 	     ready() {
 	            super.ready();
 
 	            this.mapPois =new google.maps.Map(this.$.mapContent, {
-	                center: {lat: -34.397, lng: 150.644},
+	                center: {lat: -12.092049, lng: -77.021899},
 	                zoom: 16
 	              });
-	            
-	            /* this.$.mapContent */
 	            
 	            console.log('mapa Ready!');
 	     }

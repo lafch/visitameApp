@@ -121,9 +121,9 @@ display: none;
               if(i > 3){ i = 1; }
 
               if(i == 1){
-                iconColor = 'amarillo';
+                iconColor = 'morado';
               }else if(i == 2){
-                iconColor = 'rojo';
+                iconColor = 'amarillo';
               }else if(i == 3){
                 iconColor = 'verde';
               }
@@ -196,9 +196,6 @@ display: none;
       }
       getOficinasxUbicacion(latitude, longitude){
 
-    	  console.log("lat " + latitude);
-    	  console.log("log " +longitude);
-		  console.log(this.tipoUnidad);
     	  if(!this.$.loadingLista.active){
     		  this.$.loadingLista.active = true;
           }
