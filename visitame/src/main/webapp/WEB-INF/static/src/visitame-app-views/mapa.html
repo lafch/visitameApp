@@ -64,7 +64,12 @@
 			      mapPois:{
 			    	  type : Object,
 			    	  value:{}
-				    }
+				  }
+			      ,
+			      markers:{
+			    	  type : Array,
+			    	  value: []
+				  }
 	        }
 	      }
 
@@ -75,7 +80,9 @@
 				this.mapPois.fitBounds(null);
 		   }
 	     setMarkers(data,center){
-
+	    	 
+	    	 this.clearMarkers();
+	    	 
 	    	 console.log(this.$.parametrosConfiguracion.getParametros())
 		     
 				if(this.mapPois){
@@ -98,8 +105,9 @@
 				        			  console.log(item);
 				        			    console.log(e);
 				        		  });
-						          
+				        		  this.markers.push(marker);
 					          });
+				        	  
 					      }
 			
 				      	setTimeout(() => {
@@ -119,6 +127,14 @@
 			          
 					}
 	     } 
+	     
+	     clearMarkers(){
+
+	    	 for (var i = 0; i < this.markers.length; i++) {
+	    		 this.markers[i].setMap(null);
+	         }
+	    	 
+	     }
 	     centrarUbicacion() {
 	        		var map = this.mapPois;
 					var center = {lat: this.$.parametrosConfiguracion.posicionActual.latitude, lng: this.$.parametrosConfiguracion.posicionActual.longitude};
