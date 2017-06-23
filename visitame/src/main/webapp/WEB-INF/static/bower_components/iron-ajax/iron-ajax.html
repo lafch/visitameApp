@@ -460,7 +460,37 @@ element.
 
       this.push('activeRequests', request);
 
-      request.completes.then(
+      var xhr = request.xhr;
+      xhr.onreadystatechange = function()
+      {
+          if (xhr.readyState == 4 && xhr.status != 200)
+          {
+        	  console.log('Error tipo=>'+xhr.status); 
+              if(xhr.status >= 500 && xhr.status < 600){
+                  console.log(xhr.response)
+            	  if(swal){
+	            	   swal(
+	                   		  'Oops...',
+	                   		   xhr.response.errorMessage,
+	                   		  'error'
+	                   		);
+                  } 
+               }else{
+                   if(swal){
+	            	   swal(
+	                   		  'Oops...',
+	                   		  'Servicio no disponible.',
+	                   		  'error'
+	                   		);
+                   }
+               }
+          }
+      
+      }
+
+
+      
+      request.completes.then(   
         this._boundHandleResponse
       ).catch(
         this._handleError.bind(this, request)

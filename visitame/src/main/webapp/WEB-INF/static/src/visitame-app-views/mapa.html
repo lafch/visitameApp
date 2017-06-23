@@ -70,6 +70,10 @@
 			    	  type : Array,
 			    	  value: []
 				  }
+				  ,
+				  zoom : {
+					  	type : String
+					  }
 	        }
 	      }
 
@@ -146,8 +150,8 @@
 	            super.ready();
 
 	            this.mapPois =new google.maps.Map(this.$.mapContent, {
-	                center: {lat: -12.092049, lng: -77.021899},
-	                zoom: 16
+	                center: center,
+	                zoom: zoom
 	              });
 	            
 	            console.log('mapa Ready!');

@@ -1388,6 +1388,7 @@ public final class Constantes {
 		
 		public final static String TYPE_CAJERO = "C";
 		public final static String TYPE_OFICINA = "O";
+		public final static String TYPE_AGENTE = "A";
 		public final static String ADDRESS1 = "address1";
 		public final static String DESCRIPTION = "description";
 		public final static String TELEPHONE = "telephone";
@@ -1418,6 +1419,7 @@ public final class Constantes {
 		public final static String ATTR_COUNTRY = "Country";
 		public final static String FILTER_OFICINA = "banking.branch.branch_pe_bbva";
 		public final static String FILTER_CAJERO = "banking.atm.atm_pe_bbva";
+		public final static String FILTER_AGENTE = "banking.atm.atm_pe_ae";
 		
 	}
 	

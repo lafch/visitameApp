@@ -1,6 +1,5 @@
 package pe.com.bbva.visitame.service.impl;
 
-import java.net.ConnectException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,18 +15,12 @@ import pe.com.bbva.visitame.service.GeolocalizacionService;
 
 import java.io.StringReader;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -35,8 +28,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 @Service
-public class GeolocalizacionServiceImpl implements GeolocalizacionService {
+public class GeolocalizacionServiceImpl extends BaseServiceImpl implements GeolocalizacionService {
 
+	private static final long serialVersionUID = 1229565922149112061L;
 	@Autowired
 	private PoiServiceHelper geolocalizacionServiceHelper;
 	
@@ -45,7 +39,13 @@ public class GeolocalizacionServiceImpl implements GeolocalizacionService {
 		PoiDetail resultGeolocalizacion = new PoiDetail();
 		resultGeolocalizacion.setType(param.getType());
 		try {
+			
 			ZicResult resultStringXml = geolocalizacionServiceHelper.obtenerGeolocalizaconsPois(param);
+			
+			if(resultStringXml.getCodeError() != null){
+				lanzarExcepcionMedia(resultStringXml.getCodeError(), new Object[]{}, resultStringXml.getMessageError(), null);
+			}
+						
 			List<Poi> pois = new ArrayList<Poi>();
 			DocumentBuilderFactory odbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder odb =  odbf.newDocumentBuilder();
@@ -78,7 +78,7 @@ public class GeolocalizacionServiceImpl implements GeolocalizacionService {
             resultGeolocalizacion.setPois(pois);
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			lanzarExcepcionGrave(NegocioException.CODIGO.NEG_ERROR_INESPERADO, null, "Ocurrio un error inesperdado", e);
 		}
 		
 		return resultGeolocalizacion;
