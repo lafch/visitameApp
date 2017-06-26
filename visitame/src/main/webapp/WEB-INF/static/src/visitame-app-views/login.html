@@ -39,11 +39,13 @@
 	<app-header reveals>
 	
       <app-toolbar>
-	      <paper-icon-button class="back-btn-login-main" icon="chevron-left" aria-label="Atrás" ></paper-icon-button>
+	      <paper-icon-button id = "btnRetornarMain" on-click = "retornarMain" class="back-btn-login-main" icon="chevron-left" aria-label="Atrás" ></paper-icon-button>
 	      <div main-title>Ticket de atención</div>
       </app-toolbar>
     </app-header>
 	
+	
+	<div class = "content-form">
    <iron-form id="login"> 
       <form method="get" >
           <paper-dropdown-menu label="Tipo documento" required>
@@ -64,6 +66,7 @@
           <div class="output"></div>
       </form>
       </iron-form>
+      </div>
   </template>
   <script>
   class LoginView extends Polymer.Element {
@@ -84,9 +87,23 @@
         	   value:'8'
            },
           mensaje: String
+          ,
+          parentApp : {
+				type : Object
+              }
            
       	 }
       }
+
+      setParentApp(parent){
+			this.parentApp = parent;
+	  }
+
+      getParentApp(){
+			return this.parentApp;
+	  }
+
+      
       ready() {
          super.ready();
          console.log('en el login');
@@ -97,7 +114,11 @@
 			 requestTiposDoi.then((xhr) => { 
 		    	 this.handleResponse(xhr.response);
 		     });
-    }
+     }
+
+      retornarMain(){
+		this.getParentApp().closeLogin();
+      }
       
       handleResponse(response) {
           let data = [];

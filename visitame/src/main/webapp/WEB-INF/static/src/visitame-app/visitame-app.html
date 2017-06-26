@@ -284,22 +284,45 @@
 	   		 this.SyncObject(()=>{
 	   			this.$.viewVisitas.setParentApp(this);
 	         });
+
+	   		 this.SyncObject(()=>{
+	   			this.$.loginView.setParentApp(this);
+		      });
+
+	   		 this.SyncObject(()=>{
+		   			this.$.loginView.setParentApp(this);
+			      });
+	   		
+	   		  this.SyncObject(()=>{
+		   			this.$.viewCajeros.setParentApp(this);
+			      });
+
+	   	      this.SyncObject(()=>{
+	   			this.$.viewAgentes.setParentApp(this);
+		      });
 	   		 
    	  	 }
 
    	  	 showLogin(){
    	   	  	console.log('show login');
-	    	  	this.$.ironPagesMain.style.display = 'none';
+	    	this.$.ironPagesMain.style.display = 'none';
 			this.$.headerMain.style.display = 'none';
 			this.$.loginView.style.display = 'block'; 
-			
+   	   	 }
+
+   	   	 closeLogin(){
+	   	  	console.log('close login');
+	   	    this.$.loginView.style.display = 'none'; 
+	    	this.$.ironPagesMain.style.display = 'block';
+			this.$.headerMain.style.display = 'block';
+		
    	   	 }
          
          ready(){
        	  super.ready();
        	  this.init(this.$.loadingMain);
        	  this.initBusquedaDireccions();
-       	  this.showLogin();
+       	  //this.showLogin();
          }
 
          _regresar(){

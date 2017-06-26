@@ -115,11 +115,11 @@
 				        	          icon: pathIcon
 				        	        });
 
-				        		  marker.addListener('click', function(e) {
+				        		  marker.addListener('click', (e) => {
 				        			  console.log(item);
 				        			   console.log(e);
 				        			   console.log(this.getParentApp());
-				        			   //this.getParentApp().showLogin();  
+				        			   this.getParentApp().showLogin();  
 				        			    
 				        		  });
 				        		  this.markers.push(marker);
