@@ -40,149 +40,149 @@
 		</div>
 		
 		<div id = "mapContent" style="height:600px;width:100%;"></div>
-		
+
 	</template>
-    <script>
-        class MapaView extends Polymer.Element {
-            static get is() {
-                return 'mapa-view';
-            }
+   
+	<script>
+	    class MapaView extends Polymer.Element {
+	      static get is() { return 'mapa-view'; }
+	
+	      static get properties(){
+	        return {
+	              pathParent : {
+	                  type : String,
+	                  value :'static/'
+	              },
+	              centroide : {
+		                type : Object
+		          },
+		          errorDescripcion : {
+			           type : String
+			      }
+			      ,
+			      mapPois:{
+			    	  type : Object,
+			    	  value:{}
+				  }
+			      ,
+			      markers:{
+			    	  type : Array,
+			    	  value: []
+				  }
+				  ,
+				  zoom : {
+					  	type : String
+					  }
+				  ,
+	              parentApp : {
+						type: Object
+	              }
+	        }
+	      }
 
-            static get properties() {
-                return {
-                    pathParent: {
-                        type: String,
-                        value: 'static/'
-                    },
-                    centroide: {
-                        type: Object
-                    },
-                    errorDescripcion: {
-                        type: String
-                    },
-                    mapPois: {
-                        type: Object,
-                        value: {}
-                    },
-                    markers: {
-                        type: Array,
-                        value: []
-                    },
-                    zoom: {
-                        type: String
-                    }
-                }
-            }
+	      setParentApp(parent){
+				this.parentApp = parent;
+		  }
 
-            getMap() {
-                return this.mapPois;
-            }
-            clearMap() {
-                this.mapPois.fitBounds(null);
-            }
-            setMarkers(data, center) {
+	      getParentApp(){
+				return this.parentApp;
+		  }
 
-                this.clearMarkers();
+	      getMap(){
+				return this.mapPois; 
+		   }
+	      clearMap(){
+				this.mapPois.fitBounds(null);
+		   }
+	     setMarkers(data,center){
+	    	 
+	    	 this.clearMarkers();
+		     
+				if(this.mapPois){
+						
+						var map = this.mapPois;
+			
+						google.maps.event.trigger(map, "resize");
+						
+				          if(data){
+				        	  data.forEach((item,index)=>{
+								  let pathIcon = this.pathParent+"/images/icon_marker_"+item.iconColor+".png";
+								  let point = {lat: parseFloat(item.latitude), lng: parseFloat(item.longitude)};
+				        		  let marker = new google.maps.Marker({
+				        	          position: point,
+				        	          map: this.mapPois,
+				        	          title: item.name,
+				        	          icon: pathIcon
+				        	        });
 
-                if (this.mapPois) {
+				        		  marker.addListener('click', function(e) {
+				        			  console.log(item);
+				        			   console.log(e);
+				        			   console.log(this.getParentApp());
+				        			   //this.getParentApp().showLogin();  
+				        			    
+				        		  });
+				        		  this.markers.push(marker);
+					          });
+				        	  
+					      }
+			
+				      	setTimeout(() => {
+							map.setZoom(16);
+							var centroide = null;
+							if(center && center.latitude && center.longitude){
+								centroide = {lat: center.latitude, lng: center.longitude};
+							}else{
+								centroide = {lat: this.$.parametrosConfiguracion.getParametros().posicionActual.latitude, lng: this.$.parametrosConfiguracion.getParametros().posicionActual.longitude};
+							}
+							
+							map.setCenter(centroide);
+						}, 100);
+			          
+					}
+	     } 
+	     
+	     clearMarkers(){
 
-                    var map = this.mapPois;
+	    	 for (var i = 0; i < this.markers.length; i++) {
+	    		 this.markers[i].setMap(null);
+	         }
+	    	 
+	     }
+	     centrarUbicacion() {
+	        		var map = this.mapPois;
+					var center = {lat: this.$.parametrosConfiguracion.getParametros().posicionActual.latitude, lng: this.$.parametrosConfiguracion.getParametros().posicionActual.longitude};
+	        		map.setCenter(center);
+	     }
+	 
+	     ready() {
+	            super.ready();
 
-                    google.maps.event.trigger(map, "resize");
+	            
 
-                    if (data) {
-                        this.markers = [];
-                        data.forEach((item, index) => {
-                            let iconPath = this.pathParent + "images/icon_marker_" + item.iconColor + ".png";
-                            let point = {
-                                lat: parseFloat(item.latitude),
-                                lng: parseFloat(item.longitude)
-                            };
-                            let marker = new google.maps.Marker({
-                                position: point,
-                                map: this.mapPois,
-                                title: item.name,
-                                icon: iconPath
-                            });
+	            let center = null;
+				let zoom  = null;
+				
+				if(this.$.parametrosConfiguracion && this.$.parametrosConfiguracion.getParametros() && this.$.parametrosConfiguracion.getParametros().posicionActual){
+					center = {lat: this.$.parametrosConfiguracion.getParametros().posicionActual.latitude, lng: this.$.parametrosConfiguracion.getParametros().posicionActual.longitude};
+			    }else{
+			    	 center =  {lat: -34.397, lng: 150.644}
+				}
 
-                            marker.addListener('click', function(e) {
-                                console.log(item);
-                                console.log(e);
-                            });
-                            this.markers.push(marker);
-                        });
+	            if(this.$.parametrosConfiguracion && this.$.parametrosConfiguracion.getParametros() && this.$.parametrosConfiguracion.getParametros().zoomMapGen){
+	            	zoom = parseFloat(this.$.parametrosConfiguracion.getParametros().zoomMapGen);
+			    }else{
+			    	zoom = 16;
+				}
+				
+	            this.mapPois =new google.maps.Map(this.$.mapContent, {
+	                center: center,
+	                zoom: zoom
+	              });
+	     }
+   		}
 
-                    }
-
-                    setTimeout(() => {
-                        map.setZoom(16);
-                        var centroide = null;
-                        if (center && center.latitude && center.longitude) {
-                            centroide = {
-                                lat: center.latitude,
-                                lng: center.longitude
-                            };
-                        } else {
-                            centroide = {
-                                lat: this.$.parametrosConfiguracion.getParametros().posicionActual.latitude,
-                                lng: this.$.parametrosConfiguracion.getParametros().posicionActual.longitude
-                            };
-                        }
-
-                        map.setCenter(centroide);
-                    }, 100);
-
-                }
-            }
-
-            clearMarkers() {
-
-                for (var i = 0; i < this.markers.length; i++) {
-                    this.markers[i].setMap(null);
-                }
-
-            }
-            centrarUbicacion() {
-                var map = this.mapPois;
-                var center = {
-                    lat: this.$.parametrosConfiguracion.getParametros().posicionActual.latitude,
-                    lng: this.$.parametrosConfiguracion.getParametros().posicionActual.longitude
-                };
-                map.setCenter(center);
-            }
-
-            ready() {
-                super.ready();
-
-                let center = null;
-                let zoom = null;
-
-                if (this.$.parametrosConfiguracion && this.$.parametrosConfiguracion.getParametros() && this.$.parametrosConfiguracion.getParametros().posicionActual) {
-                    center = {
-                        lat: this.$.parametrosConfiguracion.getParametros().posicionActual.latitude,
-                        lng: this.$.parametrosConfiguracion.getParametros().posicionActual.longitude
-                    };
-                } else {
-                    center = {
-                        lat: -34.397,
-                        lng: 150.644
-                    }
-                }
-
-                if (this.$.parametrosConfiguracion && this.$.parametrosConfiguracion.getParametros() && this.$.parametrosConfiguracion.getParametros().zoomMapGen) {
-                    zoom = parseFloat(this.$.parametrosConfiguracion.getParametros().zoomMapGen);
-                } else {
-                    zoom = 16;
-                }
-
-                this.mapPois = new google.maps.Map(this.$.mapContent, {
-                    center: center,
-                    zoom: zoom
-                });
-            }
-        }
-
-        window.customElements.define(MapaView.is, MapaView);
-    </script>
-
+    	window.customElements.define(MapaView.is, MapaView);
+  		</script>
+  		  
 </dom-module>

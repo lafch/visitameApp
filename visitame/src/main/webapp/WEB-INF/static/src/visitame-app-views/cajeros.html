@@ -17,8 +17,20 @@
 	              seleccion:{
 	            	  type:String
 	              }
+	              ,
+	              parentApp : {
+						type: Object
+	              }
 	        }
 	      }
+
+	      setParentApp(parent){
+				this.parentApp = parent;
+		  }
+
+	      getParentApp(){
+				return this.parentApp;
+		  }
 	      
 	      cargarMapa(center){
 	    	  this.$.unidadAtencion.cargarMapa(center);
@@ -34,10 +46,20 @@
 
 	      clearListOficinas(){
 				return this.$.unidadAtencion.clearListOficinas();
-	 		  }
-	    	  clearMapa(){
-				return this.$.unidadAtencion.clearMapa();  
-	 		  }
+	 		}
+	 		
+    	  clearMapa(){
+			return this.$.unidadAtencion.clearMapa();  
+ 		  }
+
+    	  ready(){
+   			super.ready();
+   			SyncObjects(()=>{
+   				this.getParentApp().present();
+   	 			this.$.unidadAtencion.setParentApp( this.getParentApp() );
+   	 	 	});
+   		    
+   	 	 }
 	      
 	}
     window.customElements.define(CajerosView.is, CajerosView);

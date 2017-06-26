@@ -68,14 +68,21 @@ display: none;
               seleccion:{
             	  type:String,
                   observer: '_seleccionar',
-              },
-              tiposUnidad : {
-						oficinas : 'oficinas',
-						cajeros : 'cajeros',
-						agentes : 'agentes'
-                 }
+              }
+              ,
+              parentApp : {
+					type: Object
+              }
         }
       }
+
+      setParentApp(parent){
+			this.parentApp = parent;
+	  }
+
+      getParentApp(){
+			return this.parentApp;
+	  }
 
       constructor() {
     	    super();
@@ -216,6 +223,14 @@ display: none;
       }
       clearListOficinas(){
     	  this.listOficinas = [];
+      }
+
+      ready(){
+			super.ready();
+			SyncObjects(()=>{
+				this.getParentApp().present();
+				this.$.mapaOficinas.setParentApp(this.getParentApp()); 
+	 	 	});
       }
       
     }

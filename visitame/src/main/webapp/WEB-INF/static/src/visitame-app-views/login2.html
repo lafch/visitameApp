@@ -19,7 +19,7 @@
 
 <link rel="import" href="../visitame-app-styles/main-style.html">
 
-<dom-module id="my-view2">
+<dom-module id="login-view">
   <template>
   	<customer-service      id="customerService"></customer-service>
   	<configuracion-service id="configuracionService"></configuracion-service>
@@ -68,8 +68,8 @@
   </template>
 
   <script>
-    class MyView2 extends Polymer.Element {
-      static get is() { return 'my-view2'; }
+    class LoginView extends Polymer.Element {
+      static get is() { return 'login-view'; }
       static get properties(){
           return {
     	  listTipoDoi : {
@@ -91,6 +91,7 @@
       }
       ready() {
          super.ready();
+         console.log('en el login');
          var configuracionService = this.$.configuracionService;
 		 if("undefined" !== typeof configuracionService){
 			 var requestTiposDoi = configuracionService.listarTiposDoi({
@@ -188,6 +189,6 @@
     }
     
 
-    window.customElements.define(MyView2.is, MyView2);
+    window.customElements.define(LoginView.is, LoginView);
   </script>
 </dom-module>

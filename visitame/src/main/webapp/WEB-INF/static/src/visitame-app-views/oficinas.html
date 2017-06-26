@@ -21,8 +21,21 @@
 	              estado:{
 	            	  type:String
 	              }
+	              ,
+	              parentApp : {
+						type : Object
+		              }
 	        }
 	      }
+
+	      setParentApp(parent){
+				this.parentApp = parent;
+		  }
+
+	      getParentApp(){
+				return this.parentApp;
+		  }
+	      
 	      getMap(){
 			return this.$.unidadAtencion.getMap();
 	      }
@@ -38,6 +51,15 @@
     	  clearMapa(){
 			return this.$.unidadAtencion.clearMapa();  
  		  }
+
+ 		  ready(){
+ 			super.ready();
+ 			SyncObjects(()=>{
+ 				this.getParentApp().present();
+ 	 			this.$.unidadAtencion.setParentApp( this.getParentApp() );
+ 	 	 	});
+ 		    
+ 	 	 }
 
 	}
     window.customElements.define(OficinasView.is, OficinasView);

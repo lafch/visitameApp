@@ -16,13 +16,34 @@
 	              },
 	              seleccion:{
 	            	  type:String
-	              }
+	              }  
+	              ,
+	              parentApp : {
+						type : Object
+		              }
 	        }
 	      }
+
+	      setParentApp(parent){
+				this.parentApp = parent;
+		  }
+
+	      getParentApp(){
+				return this.parentApp;
+		  }
 	      
 	      cargarMapa(center){
 	    	  this.$.unidadAtencion.cargarMapa(center);
 	      }
+
+		  ready(){
+	 			super.ready();
+	 			SyncObjects(()=>{
+	 				this.getParentApp().present();
+	 	 			this.$.unidadAtencion.setParentApp( this.getParentApp() );
+	 	 	 	});
+	 		    
+	 	 	 }
 	}
     window.customElements.define(AgentesView.is, AgentesView);
   </script>
