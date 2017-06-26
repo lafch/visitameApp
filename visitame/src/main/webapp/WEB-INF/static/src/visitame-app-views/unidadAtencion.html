@@ -31,7 +31,7 @@ display: none;
 
 <div class="main-list-oficina" id="containerOficina">
 	<paper-spinner class="paper-spinner-loading" id="loadingLista" active></paper-spinner>
-	<div class = "mensaje-no-results" id = "noResultList" >La busqueda no retorno resultados.</div>
+	<div class = "mensaje-no-results" style = "display:none;" id = "noResultList" >La busqueda no retorno resultados.</div>
 	<ul id = "oficinasRecords">
 		<template is="dom-repeat" items="{{listOficinas}}">
 <!-- class ="card"  -->
@@ -122,7 +122,7 @@ display: none;
       
       handleResponse(response) {
         let data = [];
-        if(response.data.hasMoreData){
+        if(response.data.pois.length > 0){
           let i = 1;
           let iconColor;
           response.data.pois.forEach((poi,index)=>{
@@ -153,7 +153,7 @@ display: none;
          
           this.listOficinas = data;
         }else{
-        	//swal('Any fool can use a computer');
+        	this.$.noResultList.style.display = 'block';
         }
 
         this.$.loadingLista.active = false;
@@ -165,7 +165,7 @@ display: none;
       }
 
       loadMapa(latitud,longitud,tipo){
-
+			
     	  SyncObjects(()=>{
         		//console.log(this.$.parametrosConfiguracion.getParametros())
         		this.resetearMapa();
@@ -227,6 +227,7 @@ display: none;
 
       ready(){
 			super.ready();
+			this.$.noResultList.style.display = 'none';
 			SyncObjects(()=>{
 				this.getParentApp().present();
 				this.$.mapaOficinas.setParentApp(this.getParentApp()); 
