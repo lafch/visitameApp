@@ -106,17 +106,17 @@
 						google.maps.event.trigger(map, "resize");
 						
 				          if(data){
-				        	  this.markers = [];
 				        	  data.forEach((item,index)=>{
-									
-								 let point = {lat: parseFloat(item.latitude), lng: parseFloat(item.longitude)};
+								  let pathIcon = this.pathParent+"/images/icon_marker_"+item.iconColor+".png";
+								  let point = {lat: parseFloat(item.latitude), lng: parseFloat(item.longitude)};
 				        		  let marker = new google.maps.Marker({
 				        	          position: point,
 				        	          map: this.mapPois,
-				        	          title: item.name
+				        	          title: item.name,
+				        	          icon: pathIcon
 				        	        });
 
-				        		  marker.addListener('click', (e) => {
+				        		  marker.addListener('click', function(e) {
 				        			  console.log(item);
 				        			   console.log(e);
 				        			   console.log(this.getParentApp());

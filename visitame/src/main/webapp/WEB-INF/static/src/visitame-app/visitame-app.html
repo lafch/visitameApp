@@ -74,7 +74,7 @@
           <div main-title>Visitame</div>
         </app-toolbar>
 
-        <app-toolbar class="ver toolbarNavegador">
+     <app-toolbar class="ver toolbarNavegador">
           <paper-tabs selected="[[pagina]]" attr-for-selected="name" noink>
           	<paper-tab  name="oficinas"><a   href="visitame/oficinas">Oficinas</a></paper-tab>
           	<paper-tab  name="cajeros"><a   href="visitame/cajeros">Cajeros</a></paper-tab>
@@ -233,9 +233,9 @@
          _routePageChanged(pagina) {
            this.pagina = pagina || 'oficinas';
 
-           if (!this.$.drawer.persistent) {
+           /*if (!this.$.drawer.persistent) {
              this.$.drawer.close();
-           }
+           }*/
          }
 
          _pageChanged(pagina) {
@@ -245,10 +245,10 @@
 	        }
             
    			this.$.buscador.value = null;
-           var resolvedPageUrl = this.resolveUrl('../visitame-app-views/'+pagina + '.html');
-           Polymer.importHref( resolvedPageUrl,  null, this._showPage404.bind(this), true);
+            var resolvedPageUrl = this.resolveUrl('../visitame-app-views/'+pagina + '.html');
+            Polymer.importHref( resolvedPageUrl,  null, this._showPage404.bind(this), true);
            
-           this.iconoMapa = "list";
+           	this.iconoMapa = "list";
          }
 
          _showPage404() {
