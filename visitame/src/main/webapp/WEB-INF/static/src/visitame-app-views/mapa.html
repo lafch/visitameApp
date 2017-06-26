@@ -74,8 +74,20 @@
 				  zoom : {
 					  	type : String
 					  }
+				  ,
+	              parentApp : {
+						type: Object
+	              }
 	        }
 	      }
+
+	      setParentApp(parent){
+				this.parentApp = parent;
+		  }
+
+	      getParentApp(){
+				return this.parentApp;
+		  }
 
 	      getMap(){
 				return this.mapPois; 
@@ -104,9 +116,12 @@
 				        	          title: item.name
 				        	        });
 
-				        		  marker.addListener('click', function(e) {
+				        		  marker.addListener('click', (e) => {
 				        			  console.log(item);
-				        			    console.log(e);
+				        			   console.log(e);
+				        			   console.log(this.getParentApp());
+				        			   //this.getParentApp().showLogin();  
+				        			    
 				        		  });
 				        		  this.markers.push(marker);
 					          });
@@ -143,6 +158,8 @@
 	 
 	     ready() {
 	            super.ready();
+
+	            
 
 	            let center = null;
 				let zoom  = null;

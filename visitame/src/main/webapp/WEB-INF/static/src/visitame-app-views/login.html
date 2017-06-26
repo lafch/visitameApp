@@ -13,38 +13,37 @@
  <link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
  <link rel="import" href="../../bower_components/paper-item/paper-item.html">
  <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+ 
+ <link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
 
 
  <link rel="import"	href="../../bower_components/paper-spinner/paper-spinner.html">
 
 <link rel="import" href="../visitame-app-styles/main-style.html">
+<link rel="import" href="../visitame-app-styles/login-style.html">
+<link rel="import" href="../visitame-app-icons/main-icons.html">
 
-<dom-module id="my-view2">
+<dom-module id="login-view"> 
+
   <template>
   	<customer-service      id="customerService"></customer-service>
   	<configuracion-service id="configuracionService"></configuracion-service>
-  	
-    <style include="main-styles">
-      :host {
-        display: block;
-
-        padding: 10px;
-      }
-      
-      paper-dropdown-menu{
-      	width: 100%;
-      }
-      
-      paper-listbox{
-      	width: 53.5vh;
-      }
-      
-      .botonera{
-      	text-align: center;
-      	padding-top: 5px;
-      }
-    </style>
-	<paper-spinner class="paper-spinner-loading" id="loadingLista" active></paper-spinner>
+  	<meta charset="utf-8">
+    <style include="main-styles"></style>
+    <style include="login-style"></style>
+    
+    <paper-spinner class="paper-spinner-loading" id="loadingLista" active></paper-spinner>
+	
+	<app-header reveals>
+	
+      <app-toolbar>
+	      <paper-icon-button class="back-btn-login-main" icon="chevron-left" aria-label="Atr√°s" ></paper-icon-button>
+	      <div main-title>Ticket de atenci√≥n</div>
+      </app-toolbar>
+    </app-header>
+	
    <iron-form id="login"> 
       <form method="get" >
           <paper-dropdown-menu label="Tipo documento" required>
@@ -66,10 +65,9 @@
       </form>
       </iron-form>
   </template>
-
   <script>
-    class MyView2 extends Polymer.Element {
-      static get is() { return 'my-view2'; }
+  class LoginView extends Polymer.Element {
+      static get is() { return 'login-view'; }
       static get properties(){
           return {
     	  listTipoDoi : {
@@ -91,15 +89,14 @@
       }
       ready() {
          super.ready();
+         console.log('en el login');
          var configuracionService = this.$.configuracionService;
-		 if("undefined" !== typeof configuracionService){
 			 var requestTiposDoi = configuracionService.listarTiposDoi({
 					params : {"codigoLista": "PERSON_DOI_TIPO"}
 		     });
 			 requestTiposDoi.then((xhr) => { 
 		    	 this.handleResponse(xhr.response);
 		     });
-		 }
     }
       
       handleResponse(response) {
@@ -148,16 +145,16 @@
     			     	  	console.log("error" + error.code); 
     			     	  	switch(error.code) {
     			      	    	case error.PERMISSION_DENIED:
-    			      	    		this.errorDescripcion = "Usuario deneg&#243; utilizar la ubicaciÛn GPS."
+    			      	    		this.errorDescripcion = "Usuario deneg&#243; utilizar la ubicaci√≥n GPS."
     			        	      break;
     			        	    case error.POSITION_UNAVAILABLE:
-    			        	    	this.errorDescripcion = "La informaciÛn de ubicaciÛn es inhabilitada."
+    			        	    	this.errorDescripcion = "La informaci√≥n de ubicaci√≥n es inhabilitada."
     			        	      break;
     			        	    case error.TIMEOUT:
-    			        	    	this.errorDescripcion = "La solicitud para obtener la ubicaciÛn del usuario se ha agotado."
+    			        	    	this.errorDescripcion = "La solicitud para obtener la ubicaci√≥n del usuario se ha agotado."
     			        	      break;
     			        	    case error.UNKNOWN_ERROR:
-    			        	    	this.errorDescripcion = "Un error desconocido ocurriÛ."
+    			        	    	this.errorDescripcion = "Un error desconocido ocurri√≥."
     			        	      break;
     			        	}
     			     	 }else{
@@ -186,8 +183,6 @@
       }
       
     }
-    
-
-    window.customElements.define(MyView2.is, MyView2);
+    window.customElements.define(LoginView.is, LoginView);
   </script>
 </dom-module>
