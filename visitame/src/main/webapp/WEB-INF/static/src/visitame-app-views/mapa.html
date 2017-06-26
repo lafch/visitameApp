@@ -1,13 +1,13 @@
-<link rel="import"	href="../../bower_components/polymer/polymer-element.html">
-<link rel="import"	href="../../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
 <!-- <link rel="import"	href="../../bower_components/google-map/google-map.html">
 <link rel="import"  href="../../bower_components/google-map/google-map-marker.html"> -->
-<link rel="import"  href="../visitame-app-icons/main-icons.html">
-<link rel="import"  href="../visitame-app-styles/main-style.html">
-<link rel="import"	href="../visitame-app-services/geolocalizacion-service.html">
+<link rel="import" href="../visitame-app-icons/main-icons.html">
+<link rel="import" href="../visitame-app-styles/main-style.html">
+<link rel="import" href="../visitame-app-services/geolocalizacion-service.html">
 <link rel="import" href="../visitame-app-commons/parametros-commons.html">
-<dom-module id="mapa-view"> 
-	<template>
+<dom-module id="mapa-view">
+    <template>
 	 	<!-- Uso de Parametros -->
 		<parametros-commons id = "parametrosConfiguracion" ></parametros-commons>	
 		<geolocalizacion-service id="geoLocalizacionService">
@@ -18,23 +18,21 @@
 		  google-map {
 		    height: 600px !important;
 		  }
-		    html, body {
-		        height: 100%;
-		        margin: 0;
-		        padding: 0;
-		     }
-		     #divCentrarGps{
-				position: fixed;
-				right: 15px;
-				bottom: 15px;
-				z-index:2; 
-				background: white;
-			}
-			#imgGps{
-			    width: 23px;
-			    padding: 8px;
-			    height: 23px;
-			}
+	    html, body {
+	        height: 100%;
+	        margin: 0;
+	        padding: 0;
+	     }
+	     #divCentrarGps{
+			    position: fixed;
+			    right: 16px;
+			    bottom: 16px;
+			    z-index: 2;
+		}
+		#imgGps{
+		    width: 45px;
+		    height: 45px;
+		}
 		</style>
 
 		<div id="divCentrarGps" on-click="centrarUbicacion" >
@@ -43,122 +41,148 @@
 		
 		<div id = "mapContent" style="height:600px;width:100%;"></div>
 		
-	</template> 
-	<script>
-	    class MapaView extends Polymer.Element {
-	      static get is() { return 'mapa-view'; }
-	
-	      static get properties(){
-	        return {
-	              pathParent : {
-	                  type : String,
-	                  value :'static/'
-	              },
-	              centroide : {
-		                type : Object
-		          },
-		          errorDescripcion : {
-			           type : String
-			      }
-			      ,
-			      mapPois:{
-			    	  type : Object,
-			    	  value:{}
-				  }
-			      ,
-			      markers:{
-			    	  type : Array,
-			    	  value: []
-				  }
-				  ,
-				  zoom : {
-					  	type : String
-					  }
-	        }
-	      }
+	</template>
+    <script>
+        class MapaView extends Polymer.Element {
+            static get is() {
+                return 'mapa-view';
+            }
 
-	      getMap(){
-				return this.mapPois; 
-		   }
-	      clearMap(){
-				this.mapPois.fitBounds(null);
-		   }
-	     setMarkers(data,center){
-	    	 
-	    	 this.clearMarkers();
-	    	 
-	    	 console.log(this.$.parametrosConfiguracion.getParametros())
-		     
-				if(this.mapPois){
-						
-						var map = this.mapPois;
-			
-						google.maps.event.trigger(map, "resize");
-						
-				          if(data){
-				        	  data.forEach((item,index)=>{
-								  let pathIcon = this.pathParent+"/images/icon_marker_"+item.iconColor+".png";
-								  let point = {lat: parseFloat(item.latitude), lng: parseFloat(item.longitude)};
-				        		  let marker = new google.maps.Marker({
-				        	          position: point,
-				        	          map: this.mapPois,
-				        	          title: item.name,
-				        	          icon: pathIcon
-				        	        });
+            static get properties() {
+                return {
+                    pathParent: {
+                        type: String,
+                        value: 'static/'
+                    },
+                    centroide: {
+                        type: Object
+                    },
+                    errorDescripcion: {
+                        type: String
+                    },
+                    mapPois: {
+                        type: Object,
+                        value: {}
+                    },
+                    markers: {
+                        type: Array,
+                        value: []
+                    },
+                    zoom: {
+                        type: String
+                    }
+                }
+            }
 
-				        		  marker.addListener('click', function(e) {
-				        			  console.log(item);
-				        			    console.log(e);
-				        		  });
-				        		  this.markers.push(marker);
-					          });
-				        	  
-					      }
-			
-				      	setTimeout(() => {
-							map.setZoom(16);
-							if(!center){
-							}
-							var centroide = null;
+            getMap() {
+                return this.mapPois;
+            }
+            clearMap() {
+                this.mapPois.fitBounds(null);
+            }
+            setMarkers(data, center) {
 
-							if(center){
-								centroide = {lat: center.latitude, lng: center.longitude};
-							}else{
-								centroide = {lat: this.$.parametrosConfiguracion.getParametros().posicionActual.latitude, lng: this.$.parametrosConfiguracion.getParametros().posicionActual.longitude};
-							}
-							
-							map.setCenter(centroide);
-						}, 100);
-			          
-					}
-	     } 
-	     
-	     clearMarkers(){
+                this.clearMarkers();
 
-	    	 for (var i = 0; i < this.markers.length; i++) {
-	    		 this.markers[i].setMap(null);
-	         }
-	    	 
-	     }
-	     centrarUbicacion() {
-	    	 	console.log(this.$.parametrosConfiguracion.posicionActual);
-				var center = {lat: this.$.parametrosConfiguracion.posicionActual.latitude, lng: this.$.parametrosConfiguracion.posicionActual.longitude};
-				this.mapPois.setCenter(center);
-	     }
-	 
-	     ready() {
-	            super.ready();
+                if (this.mapPois) {
 
-	            this.mapPois =new google.maps.Map(this.$.mapContent, {
-	                center: center,
-	                zoom: zoom
-	              });
-	            
-	            console.log('mapa Ready!');
-	     }
-   		}
+                    var map = this.mapPois;
 
-    	window.customElements.define(MapaView.is, MapaView);
-  		</script>
-  		  
- </dom-module>
+                    google.maps.event.trigger(map, "resize");
+
+                    if (data) {
+                        this.markers = [];
+                        data.forEach((item, index) => {
+                            let iconPath = this.pathParent + "images/icon_marker_" + item.iconColor + ".png";
+                            let point = {
+                                lat: parseFloat(item.latitude),
+                                lng: parseFloat(item.longitude)
+                            };
+                            let marker = new google.maps.Marker({
+                                position: point,
+                                map: this.mapPois,
+                                title: item.name,
+                                icon: iconPath
+                            });
+
+                            marker.addListener('click', function(e) {
+                                console.log(item);
+                                console.log(e);
+                            });
+                            this.markers.push(marker);
+                        });
+
+                    }
+
+                    setTimeout(() => {
+                        map.setZoom(16);
+                        var centroide = null;
+                        if (center && center.latitude && center.longitude) {
+                            centroide = {
+                                lat: center.latitude,
+                                lng: center.longitude
+                            };
+                        } else {
+                            centroide = {
+                                lat: this.$.parametrosConfiguracion.getParametros().posicionActual.latitude,
+                                lng: this.$.parametrosConfiguracion.getParametros().posicionActual.longitude
+                            };
+                        }
+
+                        map.setCenter(centroide);
+                    }, 100);
+
+                }
+            }
+
+            clearMarkers() {
+
+                for (var i = 0; i < this.markers.length; i++) {
+                    this.markers[i].setMap(null);
+                }
+
+            }
+            centrarUbicacion() {
+                var map = this.mapPois;
+                var center = {
+                    lat: this.$.parametrosConfiguracion.getParametros().posicionActual.latitude,
+                    lng: this.$.parametrosConfiguracion.getParametros().posicionActual.longitude
+                };
+                map.setCenter(center);
+            }
+
+            ready() {
+                super.ready();
+
+                let center = null;
+                let zoom = null;
+
+                if (this.$.parametrosConfiguracion && this.$.parametrosConfiguracion.getParametros() && this.$.parametrosConfiguracion.getParametros().posicionActual) {
+                    center = {
+                        lat: this.$.parametrosConfiguracion.getParametros().posicionActual.latitude,
+                        lng: this.$.parametrosConfiguracion.getParametros().posicionActual.longitude
+                    };
+                } else {
+                    center = {
+                        lat: -34.397,
+                        lng: 150.644
+                    }
+                }
+
+                if (this.$.parametrosConfiguracion && this.$.parametrosConfiguracion.getParametros() && this.$.parametrosConfiguracion.getParametros().zoomMapGen) {
+                    zoom = parseFloat(this.$.parametrosConfiguracion.getParametros().zoomMapGen);
+                } else {
+                    zoom = 16;
+                }
+
+                this.mapPois = new google.maps.Map(this.$.mapContent, {
+                    center: center,
+                    zoom: zoom
+                });
+            }
+        }
+
+        window.customElements.define(MapaView.is, MapaView);
+    </script>
+
+</dom-module>
