@@ -46,8 +46,43 @@
 	
 	
 	<div class = "content-form">
+	
+	<h3>Reserva tu ticket de atención para:</h3>
+	
+	<div class = "content-franga-login">
+	
+	<div class ="up"></div>
+	<div class ="bottom"></div>
+	
+	
+	<div class="box-init">
+
+	<div class="left">
+		<div class="content">
+		<h3>{{data.description}}</h3>
+		<p>{{data.address}}</p>
+		</div>
+	</div>
+	
+	<div class=right>
+	<img src = "{{icon}}" />
+	</div>
+	
+	<div class="usuario-atencion">
+		<iron-icon icon="my-icons:person"></iron-icon> <div>Usuario en espera de atención: 11</div>
+	</div>
+	
+	
+	</div>
+	
+	</div>
+	<div class="form-reserva">
    <iron-form id="login"> 
       <form method="get" >
+      
+      
+      
+      <div class="content-input-form">
           <paper-dropdown-menu label="Tipo documento" required>
 	          <paper-listbox slot="dropdown-content" selected="{{tipoDocumento}}" attr-for-selected="valor">
 	            <template is="dom-repeat" items="{{listTipoDoi}}" >
@@ -55,17 +90,20 @@
 	            </template>
 	          </paper-listbox>
           </paper-dropdown-menu>
+       </div>
           
+          <div class="content-input-form">
           <paper-input autofocus always-float-label required error-message$="{{mensaje}}" id="inputNumeroDocumento" pattern="[0-9]*"  maxlength$="[[numeroCaracteres]]" max$="[[numeroCaracteres]]" minlength$="[[numeroCaracteres]]"  label="Ingresar numero"  ></paper-input>
-          
+          </div>
           <div class="botonera">
-          	<paper-button raised on-click="_reservar">Reservar</paper-button>
-          	<paper-button raised on-click="_reset">Cancelar</paper-button>
+          	<paper-button class="reservar" raised on-click="reservar">Reservar</paper-button>
+          	<paper-button raised on-click="cancelar">Cancelar</paper-button>
           </div>
           
           <div class="output"></div>
       </form>
       </iron-form>
+      </div>
       </div>
   </template>
   <script>
@@ -73,6 +111,11 @@
       static get is() { return 'login-view'; }
       static get properties(){
           return {
+
+          contextPath:{
+              type  : String,
+              value : baseUrl
+              },    
     	  listTipoDoi : {
               			  type : Array,
               			  value : []
@@ -91,6 +134,15 @@
           parentApp : {
 				type : Object
               }
+          ,
+          data:{
+       	   type : Object,
+       	   value : {}
+          }
+          ,
+          icon : {
+			type : String
+          }
            
       	 }
       }
@@ -103,9 +155,22 @@
 			return this.parentApp;
 	  }
 
+      renderData(data){
+		console.log(data);
+		if(data && data.item && data.item.data){
+			this.data = data.item.data;
+		}else{
+			this.data = {};
+			return
+		}
+		if(data && data.icon){
+			this.icon = this.contextPath + 'static/' + data.icon
+		}
+      }
       
       ready() {
          super.ready();
+                          
          console.log('en el login');
          var configuracionService = this.$.configuracionService;
 			 var requestTiposDoi = configuracionService.listarTiposDoi({
@@ -148,7 +213,7 @@
     	  
       }
       
-      _reservar(){
+      reservar(){
     	  if(this.$.inputNumeroDocumento.validate()){
     		  var customerService = this.$.customerService;
     		  var numeroDocumento = this.$.inputNumeroDocumento.value;
@@ -197,10 +262,18 @@
     	  
       }
       
-      _reset(){
+      reset(){
     	  this.tipoDocumento = "DNI";
     	  this.$.inputNumeroDocumento.value="";
     	  this.$.inputNumeroDocumento.invalid = false;
+      }
+
+      cancelar(){
+          
+    	  SyncObjects(()=>{
+    		  	this.reset();
+    	    	this.getParentApp().closeLogin();  
+    	  });
       }
       
     }

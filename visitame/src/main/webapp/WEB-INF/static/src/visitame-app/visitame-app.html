@@ -150,6 +150,9 @@
                  type: Object,
                  value : {}
                  }
+             ,map:{
+				type : Object
+                 }
            };
          }
 
@@ -212,10 +215,19 @@
        
              }
          }
+
+         setMap(map){
+			this.map = map;
+         }
+         
+         getMap(){
+			return this.map;
+         }
          
          initBusquedaDireccions(){
        	  this.SyncObject(()=>{
        			this.buildBusquedaDireccions(this.$.viewVisitas.getMap());
+       			this.setMap(this.$.viewVisitas.getMap());
            });
          }
 
@@ -303,11 +315,17 @@
 	   		 
    	  	 }
 
-   	  	 showLogin(){
-   	   	  	console.log('show login');
+   	  	 showLogin(data){
+
+			if(data){
+				this.$.loginView.renderData(data);
+			}
+   	   	  	 
 	    	this.$.ironPagesMain.style.display = 'none';
 			this.$.headerMain.style.display = 'none';
 			this.$.loginView.style.display = 'block'; 
+
+			
    	   	 }
 
    	   	 closeLogin(){
@@ -315,6 +333,10 @@
 	   	    this.$.loginView.style.display = 'none'; 
 	    	this.$.ironPagesMain.style.display = 'block';
 			this.$.headerMain.style.display = 'block';
+
+			 this.SyncObject(()=>{
+				 google.maps.event.trigger(this.getMap, "resize");
+			      });
 		
    	   	 }
          
