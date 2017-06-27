@@ -9,7 +9,7 @@
     "ecmaVersion": 5
   },
   "rules": {
-    // Possible errors
+
     "no-await-in-loop": "off",
     "comma-dangle": ["error", "never"],
     "no-cond-assign": ["error", "except-parens"],
@@ -43,7 +43,7 @@
     "valid-jsdoc": "off",
     "valid-typeof": "error",
 
-    // Best practices
+
     "accessor-pairs": "error",
     "array-callback-return": "error",
     "block-scoped-var": "off",
@@ -115,10 +115,10 @@
     "wrap-iife": ["error", "outside"],
     "yoda": ["error", "never"],
 
-    // Strict Mode
+
     "strict": ["error", "global"],
 
-    // Variables
+
     "init-declarations": "off",
     "no-catch-shadow": "error",
     "no-delete-var": "error",
@@ -132,7 +132,7 @@
     "no-unused-vars": "error",
     "no-use-before-define": ["error", "nofunc"],
 
-    // Node.js and CommonJS
+
     "callback-return": "off",
     "global-require": "error",
     "handle-callback-err": "error",
@@ -144,7 +144,7 @@
     "no-restricted-modules": "off",
     "no-sync": "off",
 
-    // Stylistic Issues
+
     "array-bracket-spacing": ["error", "never"],
     "block-spacing": ["error", "always"],
     "brace-style": ["error", "1tbs", { "allowSingleLine": false }],
