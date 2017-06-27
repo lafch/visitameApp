@@ -1,0 +1,13 @@
+<!-- Contexto de JNDI para la aplicacion de visitas -->
+ 	<Resource 
+ 				auth="Container" 
+ 				driverClassName="org.postgresql.Driver" 
+ 				maxActive="100" 
+ 				maxIdle="30" 
+ 				maxWait="10000" 
+ 				name="jdbc/t_visitame" 
+ 				password="$t0rm4ppV1s1tam3" 
+ 				type="javax.sql.DataSource" 
+ 				url="jdbc:postgresql://118.180.35.120:5432/t_visitame" 
+ 				username="visitamestorm"
+ 		/> 
