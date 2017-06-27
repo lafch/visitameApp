@@ -312,24 +312,30 @@
 	   	      this.SyncObject(()=>{
 	   			this.$.viewAgentes.setParentApp(this);
 		      });
+
 	   		 
    	  	 }
 
    	  	 showLogin(data){
-
+   	  		this.setFalse();
 			if(data){
 				this.$.loginView.renderData(data);
 			}
-   	   	  	 
+			
+			
 	    	this.$.ironPagesMain.style.display = 'none';
 			this.$.headerMain.style.display = 'none';
 			this.$.loginView.style.display = 'block'; 
-
 			
    	   	 }
 
+         setFalse(){
+       	 	console.log(this.$.ironV);
+
+         }
    	   	 closeLogin(){
 	   	  	console.log('close login');
+	   	  	
 	   	    this.$.loginView.style.display = 'none'; 
 	    	this.$.ironPagesMain.style.display = 'block';
 			this.$.headerMain.style.display = 'block';

@@ -2,7 +2,8 @@
  <link rel="import" href="../../bower_components/iron-form/iron-form.html">
 <link rel="import"	href="../visitame-app-services/configuracion-service.html">
 <link rel="import"	href="../visitame-app-services/customer-service.html">
- 
+ <!-- 
+<link rel="import" href="../../bower_components/google-recaptcha/google-recaptcha.html">-->
  <link rel="import" href="../../bower_components/paper-input/paper-input.html">
  <link rel="import" href="../../bower_components/paper-input/paper-input-error.html">
  
@@ -24,6 +25,7 @@
 <link rel="import" href="../visitame-app-styles/main-style.html">
 <link rel="import" href="../visitame-app-styles/login-style.html">
 <link rel="import" href="../visitame-app-icons/main-icons.html">
+
 
 <dom-module id="login-view"> 
 
@@ -78,7 +80,7 @@
 	</div>
 	<div class="form-reserva">
    <iron-form id="login"> 
-      <form method="get" >
+      <form method="POST" >
       
       
       
@@ -91,9 +93,19 @@
 	          </paper-listbox>
           </paper-dropdown-menu>
        </div>
-          
-          <div class="content-input-form">
+        
+          <div class="content-input-form" >
           <paper-input autofocus always-float-label required error-message$="{{mensaje}}" id="inputNumeroDocumento" pattern="[0-9]*"  maxlength$="[[numeroCaracteres]]" max$="[[numeroCaracteres]]" minlength$="[[numeroCaracteres]]"  label="Ingresar numero"  ></paper-input>
+          </div>
+           <!--  <div id="captcha">
+         	 <google-recaptcha id="cap" force-in-body 
+			    sitekey="6LdHISEUAAAAAN0FxtC5OBGQv-zrtj1tQ1Z_KUWf"
+			    
+			  ></google-recaptcha>
+			
+          </div>-->
+          <div id="maincontainer">
+          <div class="g-recaptcha" data-sitekey="6LdodhMUAAAAAOVHHUa7ukXl1bKJVwKjGhcA_gVK"></div>
           </div>
           <div class="botonera">
           	<paper-button class="reservar" raised on-click="reservar">Reservar</paper-button>
@@ -146,7 +158,7 @@
            
       	 }
       }
-
+		
       setParentApp(parent){
 			this.parentApp = parent;
 	  }
@@ -166,8 +178,15 @@
 		if(data && data.icon){
 			this.icon = this.contextPath + 'static/' + data.icon
 		}
+
+		grecaptcha.render(this.$.maincontainer.querySelector('.g-recaptcha'), {
+	      'sitekey' : '6LfB6SYUAAAAAMjkzbg_4lctIV6nlFR7fsGUCT9p',
+	      
+	    });
       }
-      
+      /*mostrarCaptcha(){
+    	  this.$.captcha.style.display="block";
+      }*/
       ready() {
          super.ready();
                           
@@ -179,6 +198,7 @@
 			 requestTiposDoi.then((xhr) => { 
 		    	 this.handleResponse(xhr.response);
 		     });
+			 
      }
 
       retornarMain(){
@@ -197,6 +217,7 @@
             });
             this.$.loadingLista.active = false;
             this.listTipoDoi = data;
+          
           }
       }
       
@@ -212,7 +233,6 @@
     	  
     	  
       }
-      
       reservar(){
     	  if(this.$.inputNumeroDocumento.validate()){
     		  var customerService = this.$.customerService;
