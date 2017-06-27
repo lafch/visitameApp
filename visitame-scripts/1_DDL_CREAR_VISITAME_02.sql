@@ -63,21 +63,9 @@ ON DELETE RESTRICT
 ON UPDATE CASCADE
 NOT DEFERRABLE;
 
-
---SEQUENCES
-CREATE SEQUENCE appvisitame.seq_tvisita002_cfg_lista;
-
-ALTER SEQUENCE appvisitame.seq_tvisita002_cfg_lista
-    OWNER TO visitamestorm;
-
-CREATE SEQUENCE appvisitame.seq_tvisita003_cfg_valor;
-
-ALTER SEQUENCE appvisitame.seq_tvisita003_cfg_valor
-    OWNER TO visitamestorm;
-    
     
 -- Crear Tablas de Login e Intentos
-CREATE TABLE appvisitame.TVISITA004_PER_PERSONA
+CREATE TABLE appvisitame.tvisita004_per_persona
 (
    CD_PERSONA           INTEGER NOT NULL,
    CD_ALTERNO           INTEGER,
@@ -96,11 +84,12 @@ CREATE TABLE appvisitame.TVISITA004_PER_PERSONA
    PRIMARY KEY (CD_PERSONA)
 );
 
-CREATE TABLE appvisitame.TVISITA005_SEG_INTENTO_LOGUEO
+CREATE TABLE appvisitame.tvisita005_seg_intento_logueo
 (
    CD_INTENTO           INTEGER NOT NULL,
    NB_NUM_DOI           VARCHAR(15)  NOT NULL,
    NB_LOGIN             VARCHAR(30),
+   CD_TIPO_DOI          INTEGER,
    TM_HORA_LOGIN        TIMESTAMP,
    NB_IP                VARCHAR(30),
    NB_ID_DISPOSITIVO    VARCHAR(30),
@@ -111,6 +100,28 @@ CREATE TABLE appvisitame.TVISITA005_SEG_INTENTO_LOGUEO
    TM_EDICION 		    TIMESTAMP,
    PRIMARY KEY (CD_INTENTO)
 );
+
+--SEQUENCES
+CREATE SEQUENCE appvisitame.seq_tvisita002_cfg_lista;
+
+ALTER SEQUENCE appvisitame.seq_tvisita002_cfg_lista
+    OWNER TO visitamestorm;
+
+CREATE SEQUENCE appvisitame.seq_tvisita003_cfg_valor;
+
+ALTER SEQUENCE appvisitame.seq_tvisita003_cfg_valor
+    OWNER TO visitamestorm;
+    
+CREATE SEQUENCE appvisitame.seq_tvisita004_per_persona;
+
+ALTER SEQUENCE appvisitame.seq_tvisita004_per_persona
+    OWNER TO visitamestorm;
+    
+CREATE SEQUENCE appvisitame.seq_tvisita005_seg_intento_logueo;
+
+ALTER SEQUENCE appvisitame.seq_tvisita005_seg_intento_logueo
+    OWNER TO visitamestorm;
+
 COMMIT;
     
     
