@@ -34,8 +34,7 @@ display: none;
 	<div class = "mensaje-no-results" style = "display:none;" id = "noResultList" >La busqueda no retorno resultados.</div>
 	<ul id = "oficinasRecords">
 		<template is="dom-repeat" items="{{listOficinas}}">
-<!-- class ="card"  -->
-		<li ><img src="{{pathParent}}images/icon_{{item.iconColor}}.png" />
+		<li><img src="{{pathParent}}images/icon_{{item.iconColor}}.png" />
 				<h3>{{item.name}}</h3>
 			<p>{{item.description}}</p> <paper-icon-button
 				icon="my-icons:chevron-right"></paper-icon-button></li>
