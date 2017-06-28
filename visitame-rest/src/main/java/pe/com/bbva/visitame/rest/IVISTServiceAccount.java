@@ -1,7 +1,10 @@
 package pe.com.bbva.visitame.rest;
 
 
+import java.util.Map;
+
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -22,4 +25,13 @@ public interface IVISTServiceAccount {
 			@QueryParam("documentType") String documentType
 			) throws ValidacionException, NegocioException;
 
+	
+	@POST
+	@Path("/validate")
+	@Produces({MediaType.APPLICATION_JSON})
+	public Map<String, Object> validarUsuario(
+			@QueryParam("documentNumber") String documentNumber,
+			@QueryParam("documentType") Integer documentType
+			) throws ValidacionException, NegocioException;
+	
 }

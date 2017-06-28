@@ -14,7 +14,7 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="tvisita002_cfg_lista", schema=Constantes.SCHEMA.VIST)
+@Table(name="tvisita002_cfg_lista" , schema=Constantes.SCHEMA.VIST)
 public class Lista implements Serializable {
 	private static final long serialVersionUID = 1L;
 
