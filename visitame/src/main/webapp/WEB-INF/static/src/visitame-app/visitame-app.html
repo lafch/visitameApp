@@ -114,9 +114,6 @@
   
 <!--   login-view -->
 
-
-
-  
   </template>
 
   <script>
@@ -154,6 +151,9 @@
              },
              altoPantalla:{
                	 type: String
+             },
+             map:{
+				type : Object
              }
            };
          }
@@ -217,10 +217,19 @@
        
              }
          }
+
+         setMap(map){
+			this.map = map;
+         }
+         
+         getMap(){
+			return this.map;
+         }
          
          initBusquedaDireccions(){
        	  this.SyncObject(()=>{
        			this.buildBusquedaDireccions(this.$.viewVisitas.getMap());
+       			this.setMap(this.$.viewVisitas.getMap());
            });
          }
 
@@ -247,8 +256,7 @@
 
 	        if(this.$.parametrosConfiguracion && this.$.parametrosConfiguracion.getParametros && this.$.parametrosConfiguracion.getParametros()){
 	        	this.center = this.$.parametrosConfiguracion.getParametros().posicionActual;
-	        }
-            
+	        }   
    			this.$.buscador.value = null;
             var resolvedPageUrl = this.resolveUrl('../visitame-app-views/'+pagina + '.html');
             Polymer.importHref( resolvedPageUrl,  null, this._showPage404.bind(this), true);
@@ -259,8 +267,7 @@
          _showPage404() {
            this.pagina = 'view404';
          }
-
-
+         
          changeIconMapa(){
       		if(this.iconoMapa === 'maps:streetview'){
        			this.iconoMapa = 'list';
@@ -270,14 +277,12 @@
          }
          
          _verMapa(){
-
           	 this.changeIconMapa();
-      	  		
   	  		if(this.pagina === "oficinas"){
-    	  			this.$.viewVisitas.cargarMapa(this.center);	
-    	  		}else if(this.pagina === "cajeros"){
+    	  		this.$.viewVisitas.cargarMapa(this.center);	
+    	  	}else if(this.pagina === "cajeros"){
  	  			this.$.viewCajeros.cargarMapa(this.center);	
-   	  		}if(this.pagina === "agentes"){
+   	  		}else if(this.pagina === "agentes"){
    	  			this.$.viewAgentes.cargarMapa(this.center);	
    	  		}
          }
@@ -289,22 +294,50 @@
 	   		 this.SyncObject(()=>{
 	   			this.$.viewVisitas.setParentApp(this);
 	         });
-	   		 
+	   		 this.SyncObject(()=>{
+	   			this.$.loginView.setParentApp(this);
+		      });
+	   		 this.SyncObject(()=>{
+		   		this.$.viewCajeros.setParentApp(this);
+			 });
+	   	     this.SyncObject(()=>{
+	   			this.$.viewAgentes.setParentApp(this);
+		     });
    	  	 }
 
-   	  	 showLogin(){
-   	   	  	console.log('show login');
-	/*    	  	this.$.ironPagesMain.style.display = 'none';
+   	  	 showLogin(data){
+   	  		this.setFalse();
+			if(data){
+				this.$.loginView.renderData(data);
+			}
+	    	this.$.ironPagesMain.style.display = 'none';
 			this.$.headerMain.style.display = 'none';
-			this.$.loginView.style.display = 'block'; */
-			
+			this.$.loginView.style.display = 'block'; 
+
+   	   	 }
+
+         setFalse(){
+       	 	console.log(this.$.ironV);
+         }
+         
+   	   	 closeLogin(){
+	   	  	console.log('close login');
+	   	  	
+	   	    this.$.loginView.style.display = 'none'; 
+	    	this.$.ironPagesMain.style.display = 'block';
+			this.$.headerMain.style.display = 'block';
+
+			 this.SyncObject(()=>{
+				 google.maps.event.trigger(this.getMap, "resize");
+			      });
+		
    	   	 }
          
          ready(){
        	  super.ready();
        	  this.init(this.$.loadingMain);
        	  this.initBusquedaDireccions();
-       	  this.showLogin();
+       	  //this.showLogin();
        	  this.altoHeader   = this.$.header.clientHeight;
        	  this.altoPantalla = this.parentElement.clientHeight;
          }

@@ -2,7 +2,8 @@
  <link rel="import" href="../../bower_components/iron-form/iron-form.html">
 <link rel="import"	href="../visitame-app-services/configuracion-service.html">
 <link rel="import"	href="../visitame-app-services/customer-service.html">
- 
+ <!-- 
+<link rel="import" href="../../bower_components/google-recaptcha/google-recaptcha.html">-->
  <link rel="import" href="../../bower_components/paper-input/paper-input.html">
  <link rel="import" href="../../bower_components/paper-input/paper-input-error.html">
  
@@ -25,6 +26,7 @@
 <link rel="import" href="../visitame-app-styles/login-style.html">
 <link rel="import" href="../visitame-app-icons/main-icons.html">
 
+
 <dom-module id="login-view"> 
 
   <template>
@@ -39,13 +41,50 @@
 	<app-header reveals>
 	
       <app-toolbar>
-	      <paper-icon-button class="back-btn-login-main" icon="chevron-left" aria-label="Atrás" ></paper-icon-button>
+	      <paper-icon-button id = "btnRetornarMain" on-click = "retornarMain" class="back-btn-login-main" icon="chevron-left" aria-label="Atrás" ></paper-icon-button>
 	      <div main-title>Ticket de atención</div>
       </app-toolbar>
     </app-header>
 	
+	
+	<div class = "content-form">
+	
+	<h3>Reserva tu ticket de atención para:</h3>
+	
+	<div class = "content-franga-login">
+	
+	<div class ="up"></div>
+	<div class ="bottom"></div>
+	
+	
+	<div class="box-init">
+
+	<div class="left">
+		<div class="content">
+		<h3>{{data.description}}</h3>
+		<p>{{data.address}}</p>
+		</div>
+	</div>
+	
+	<div class=right>
+	<img src = "{{icon}}" />
+	</div>
+	
+	<div class="usuario-atencion">
+		<iron-icon icon="my-icons:person"></iron-icon> <div>Usuario en espera de atención: 11</div>
+	</div>
+	
+	
+	</div>
+	
+	</div>
+	<div class="form-reserva">
    <iron-form id="login"> 
-      <form method="get" >
+      <form method="POST" >
+      
+      
+      
+      <div class="content-input-form">
           <paper-dropdown-menu label="Tipo documento" required>
 	          <paper-listbox slot="dropdown-content" selected="{{tipoDocumento}}" attr-for-selected="valor">
 	            <template is="dom-repeat" items="{{listTipoDoi}}" >
@@ -53,23 +92,42 @@
 	            </template>
 	          </paper-listbox>
           </paper-dropdown-menu>
-          
+       </div>
+        
+          <div class="content-input-form" >
           <paper-input autofocus always-float-label required error-message$="{{mensaje}}" id="inputNumeroDocumento" pattern="[0-9]*"  maxlength$="[[numeroCaracteres]]" max$="[[numeroCaracteres]]" minlength$="[[numeroCaracteres]]"  label="Ingresar numero"  ></paper-input>
-          
+          </div>
+           <!--  <div id="captcha">
+         	 <google-recaptcha id="cap" force-in-body 
+			    sitekey="6LdHISEUAAAAAN0FxtC5OBGQv-zrtj1tQ1Z_KUWf"
+			    
+			  ></google-recaptcha>
+			
+          </div>-->
+          <div id="maincontainer">
+          <div class="g-recaptcha" data-sitekey="6LdodhMUAAAAAOVHHUa7ukXl1bKJVwKjGhcA_gVK"></div>
+          </div>
           <div class="botonera">
-          	<paper-button raised on-click="_reservar">Reservar</paper-button>
-          	<paper-button raised on-click="_reset">Cancelar</paper-button>
+          	<paper-button class="reservar" raised on-click="reservar">Reservar</paper-button>
+          	<paper-button raised on-click="cancelar">Cancelar</paper-button>
           </div>
           
           <div class="output"></div>
       </form>
       </iron-form>
+      </div>
+      </div>
   </template>
   <script>
   class LoginView extends Polymer.Element {
       static get is() { return 'login-view'; }
       static get properties(){
           return {
+
+          contextPath:{
+              type  : String,
+              value : baseUrl
+              },    
     	  listTipoDoi : {
               			  type : Array,
               			  value : []
@@ -84,11 +142,54 @@
         	   value:'8'
            },
           mensaje: String
+          ,
+          parentApp : {
+				type : Object
+              }
+          ,
+          data:{
+       	   type : Object,
+       	   value : {}
+          }
+          ,
+          icon : {
+			type : String
+          }
            
       	 }
       }
+		
+      setParentApp(parent){
+			this.parentApp = parent;
+	  }
+
+      getParentApp(){
+			return this.parentApp;
+	  }
+
+      renderData(data){
+		console.log(data);
+		if(data && data.item && data.item.data){
+			this.data = data.item.data;
+		}else{
+			this.data = {};
+			return
+		}
+		if(data && data.icon){
+			this.icon = this.contextPath + 'static/' + data.icon
+		}
+
+		grecaptcha.render(this.$.maincontainer.querySelector('.g-recaptcha'), {
+	      'sitekey' : '6LfB6SYUAAAAAMjkzbg_4lctIV6nlFR7fsGUCT9p',
+	      
+	    });
+      }
+      /*mostrarCaptcha(){
+    	  this.$.captcha.style.display="block";
+      }*/
       ready() {
          super.ready();
+                          
          console.log('en el login');
          var configuracionService = this.$.configuracionService;
 			 var requestTiposDoi = configuracionService.listarTiposDoi({
@@ -97,7 +198,12 @@
 			 requestTiposDoi.then((xhr) => { 
 		    	 this.handleResponse(xhr.response);
 		     });
-    }
+			 
+     }
+
+      retornarMain(){
+		this.getParentApp().closeLogin();
+      }
       
       handleResponse(response) {
           let data = [];
@@ -111,6 +217,7 @@
             });
             this.$.loadingLista.active = false;
             this.listTipoDoi = data;
+          
           }
       }
       
@@ -126,8 +233,7 @@
     	  
     	  
       }
-      
-      _reservar(){
+      reservar(){
     	  if(this.$.inputNumeroDocumento.validate()){
     		  var customerService = this.$.customerService;
     		  var numeroDocumento = this.$.inputNumeroDocumento.value;
@@ -176,10 +282,18 @@
     	  
       }
       
-      _reset(){
+      reset(){
     	  this.tipoDocumento = "DNI";
     	  this.$.inputNumeroDocumento.value="";
     	  this.$.inputNumeroDocumento.invalid = false;
+      }
+
+      cancelar(){
+          
+    	  SyncObjects(()=>{
+    		  	this.reset();
+    	    	this.getParentApp().closeLogin();  
+    	  });
       }
       
     }

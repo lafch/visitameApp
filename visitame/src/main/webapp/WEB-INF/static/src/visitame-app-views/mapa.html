@@ -175,8 +175,6 @@
 		<geolocalizacion-service id="geoLocalizacionService">		
 		</geolocalizacion-service>
 
-		
-		
 		<div id="divCentrarGps" on-click="centrarUbicacion" >
 		 	<img id="imgGps" src="static/images/ic_gps.svg">
 		</div>
@@ -284,10 +282,22 @@
 
 	      getMap(){
 				return this.mapPois; 
-		   }
+		  }
+	      
 	      clearMap(){
 				this.mapPois.fitBounds(null);
-		   }
+		  }
+	      
+	      reAjusteMap(){
+		      try{
+		    	  var map = this.mapPois;
+		    	  google.maps.event.trigger(map, "resize");
+			  }catch(e){
+				console.log('no se pudo hacer resize del mapa');
+				console.log(e);
+			  }
+		  }
+		   
 	     setMarkers(data,center){
 	    	 
 	    	 this.clearMarkers();
@@ -310,8 +320,13 @@
 				        	        });
 
 				        		  marker.addListener('click', (e) => {
-				        			  console.log(item);
-				        			   console.log(e);
+				        			   if(item.type == 'O'){
+				        			   		this.getParentApp().showLogin({
+												item : item,
+												icon: "/images/icon_marker_"+item.iconColor+".png",
+												e : e
+						        			});
+				        			   } 
 				        			   //console.log(this.getParentApp());
 				        			   //this.getParentApp().showLogin();
 				        			   var alto = this.altoTotal/4;
