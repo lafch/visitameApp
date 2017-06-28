@@ -67,7 +67,7 @@
     <!-- Main content -->
     <app-header-layout id = "headerMain" has-scrolling-region>
 
-      <app-header slot="header" condenses reveals effects="waterfall">
+      <app-header id="header" slot="header" condenses reveals effects="waterfall">
         <app-toolbar >
           <paper-icon-button class="ver" icon="my-icons:menu" drawer-toggle></paper-icon-button>
           <paper-icon-button class="back-btn" icon="arrow-back" aria-label="Atrás" on-click="_regresar"></paper-icon-button>
@@ -144,12 +144,17 @@
              iconoMapa: {
            	  type: String,
            	  value: 'maps:streetview'
-             }
-             ,
+             },
              center :{
                  type: Object,
                  value : {}
-                 }
+             },
+             altoHeader:{
+            	 type: String
+             },
+             altoPantalla:{
+               	 type: String
+             }
            };
          }
 
@@ -300,6 +305,8 @@
        	  this.init(this.$.loadingMain);
        	  this.initBusquedaDireccions();
        	  this.showLogin();
+       	  this.altoHeader   = this.$.header.clientHeight;
+       	  this.altoPantalla = this.parentElement.clientHeight;
          }
 
          _regresar(){

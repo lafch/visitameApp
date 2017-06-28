@@ -6,18 +6,15 @@
 <link rel="import" href="../visitame-app-styles/main-style.html">
 <link rel="import" href="../visitame-app-services/geolocalizacion-service.html">
 <link rel="import" href="../visitame-app-commons/parametros-commons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/device-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <dom-module id="mapa-view">
-    <template>
-	 	<!-- Uso de Parametros -->
-		<parametros-commons id = "parametrosConfiguracion" ></parametros-commons>	
-		<geolocalizacion-service id="geoLocalizacionService">
-		
-		</geolocalizacion-service>
-
-		<style>
-		  google-map {
-		    height: 600px !important;
-		  }
+    <template id="tmpMapa">
+    	<style>
 	    html, body {
 	        height: 100%;
 	        margin: 0;
@@ -33,14 +30,190 @@
 		    width: 45px;
 		    height: 45px;
 		}
-		</style>
+		.mapa{
+			width:100%;
+			position: inherit !important;
+			transition: 1s ease-in-out;
+		}
+/* 		.mapaSamll{ */
+/* 			height: 10px; */
+/* 			width:100%; */
+/* 			transition: 1s ease-in-out; */
+/* 		} */
+		
+		.detalleOpen{
+    		background-color: blue;
+    		width: 100%;
+    		height: 50vh;
+    		transition: 1s ease-in-out;
+    	}
+    	.detalleClose{
+    		width: 100%;
+    		height: 0px;    		
+    		background-color: red;
+    		transition: 1s ease-in-out;
+    	}
 
+    	.contenedor{
+    	    width: 100%;
+    		height: 0px;
+     		position: absolute;     		
+     		left: 0;
+			bottom: 0;
+    	}
+    	
+    	.bloque > label{
+    		display: block;
+    		float:left;
+    	}
+    	
+    	.bloque {
+    		width: 100%; 
+    		border-bottom: solid 1px #F2F2F2;
+    		display: inline-block;
+    		padding-bottom:0.5%;
+    	}
+    	
+    	.titulo{
+    		font-size: 1.3em; 
+    		font-weight: bold;
+    	}
+    	
+    	.subTitulo-bold{
+    		font-size: 1em; 
+    		font-weight: bold;
+    		padding-top:0.5%;
+    	}
+    	
+    	.subTitulo{
+    		font-size: 1em; 
+    		color: #8F8F8F;
+    	}
+    	
+    	.botonera{
+    		text-align:center;
+    	}
+    	
+    	paper-button.boton[active] {
+    		background-color: var(--paper-red-500);
+  		}
+    	
+    	paper-button.boton{
+			border: solid 1px #F2F2F2;
+			border-radius:5px;
+			font-size: 1em; 
+			--paper-button-flat-keyboard-focus: {
+      			background-color: #0051A9;
+      			color:white !important;
+		    };
+    	}
+    	
+    	@media (max-height: 660px) {
+    		.titulo{
+    			font-size: 1.1em; 
+	    		font-weight: bold;
+    		}
+    	
+	    	.subTitulo-bold{
+	    		font-size: 0.9em; 
+	    		font-weight: bold;
+	    		padding-top:0.5%;
+	    	}
+	    	
+	    	.subTitulo{
+    			font-size: 0.9em; 
+	    		color: #8F8F8F;
+    		}
+    		
+    		paper-button.boton{
+				border: solid 1px #F2F2F2;
+				border-radius:5px;
+				font-size: 0.9em; 
+    		}
+    	}
+    	
+    	@media (min-height: 730px) {
+    		.titulo{
+    			font-size: 1.5em; 
+	    		font-weight: bold;
+    		}
+    	
+	    	.subTitulo-bold{
+	    		font-size: 1.2em; 
+	    		font-weight: bold;
+	    		padding-top:0.5%;
+	    	}
+	    	
+	    	.subTitulo{
+    			font-size: 1.2em; 
+	    		color: #8F8F8F;
+    		}
+    		
+    		paper-button.boton{
+				border: solid 1px #F2F2F2;
+				border-radius:5px;
+				font-size: 1.2em; 
+    		}
+    	}
+    	
+    	
+    	
+    	.icono{
+    		width:10%;
+    		float: left;
+    		padding-top:0.5%;
+    		color: #8F8F8F;
+    	}
+    	
+    	iron-icon.iconoTelefono{
+    		--iron-icon-fill-color:green;
+    	}
+		
+		</style>
+	 	<!-- Uso de Parametros -->
+		<parametros-commons id = "parametrosConfiguracion" ></parametros-commons>	
+		<geolocalizacion-service id="geoLocalizacionService">		
+		</geolocalizacion-service>
+
+		
+		
 		<div id="divCentrarGps" on-click="centrarUbicacion" >
 		 	<img id="imgGps" src="static/images/ic_gps.svg">
 		</div>
-		
-		<div id = "mapContent" style="height:600px;width:100%;"></div>
+		<div id="contenedorMapaDetalle">
+			<div id = "mapContent"></div>
+			<div id="detalle" class="contenedor">
+				<div style = 'width:  90%; display: block; padding: 5%;'>
+				<div  class="bloque">
+					<label style="width: 100%;" class="titulo">{{detalleOficina.address2}}</label>
+					<label style="width: 100%;" class="subTitulo">{{detalleOficina.address}}</label>
+					<iron-icon icon="social:person" class="icono" ></iron-icon><label style="width: 90%; color:#008CDB;" class="subTitulo-bold">Usuarios en espera de atencion: 11</label>
+				</div>
+				<div class="bloque">
+					<div style="display:inline-block;">
+						<iron-icon icon="device:access-time" class="icono"></iron-icon>
+						<label style="width: 90%;" class="subTitulo-bold"> Horario de Atencion</label>
+					</div>
+					<label style="width: 55%; padding-left:10%;" class="subTitulo">Lunes a Viernes</label><label style="width: 35%;" class="subTitulo">{{detalleOficina.hours_mf}}</label>
+					<label style="width: 55%; padding-left:10%;" class="subTitulo">Sabados</label>		  <label style="width: 35%;" class="subTitulo">{{detalleOficina.hours_sat}}</label>
+				</div>
+				<div class="bloque">
+				    <iron-icon icon="communication:phone" class="icono iconoTelefono"></iron-icon>
+					<label style="width: 55%;" class="subTitulo-bold">Telefono</label>
+					<label style="width: 35%; padding-top:0.5%;" class="subTitulo">{{detalleOficina.telephone}}</label>
 
+				</div>
+				<div class="bloque">
+				    <iron-icon icon="flag" class="icono" ></iron-icon>
+					<label style="width: 55%;" class="subTitulo-bold">Rutas</label>
+					<label style="width: 35%; padding-top:0.5%;" class="subTitulo">¿Como llegar?</label>
+				</div>
+				<div class="botonera" >
+					<paper-button class="boton" style="width:100%; margin-bottom:2%;">Reservar ticket de atención</paper-button>
+					<paper-button class="boton" style="width:100%;" on-click="cerrarDetalle">Cancelar</paper-button>
+				</div>
+			</div>
+		</div>
 	</template>
    
 	<script>
@@ -58,25 +231,46 @@
 		          },
 		          errorDescripcion : {
 			           type : String
-			      }
-			      ,
+			      },
 			      mapPois:{
 			    	  type : Object,
 			    	  value:{}
-				  }
-			      ,
+				  },
 			      markers:{
 			    	  type : Array,
 			    	  value: []
-				  }
-				  ,
-				  zoom : {
+				  },
+				  zoom:{
 					  	type : String
-					  }
-				  ,
+				  },
 	              parentApp : {
 						type: Object
-	              }
+	              },
+				  estiloDetalle : {
+					type: String,
+					value: "detalleClose"
+				  },
+				  estiloMapa:{
+					  type: String,
+					  value: "mapa"
+				  },
+				  altoMapa:{
+					  type:String
+				  },
+				  altoPantalla: {
+					  type:String
+				  },
+				  altoHeader:{
+					  type:String
+				  },
+				  altoTotal:{
+					  type:String
+				  },
+				  
+				  detalleOficina:{
+					  type: Object
+				  }
+				  
 	        }
 	      }
 
@@ -115,12 +309,30 @@
 				        	          icon: pathIcon
 				        	        });
 
-				        		  marker.addListener('click', function(e) {
+				        		  marker.addListener('click', (e) => {
 				        			  console.log(item);
 				        			   console.log(e);
-				        			   console.log(this.getParentApp());
-				        			   //this.getParentApp().showLogin();  
-				        			    
+				        			   //console.log(this.getParentApp());
+				        			   //this.getParentApp().showLogin();
+				        			   var alto = this.altoTotal/4;
+				        			   var altoDetalle = alto * 3;
+				        			   this.$.divCentrarGps.style.display = 'none';
+				        			   this.$.mapContent.style.height = alto+"px";
+				        			   this.$.mapContent.style.transition = '0.8s ease-in-out';
+				        			   this.$.detalle.style.height = altoDetalle+"px";
+				        			   this.$.detalle.style.transition = '0.8s ease-in-out';
+									   var centroide = {lat: parseFloat(item.latitude), lng: parseFloat(item.longitude)};
+									   setTimeout(() => {
+// 										   map.setZoom(18);
+										   google.maps.event.trigger(map, "resize");	
+										   map.panTo(marker.getPosition());
+										   map.setZoom(17);
+									   }, 600);
+				        			   this.detalleOficina = item.data;
+// 				        			   var hola = Polymer.dom(this.root).querySelector('.mapaSamll');
+// 				        			   this.estiloMapa = 'mapaSamll';
+				        			   
+// 				        			   this.estiloDetalle = 'detalleOpen';
 				        		  });
 				        		  this.markers.push(marker);
 					          });
@@ -140,7 +352,18 @@
 						}, 100);
 			          
 					}
-	     } 
+	     }
+	     
+	     cerrarDetalle(){
+			   this.$.mapContent.style.height = this.altoTotal+"px";
+			   this.$.detalle.style.height = "0px";	    	 
+			   this.$.divCentrarGps.style.display = 'block';
+			   setTimeout(() => {
+				   google.maps.event.trigger(this.mapPois, "resize");	
+				   this.centrarUbicacion();
+				   this.mapPois.setZoom(16);
+			   }, 600);
+	     }
 	     
 	     clearMarkers(){
 
@@ -157,9 +380,6 @@
 	 
 	     ready() {
 	            super.ready();
-
-	            
-
 	            let center = null;
 				let zoom  = null;
 				
@@ -174,13 +394,27 @@
 			    }else{
 			    	zoom = 16;
 				}
+	            
+	            SyncObjects(()=>{
+					this.altoHeader   = this.getParentApp().altoHeader;
+					this.altoPantalla = this.getParentApp().altoPantalla;
+					this.altoTotal    = this.altoPantalla - this.altoHeader;
+					this.$.mapContent.style.height = this.altoTotal+"px";
+	            });
 				
 	            this.mapPois =new google.maps.Map(this.$.mapContent, {
 	                center: center,
-	                zoom: zoom
+	                zoom: zoom,
+	                zoomControl: false,
+	                mapTypeControl: false,
+	                scaleControl: false,
+	                streetViewControl: false
+// 	                overviewMapControl: false,
+// 	                rotateControl: false
+	                
 	              });
-	     }
-   		}
+	     }}
+	    
 
     	window.customElements.define(MapaView.is, MapaView);
   		</script>
