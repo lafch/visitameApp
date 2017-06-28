@@ -207,7 +207,7 @@
 					<label style="width: 35%; padding-top:0.5%;" class="subTitulo">¿Como llegar?</label>
 				</div>
 				<div class="botonera" >
-					<paper-button class="boton" style="width:100%; margin-bottom:2%;">Reservar ticket de atención</paper-button>
+					<paper-button class="boton" style="width:100%; margin-bottom:2%;" on-click="abrirLogin">Reservar ticket de atención</paper-button>
 					<paper-button class="boton" style="width:100%;" on-click="cerrarDetalle">Cancelar</paper-button>
 				</div>
 			</div>
@@ -263,10 +263,15 @@
 				  },
 				  altoTotal:{
 					  type:String
-				  },
-				  
+				  },				  
 				  detalleOficina:{
 					  type: Object
+				  },
+				  item:{
+					  type: Object
+				  },
+				  eventoSeleccionadoMarker:{
+					  type:Object
 				  }
 				  
 	        }
@@ -321,12 +326,6 @@
 
 				        		  marker.addListener('click', (e) => {
 				        			   if(item.type == 'O'){
-// 				        			   		this.getParentApp().showLogin({
-// 												item : item,
-// 												icon: "/images/icon_marker_"+item.iconColor+".png",
-// 												e : e
-// 						        			});
-
 											//console.log(this.getParentApp());
 					        			   //this.getParentApp().showLogin();
 					        			   var alto = this.altoTotal/4;
@@ -337,12 +336,16 @@
 				        				   this.$.detalle.style.height = altoDetalle+"px";
 				        				   this.$.detalle.style.transition = '0.8s ease-in-out';
 										   var centroide = {lat: parseFloat(item.latitude), lng: parseFloat(item.longitude)};
+										   
 										   setTimeout(() => {
 										   	   google.maps.event.trigger(map, "resize");	
 										   	   map.panTo(marker.getPosition());
 										       map.setZoom(17);
 										   }, 600);
+										   
 					        			   this.detalleOficina = item.data;
+					        			   this.item = item;
+					        			   this.eventoSeleccionadoMarker = e;
 				        			   } 
 				        			   
 				        		  });
@@ -372,9 +375,17 @@
 			   this.$.divCentrarGps.style.display = 'block';
 			   setTimeout(() => {
 				   google.maps.event.trigger(this.mapPois, "resize");	
-				   this.centrarUbicacion();
+				   this.centrarOrigen();
 				   this.mapPois.setZoom(16);
-			   }, 600);
+			   }, 800);
+	     }
+	     
+	     abrirLogin(){
+	    	 this.getParentApp().showLogin({
+					item : this.item,
+					icon: "/images/icon_marker_"+this.item.iconColor+".png",
+					e : this.eventoSeleccionadoMarker
+ 			});
 	     }
 	     
 	     clearMarkers(){
@@ -388,6 +399,10 @@
 	        		var map = this.mapPois;
 					var center = {lat: this.$.parametrosConfiguracion.getParametros().posicionActual.latitude, lng: this.$.parametrosConfiguracion.getParametros().posicionActual.longitude};
 	        		map.setCenter(center);
+	     }
+	     
+	     centrarOrigen(){
+	    	 console.log(this.getParentApp().center);
 	     }
 	 
 	     ready() {
