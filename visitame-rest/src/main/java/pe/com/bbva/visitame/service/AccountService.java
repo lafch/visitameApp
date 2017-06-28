@@ -11,7 +11,7 @@ import pe.com.bbva.visitame.util.Busqueda;
 
 public interface AccountService {
 
-	CustomerDetail getCustomer( String documentNumber , String documentType) throws NegocioException;
+	CustomerDetail getCustomer( String documentNumber , Integer documentType) throws NegocioException;
 	
 	List<Persona> obtenerPersona(Busqueda b) throws NegocioException;
 	
