@@ -1,5 +1,7 @@
 <link rel="import"	href="../../bower_components/polymer/polymer-element.html">
 <link rel="import"	href="../../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import"	href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import"	href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../visitame-app-icons/main-icons.html">
 <link rel="import" href="../visitame-app-styles/main-style.html">
 <link rel="import" href="../visitame-app-styles/oficinas-style.html">
@@ -24,22 +26,29 @@ display: none;
 
 <style include="oficinas-styles">
 </style>
- <!-- Uso de Parametros -->
- <parametros-commons id = "parametrosConfiguracion" ></parametros-commons>
- 
+<!-- Uso de Parametros -->
+<parametros-commons id = "parametrosConfiguracion" ></parametros-commons> 
 <geolocalizacion-service id="geoLocalizacionService"></geolocalizacion-service>
 
 <div class="main-list-oficina" id="containerOficina">
 	<paper-spinner class="paper-spinner-loading" id="loadingLista" active></paper-spinner>
 	<div class = "mensaje-no-results" style = "display:none;" id = "noResultList" >La busqueda no retorno resultados.</div>
-	<ul id = "oficinasRecords">
-		<template is="dom-repeat" items="{{listOficinas}}">
-		<li><img src="{{pathParent}}images/icon_{{item.iconColor}}.png" />
-				<h3>{{item.name}}</h3>
-			<p>{{item.description}}</p> <paper-icon-button
-				icon="my-icons:chevron-right"></paper-icon-button></li>
+	<paper-menu id = "oficinasRecords"  attr-for-selected="data-unidad" selected="{{unidadSeleccionada}}" class="principal">
+		<template is="dom-repeat" items="{{listOficinas}}" >
+			<paper-item data-unidad="{{item}}" class="segundo">
+				<div style="width: 100%;" class="contenedor">
+					<div style="float:left" class="logoEstadoOficina">
+						<img src="{{pathParent}}images/icon_{{item.iconColor}}.png" class="logoEstadoOficina"/>	
+					</div>
+					<div style="width: 80%; float:left">
+						<label class="titulo"    style="width: 100%; display: block;">{{item.name}}</label>
+						<label class="subtitulo" style="width: 100%; display: block;">{{item.description}}</label>	
+					</div>
+					<paper-icon-button icon="my-icons:chevron-right"></paper-icon-button>
+				</div>
+			</paper-item>
 		</template>
-	</ul>
+	</paper-menu>
 	
 	<mapa-view id = "mapaOficinas"></mapa-view>
 	
@@ -71,6 +80,10 @@ display: none;
               ,
               parentApp : {
 					type: Object
+              },
+              unidadSeleccionada:{
+            	    type: Object,
+            	    observer: 'detalleUnidad',
               }
         }
       }
@@ -82,11 +95,10 @@ display: none;
       getParentApp(){
 			return this.parentApp;
 	  }
-
+      
       constructor() {
     	    super();
     	  }
-      
 
       formatoDistancia(metros){
           if(!metros) { return ''; }
@@ -109,6 +121,34 @@ display: none;
           }
 
           this.$.mapaOficinas.setMarkers(this.listOficinas,center);
+    	 
+      }
+      
+      detalleUnidad(){
+    	  if(this.unidadSeleccionada != null){
+	    	  //console.log(this.unidadSeleccionada);
+	    	  var center;
+	    	  if(this.unidadSeleccionada.latitude !== null && this.unidadSeleccionada.longitude !== null){
+	    	  	center= {latitude : parseFloat(this.unidadSeleccionada.latitude), longitude: parseFloat(this.unidadSeleccionada.longitude)};
+	    	  }
+	    	  this.cargarDetalleMapa(center);
+	    	  this.$.mapaOficinas.verDetalleOficina(this.unidadSeleccionada);
+	    	  this.unidadSeleccionada = null;
+    	  }
+      }
+      
+	 cargarDetalleMapa(center){
+    	  
+          if(this.$.mapaOficinas.style.display == 'block'){
+        	  this.$.oficinasRecords.style.display = 'block';
+    		  this.$.mapaOficinas.style.display = 'none';
+            }else{
+              this.$.oficinasRecords.style.display = 'none';
+       		  this.$.mapaOficinas.style.display = 'block';
+          }
+
+          this.$.mapaOficinas.setMarkers(this.listOficinas,center);
+          
     	 
       }
       
@@ -229,7 +269,8 @@ display: none;
 			this.$.noResultList.style.display = 'none';
 			SyncObjects(()=>{
 				this.getParentApp().present();
-				this.$.mapaOficinas.setParentApp(this.getParentApp()); 
+				this.$.mapaOficinas.setParentApp(this.getParentApp());
+				this.$.mapaOficinas.setUnidadAtencion(this);
 	 	 	});
       }
       

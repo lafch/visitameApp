@@ -14,6 +14,7 @@ import pe.com.bbva.visitame.dao.IntentoLogueoDAO;
 import pe.com.bbva.visitame.dao.PersonaDAO;
 import pe.com.bbva.visitame.dominio.IntentoLogueo;
 import pe.com.bbva.visitame.dominio.Persona;
+import pe.com.bbva.visitame.dominio.dto.cuenta.Customer;
 import pe.com.bbva.visitame.dominio.dto.cuenta.CustomerDetail;
 import pe.com.bbva.visitame.dominio.dto.zic.ZicResult;
 import pe.com.bbva.visitame.dominio.util.Constantes;
@@ -40,7 +41,7 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 	private IntentoLogueoDAO intentoLogueoDAO;
 
 	@Override 
-	public CustomerDetail getCustomer(String documentNumber, String documentType) throws NegocioException {
+	public CustomerDetail getCustomer(String documentNumber, Integer documentType) throws NegocioException {
 
 		CustomerDetail customerDetail = null;
 		try {
@@ -123,6 +124,17 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		// getCustomer
 		// crear si no existe persona
 		// registrar intento si todo es correcto
+		CustomerDetail datosPersona = getCustomer(persona.getNbNumDoi(), persona.getCdTipoDoi());
+		System.out.println(datosPersona);
+		
+		if(datosPersona==null){
+			//Insertar Persona
+			
+			
+		}else{
+			
+		}
+		
 		
 		
 		return null;

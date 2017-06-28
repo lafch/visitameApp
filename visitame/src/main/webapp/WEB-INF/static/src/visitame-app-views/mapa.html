@@ -273,7 +273,14 @@
 				  },
 				  eventoSeleccionadoMarker:{
 					  type:Object
-				  }
+				  },
+				  viaDetalle:{
+					  type:String,
+					  value: "mapa"
+				  },
+				  unidadAtencion:{
+	            	   type: Object
+	              }
 				  
 	        }
 	      }
@@ -284,6 +291,14 @@
 
 	      getParentApp(){
 				return this.parentApp;
+		  }
+	      
+	      setUnidadAtencion(unidadAtencion){
+				this.unidadAtencion = unidadAtencion;
+		  }
+
+	      getUnidadAtencion(){
+				return this.unidadAtencion;
 		  }
 
 	      getMap(){
@@ -370,15 +385,52 @@
 					}
 	     }
 	     
-	     cerrarDetalle(){
-			   this.$.mapContent.style.height = this.altoTotal+"px";
-			   this.$.detalle.style.height = "0px";	    	 
-			   this.$.divCentrarGps.style.display = 'block';
+	     verDetalleOficina(unidad){
+	    	 if(unidad.type == 'O'){
+	    		 
+ 			   var alto = this.altoTotal/4;
+ 			   var altoDetalle = alto * 3;
+ 			   this.$.divCentrarGps.style.display = 'none';
+ 			   this.$.mapContent.style.height = alto+"px";
+ 			   this.$.mapContent.style.transition = '0.8s ease-in-out';
+			   this.$.detalle.style.height = altoDetalle+"px";
+			   this.$.detalle.style.transition = '0.8s ease-in-out';
+			   let centroide = {lat: parseFloat(unidad.latitude), lng: parseFloat(unidad.longitude)};
+				   
 			   setTimeout(() => {
-				   google.maps.event.trigger(this.mapPois, "resize");	
-				   this.centrarOrigen();
-				   this.mapPois.setZoom(16);
-			   }, 800);
+			   	   google.maps.event.trigger(this.mapPois, "resize");	
+			   	this.mapPois.setCenter(centroide);
+			   	this.mapPois.setZoom(17);
+			   }, 600);   
+			   this.detalleOficina = unidad.data;
+ 			   this.item = unidad;
+ 			   this.getParentApp().changeIconMapa();
+ 			   this.viaDetalle = "lista";
+		   }
+	    	 
+	     }
+	     
+	     
+	     
+	     cerrarDetalle(){
+	    	   if(this.viaDetalle === "mapa"){	
+				   this.$.mapContent.style.height = this.altoTotal+"px";
+				   this.$.detalle.style.height = "0px";	    	 
+				   this.$.divCentrarGps.style.display = 'block';
+				   setTimeout(() => {
+					   google.maps.event.trigger(this.mapPois, "resize");	
+					   this.centrarOrigen();
+					   this.mapPois.setZoom(16);
+				   }, 800);
+	    	   }else{
+	    		 let latitud  = this.getParentApp().center.latitude;
+	    		 let longitud = this.getParentApp().center.longitude; 
+		    	 this.getUnidadAtencion().loadMapa(latitud,longitud,this.item.type);
+		    	 this.viaDetalle = "mapa";
+		    	 this.$.mapContent.style.height = this.altoTotal+"px";
+				 this.$.detalle.style.height = "0px";	    	 
+				 this.$.divCentrarGps.style.display = 'block';
+	    	   }
 	     }
 	     
 	     abrirLogin(){
@@ -397,12 +449,13 @@
 	    	 
 	     }
 	     centrarUbicacion() {
-	        		var map = this.mapPois;
 					var center = {lat: this.$.parametrosConfiguracion.getParametros().posicionActual.latitude, lng: this.$.parametrosConfiguracion.getParametros().posicionActual.longitude};
-	        		map.setCenter(center);
+					this.mapPois.setCenter(center);
 	     }
 	     
 	     centrarOrigen(){
+	    	 var center = {lat: this.getParentApp().center.latitude, lng: this.getParentApp().center.longitude};
+			 this.mapPois.setCenter(center);
 	    	 console.log(this.getParentApp().center);
 	     }
 	 

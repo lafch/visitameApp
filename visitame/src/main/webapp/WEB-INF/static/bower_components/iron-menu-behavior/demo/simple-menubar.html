@@ -15,17 +15,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="simple-menubar">
   <template>
     <style>
-      :host > ::slotted(*) {
-        display: inline-block;
-      }
-
-      :host > ::slotted(.iron-selected) {
+      .content ::content > .iron-selected {
         color: white;
         background-color: var(--google-red-500);
       }
+
+      .content ::content > * {
+        display: inline-block;
+      }
     </style>
 
-    <slot></slot>
+    <div class="content">
+      <content></content>
+    </div>
 
   </template>
 

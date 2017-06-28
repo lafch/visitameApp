@@ -38,7 +38,7 @@ public class ZICServiceAccountHelper {
 	@Autowired
 	private ZICServiceHelper zicServiceHelper;
 	
-	public ZicResult getListCustomers(String documentNumber, String documentTypeId) throws NegocioException, ConnectException {
+	public ZicResult getListCustomers(String documentNumber, Integer documentTypeId) throws NegocioException, ConnectException {
 		ZicResult resultService = null;
 		String tSec = this.zicServiceHelper.generarTSec();
 			resultService = new ZicResult();
@@ -47,7 +47,7 @@ public class ZICServiceAccountHelper {
 			StringBuilder url = new StringBuilder(urlCustomers);
 			url.append(INICIO_PARM);
 			StringBuilder parametroenvio = new StringBuilder();
-				if(StringUtils.isNotBlank(documentNumber) && StringUtils.isNotBlank(documentTypeId)) {
+				if(StringUtils.isNotBlank(documentNumber) && StringUtils.isNotBlank(documentTypeId+"")) {
 					parametroenvio.append(MessageFormat.format("identityDocument.documentNumber={0}&identityDocument.documentType.id={1}&expands=contact-details", documentNumber, documentTypeId));
 				} 
 			url.append(parametroenvio.toString());
