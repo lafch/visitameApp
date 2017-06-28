@@ -1,7 +1,11 @@
 package pe.com.bbva.visitame.rest.impl;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import pe.com.bbva.visitame.dominio.Persona;
 import pe.com.bbva.visitame.dominio.dto.cuenta.CustomerDetail;
 import pe.com.bbva.visitame.exception.NegocioException;
 import pe.com.bbva.visitame.exception.ValidacionException;
@@ -19,6 +23,17 @@ public class IVISTServiceAccountImpl implements IVISTServiceAccount {
 			throws ValidacionException, NegocioException {
 		CustomerDetail customerDetail = accountService.getCustomer(documentNumber, documentType);
 		return customerDetail;
+	}
+
+	@Override
+	public Map<String, Object> validarUsuario(String documentNumber, Integer documentType)
+			throws ValidacionException, NegocioException {
+		
+		Persona persona = new Persona();
+		persona.setCdTipoDoi(documentType);
+		persona.setNbNumDoi(documentNumber);
+		
+		return accountService.validarUsuario(persona);
 	}
 
 }
