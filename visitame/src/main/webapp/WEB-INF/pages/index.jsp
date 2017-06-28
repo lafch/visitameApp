@@ -39,7 +39,6 @@
       });
     }
     </script>
-
     <script src="<%=request.getContextPath()%>/static/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
 
     <link rel="import" href="<%=request.getContextPath()%>/static/src/visitame-app/visitame-app.html">
@@ -51,7 +50,9 @@
 
 	<!-- Include a polyfill for ES6 Promises (optional) for IE11 and Android browser -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
-   
+    	
+<script src="https://www.google.com/recaptcha/api.js"
+        ></script>
     <style>
       body {
         margin: 0;
