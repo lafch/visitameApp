@@ -321,33 +321,30 @@
 
 				        		  marker.addListener('click', (e) => {
 				        			   if(item.type == 'O'){
-				        			   		this.getParentApp().showLogin({
-												item : item,
-												icon: "/images/icon_marker_"+item.iconColor+".png",
-												e : e
-						        			});
+// 				        			   		this.getParentApp().showLogin({
+// 												item : item,
+// 												icon: "/images/icon_marker_"+item.iconColor+".png",
+// 												e : e
+// 						        			});
+
+											//console.log(this.getParentApp());
+					        			   //this.getParentApp().showLogin();
+					        			   var alto = this.altoTotal/4;
+					        			   var altoDetalle = alto * 3;
+					        			   this.$.divCentrarGps.style.display = 'none';
+					        			   this.$.mapContent.style.height = alto+"px";
+				    	    			   this.$.mapContent.style.transition = '0.8s ease-in-out';
+				        				   this.$.detalle.style.height = altoDetalle+"px";
+				        				   this.$.detalle.style.transition = '0.8s ease-in-out';
+										   var centroide = {lat: parseFloat(item.latitude), lng: parseFloat(item.longitude)};
+										   setTimeout(() => {
+										   	   google.maps.event.trigger(map, "resize");	
+										   	   map.panTo(marker.getPosition());
+										       map.setZoom(17);
+										   }, 600);
+					        			   this.detalleOficina = item.data;
 				        			   } 
-				        			   //console.log(this.getParentApp());
-				        			   //this.getParentApp().showLogin();
-				        			   var alto = this.altoTotal/4;
-				        			   var altoDetalle = alto * 3;
-				        			   this.$.divCentrarGps.style.display = 'none';
-				        			   this.$.mapContent.style.height = alto+"px";
-				        			   this.$.mapContent.style.transition = '0.8s ease-in-out';
-				        			   this.$.detalle.style.height = altoDetalle+"px";
-				        			   this.$.detalle.style.transition = '0.8s ease-in-out';
-									   var centroide = {lat: parseFloat(item.latitude), lng: parseFloat(item.longitude)};
-									   setTimeout(() => {
-// 										   map.setZoom(18);
-										   google.maps.event.trigger(map, "resize");	
-										   map.panTo(marker.getPosition());
-										   map.setZoom(17);
-									   }, 600);
-				        			   this.detalleOficina = item.data;
-// 				        			   var hola = Polymer.dom(this.root).querySelector('.mapaSamll');
-// 				        			   this.estiloMapa = 'mapaSamll';
 				        			   
-// 				        			   this.estiloDetalle = 'detalleOpen';
 				        		  });
 				        		  this.markers.push(marker);
 					          });
