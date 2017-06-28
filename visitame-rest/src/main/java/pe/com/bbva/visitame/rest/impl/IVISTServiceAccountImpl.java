@@ -26,11 +26,11 @@ public class IVISTServiceAccountImpl implements IVISTServiceAccount {
 	}
 
 	@Override
-	public Map<String, Object> validarUsuario(String documentNumber, Integer documentType)
+	public Map<String, Object> validarUsuario(String documentNumber, String documentType)
 			throws ValidacionException, NegocioException {
 		
 		Persona persona = new Persona();
-		persona.setCdTipoDoi(documentType);
+		//persona.setCdTipoDoi(documentType);
 		persona.setNbNumDoi(documentNumber);
 		
 		return accountService.validarUsuario(persona);

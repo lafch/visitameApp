@@ -31,7 +31,7 @@ public interface IVISTServiceAccount {
 	@Produces({MediaType.APPLICATION_JSON})
 	public Map<String, Object> validarUsuario(
 			@QueryParam("documentNumber") String documentNumber,
-			@QueryParam("documentType") Integer documentType
+			@QueryParam("documentType") String documentType
 			) throws ValidacionException, NegocioException;
 	
 }
