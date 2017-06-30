@@ -14,4 +14,8 @@ INSERT INTO appvisitame.tvisita003_cfg_valor (cd_valor,cd_padre,cd_lista,cd_alte
 INSERT INTO appvisitame.tvisita003_cfg_valor (cd_valor,cd_padre,cd_lista,cd_alterno,nb_etiqueta,nb_glosa,nb_valor,nu_orden,st_estado,cd_creador,tm_creacion,cd_editor,tm_edicion) VALUES ( (SELECT nextval('appvisitame.seq_tvisita003_cfg_valor')) ,null,(SELECT CD_LISTA FROM appvisitame.tvisita002_cfg_lista WHERE CD_ALTERNO='PERSON_TIPO'),'PN','Natural','Persona natural','PN',2,'A',1,'2017-06-23 13:14:39.248000',null,null);
 INSERT INTO appvisitame.tvisita003_cfg_valor (cd_valor,cd_padre,cd_lista,cd_alterno,nb_etiqueta,nb_glosa,nb_valor,nu_orden,st_estado,cd_creador,tm_creacion,cd_editor,tm_edicion) VALUES ( (SELECT nextval('appvisitame.seq_tvisita003_cfg_valor')) ,null,(SELECT CD_LISTA FROM appvisitame.tvisita002_cfg_lista WHERE CD_ALTERNO='PERSON_TIPO'),'PJ','Jurídica','Persona jurídica','PJ',1,'A',1,'2017-06-06 12:00:00',null,null);
 
+-- PARAMETROS INTENTOS LOGIN
+INSERT INTO appvisitame.tvisita001_cfg_paramet (cd_parametro,nb_etiqueta,nb_glosa,tx_valor,cd_creador,tm_creacion,cd_editor,tm_edicion) VALUES ('NUM_MAX_INTENTO_TICKET','NUM_MAX_INTENTO_TICKET','Número máximo de intentos de generacion de tickec por dia','3',0,'2017-06-30 16:44:57.911000',null,null);
+INSERT INTO appvisitame.tvisita001_cfg_paramet (cd_parametro,nb_etiqueta,nb_glosa,tx_valor,cd_creador,tm_creacion,cd_editor,tm_edicion) VALUES ('HORAS_ESPERA_ULT_INTENTO','HORAS_ESPERA_ULT_INTENTO','Horas de espera para obtencion del siguiente tckect','2',0,'2017-06-30 16:46:22.006000',null,null);
+
 COMMIT;
