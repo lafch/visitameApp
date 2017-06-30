@@ -149,6 +149,20 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 			iscliente = false;
 		}
 		
+		try {
+			Integer c = intentoLogueoDAO.contarIntentosPorDia(Integer.parseInt(documentType), documentType, new Date());
+			if(c >= 0){
+				result.put("count", c);
+				return result;
+			}
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		//Verificamos si la persona este en nustra BD PG
 		Persona persona = this.obtenerPersonaDoiNumdocumento(documentType, documentNumber);
 		
