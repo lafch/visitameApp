@@ -91,6 +91,18 @@
     		color: #8F8F8F;
     	}
     	
+    	paper-button.botonComoLlegar{
+    		font-size: 1em; 
+    	}
+    	
+    	paper-button.botonComollegarLink{
+    		color: #5CA900;
+    		margin: 0px;
+   			padding: 0px;
+   			text-transform: capitalize;
+   			text-decoration: underline;
+    	}
+    	
     	.botonera{
     		text-align:center;
     	}
@@ -126,6 +138,10 @@
 	    		color: #8F8F8F;
     		}
     		
+    		paper-button.botonComoLlegar{
+    			font-size: 0.9em; 
+    		}
+    		
     		paper-button.boton{
 				border: solid 1px #F2F2F2;
 				border-radius:5px;
@@ -150,6 +166,10 @@
 	    		color: #8F8F8F;
     		}
     		
+    		paper-button.botonComoLlegar{
+    			font-size: 0.9em; 
+    		}
+    		
     		paper-button.boton{
 				border: solid 1px #F2F2F2;
 				border-radius:5px;
@@ -169,6 +189,7 @@
     	iron-icon.iconoTelefono{
     		--iron-icon-fill-color:green;
     	}
+    	
 		
 		</style>
 	 	<!-- Uso de Parametros -->
@@ -191,21 +212,23 @@
 				<div class="bloque">
 					<div style="display:inline-block;">
 						<iron-icon icon="device:access-time" class="icono"></iron-icon>
-						<label style="width: 90%;" class="subTitulo-bold"> Horario de Atencion</label>
+						<label style="width: 90%;" class="subTitulo-bold"> Horario de atención</label>
 					</div>
 					<label style="width: 55%; padding-left:10%;" class="subTitulo">Lunes a Viernes</label><label style="width: 35%;" class="subTitulo">{{detalleOficina.hours_mf}}</label>
-					<label style="width: 55%; padding-left:10%;" class="subTitulo">Sabados</label>		  <label style="width: 35%;" class="subTitulo">{{detalleOficina.hours_sat}}</label>
+					<label style="width: 55%; padding-left:10%;" class="subTitulo">Sábados</label>		  <label style="width: 35%;" class="subTitulo">{{detalleOficina.hours_sat}}</label>
 				</div>
 				<div class="bloque">
 				    <iron-icon icon="communication:phone" class="icono iconoTelefono"></iron-icon>
-					<label style="width: 55%;" class="subTitulo-bold">Telefono</label>
+					<label style="width: 55%;" class="subTitulo-bold">Teléfono</label>
 					<label style="width: 35%; padding-top:0.5%;" class="subTitulo">{{detalleOficina.telephone}}</label>
 
 				</div>
 				<div class="bloque">
 				    <iron-icon icon="flag" class="icono" ></iron-icon>
 					<label style="width: 55%;" class="subTitulo-bold">Rutas</label>
-					<label style="width: 35%; padding-top:0.5%;" class="subTitulo">¿Como llegar?</label>
+					<div style="width: 35%; padding-top:0.5%; float:left;" >
+						<paper-button class="botonComoLlegar botonComollegarLink" noink>¿Como llegar?</paper-button>
+					</div>
 				</div>
 				<div class="botonera" >
 					<paper-button class="boton" style="width:100%; margin-bottom:2%;" on-click="abrirLogin">Reservar ticket de atención</paper-button>
