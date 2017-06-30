@@ -282,13 +282,15 @@
           	 this.changeIconMapa();
   	  		if(this.pagina === "oficinas"){
   	  			viewOrigen = this.$.viewVisitas;
+  	  			viewOrigen.clearDetalleOficina();
     	  	}else if(this.pagina === "cajeros"){
     	  		viewOrigen = this.$.viewCajeros;	
    	  		}else if(this.pagina === "agentes"){
    	  			viewOrigen = this.$.viewAgentes;	
    	  		}
   	  		viewOrigen.cargarMapa(this.center);
-  	  		viewOrigen.clearDetalleOficina();
+  	  		
+  	  		
          }
 
     	 init(loading){

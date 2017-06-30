@@ -202,7 +202,7 @@
 		</div>
 		<div id="contenedorMapaDetalle">
 			<div id = "mapContent"></div>
-			<div id="detalle" class="contenedor">
+			<div id="detalle" class="contenedor" style="height: 0px; overflow:hidden;">
 				<div style = 'width:  90%; display: block; padding: 5%;'>
 				<div  class="bloque">
 					<label style="width: 100%;" class="titulo">{{detalleOficina.address2}}</label>
@@ -303,6 +303,9 @@
 				  },
 				  unidadAtencion:{
 	            	   type: Object
+	              },
+	              tipoUnidad:{
+	            		type: String  
 	              }
 				  
 	        }
@@ -452,6 +455,7 @@
 	    	   if(this.viaDetalle === "mapa"){	
 				   this.$.mapContent.style.height = this.altoTotal+"px";
 				   this.$.detalle.style.height = "0px";	    	 
+				   this.$.detalle.style.overflow= "hidden";
 				   this.$.divCentrarGps.style.display = 'block';
 				   setTimeout(() => {
 					   google.maps.event.trigger(this.mapPois, "resize");	
@@ -468,9 +472,25 @@
 	     }
 	     
 	     cerrarDetalleVista(){
-	    	 this.$.mapContent.style.height = this.altoTotal+"px";
-			 this.$.detalle.style.height = "0px";	    	 
-			 this.$.divCentrarGps.style.display = 'block';
+			   if(this.tipoUnidad == 'O'){
+			 		this.$.mapContent.style.transition = '0.8s ease-in-out';
+			    	this.$.mapContent.style.height = this.altoTotal+"px";
+			 		this.$.detalle.style.transition = '0.8s ease-in-out';
+			    	this.$.detalle.style.height = "0px";
+					this.$.detalle.style.overflow= "hidden";
+	  			    this.$.divCentrarGps.style.display = 'block';
+			   }
+	     }
+	     
+	     cerrarDetalleVistaRapido(){
+	    	 if(this.tipoUnidad == 'O'){
+			 	this.$.mapContent.style.transition = '0.0s ease-in-out';
+	    	 	this.$.mapContent.style.height = this.altoTotal+"px";
+			 	this.$.detalle.style.transition = '0.0s ease-in-out';
+	    	 	this.$.detalle.style.height = "0px";
+				this.$.detalle.style.overflow= "hidden";
+			 	this.$.divCentrarGps.style.display = 'block';
+	    	 }
 	     }
 	     
 	     abrirLogin(){

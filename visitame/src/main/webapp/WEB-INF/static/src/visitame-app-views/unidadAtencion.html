@@ -121,6 +121,7 @@ display: none;
           }
 
           this.$.mapaOficinas.setMarkers(this.listOficinas,center);
+          this.$.mapaOficinas.tipoUnidad = this.tipoUnidad;
     	 
       }
       
@@ -242,15 +243,12 @@ display: none;
     	  });
       }
       getOficinasxUbicacion(latitude, longitude){
-
 		  this.$.noResultList.style.display = 'none';
     	  if(!this.$.loadingLista.active){
     		  this.$.loadingLista.active = true;
           }
     	  
     	  this.loadMapa(latitude,longitude);
-    	 
-    
       }
      
       getMap(){
@@ -264,9 +262,9 @@ display: none;
     	  this.listOficinas = [];
       }
       clearDetalleOficina(){
-    	  this.$.mapaOficinas.cerrarDetalleVista();
+    	  this.$.mapaOficinas.cerrarDetalleVistaRapido();
       }
-
+      
       ready(){
 			super.ready();
 			this.$.noResultList.style.display = 'none';
