@@ -8,5 +8,7 @@ import pe.com.bbva.visitame.exception.DAOException;
 public interface IntentoLogueoDAO extends BaseDAO<IntentoLogueo, String> {
 	
 	Integer contarIntentosPorDia(Integer doi , String numDoc , Date fecha) throws DAOException;
+	
+	Integer numeroHorasUltimoIntentoHoy(Integer doi , String numDoc) throws DAOException;
 
 }

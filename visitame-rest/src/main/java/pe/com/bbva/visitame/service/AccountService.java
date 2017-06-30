@@ -1,5 +1,6 @@
 package pe.com.bbva.visitame.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -28,5 +29,9 @@ public interface AccountService {
 	Persona obtenerPersonaDoiNumdocumento(String doi , String numDoc) throws NegocioException;
 	
 	Map<String, Object> actualizarDatosContacto(String documentNumber, String documentType , String desDocumentType, String email, String telefono) throws NegocioException;
+	
+	Integer contarIntentosPorDia(Integer documentType , String documentNumber , Date fecha) throws NegocioException;
+	
+	Integer numeroHorasUltimoIntentoHoy(Integer documentType , String documentNumber) throws NegocioException;
 	
 }

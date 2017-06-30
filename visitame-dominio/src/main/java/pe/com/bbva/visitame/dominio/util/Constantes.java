@@ -104,6 +104,8 @@ public final class Constantes {
 		public static final String JOB_FLUJO_USURIO_GESTORA_EJECUCION = "JOB_FLUJO_USUGES_EJEC";
 		public static final String PRODUCTO_COTIZA_ESTUDIO = "PROD_COTIZA_ESTUDIO";
 		public static final String PAGINA_SIZE_RECAUDOS = "PAG_SIZE_RECAU";
+		public static final String NUM_MAX_INTENTO_TICKET = "NUM_MAX_INTENTO_TICKET";
+		public static final String HORAS_ESPERA_ULT_INTENTO = "HORAS_ESPERA_ULT_INTENTO";
 		
 		//COMPORTAMENTO JOBS
 		public static final String JOB_USU_INTENTOS = "JOB_USU_INTENTOS";

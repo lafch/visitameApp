@@ -1,7 +1,6 @@
 package pe.com.bbva.visitame.service.impl;
 
 import java.net.ConnectException;
-import java.text.MessageFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +8,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -18,16 +16,18 @@ import org.springframework.stereotype.Service;
 import pe.com.bbva.visitame.dao.IntentoLogueoDAO;
 import pe.com.bbva.visitame.dao.PersonaDAO;
 import pe.com.bbva.visitame.dominio.IntentoLogueo;
+import pe.com.bbva.visitame.dominio.Parametro;
 import pe.com.bbva.visitame.dominio.Persona;
-import pe.com.bbva.visitame.dominio.Valor;
 import pe.com.bbva.visitame.dominio.dto.cuenta.Customer;
 import pe.com.bbva.visitame.dominio.dto.cuenta.CustomerDetail;
 import pe.com.bbva.visitame.dominio.dto.zic.ZicResult;
 import pe.com.bbva.visitame.dominio.util.Constantes;
+import pe.com.bbva.visitame.dominio.util.Mensajes;
 import pe.com.bbva.visitame.exception.DAOException;
 import pe.com.bbva.visitame.exception.NegocioException;
 import pe.com.bbva.visitame.helper.cuenta.ZICServiceAccountHelper;
 import pe.com.bbva.visitame.service.AccountService;
+import pe.com.bbva.visitame.service.ConfiguracionService;
 import pe.com.bbva.visitame.util.Busqueda;
 
 @Service
@@ -46,6 +46,9 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 	
 	@Autowired
 	private IntentoLogueoDAO intentoLogueoDAO;
+	
+	@Autowired
+	private ConfiguracionService configuracionService;
 
 	@Override 
 	public CustomerDetail getCustomer(String documentNumber, String documentType , String test) throws NegocioException {
@@ -136,6 +139,24 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		return 0;
 	}
 
+	public void validarIntentos(String documentNumber, String documentType) throws NegocioException{
+		
+		Parametro pMaxIntencionesPorDia = configuracionService.obtenerParametro(Constantes.PARAMETRO.NUM_MAX_INTENTO_TICKET);
+		Parametro pMaxHorasUltimoIntento = configuracionService.obtenerParametro(Constantes.PARAMETRO.HORAS_ESPERA_ULT_INTENTO);
+		
+		Integer numeroIntenciones = this.contarIntentosPorDia(Integer.parseInt(documentType), documentNumber, new Date());
+		Integer horasUltimoIntento = this.numeroHorasUltimoIntentoHoy(Integer.parseInt(documentType), documentNumber);
+
+		if(numeroIntenciones >= Integer.parseInt(pMaxIntencionesPorDia.getTxValor())){
+			lanzarExcepcionLeve(Mensajes.TICKET.MAX_CUOTA_TICKET_DIA, new Object[] {  }, "UD. ha agotado la cuota máxima de tickets por día.", null);
+		}else{
+			if(horasUltimoIntento <= Integer.parseInt(pMaxHorasUltimoIntento.getTxValor())){
+				String txtHoras = (Integer.parseInt(pMaxHorasUltimoIntento.getTxValor())==1? "1 hora":pMaxHorasUltimoIntento.getTxValor()+" horas");
+				lanzarExcepcionLeve(Mensajes.TICKET.TIEMPO_ESPERA_SIGUIENTE_TICKET , new Object[] { txtHoras }, "UD. ha generado un ticket de atención recientemente, vuelva a intentarlo dentro de "+txtHoras+".", null);
+			}
+		}
+		
+	}
 	
 	@Override
 	public Map<String, Object> validarUsuario(String documentNumber, String documentType , String desDocumentType) throws NegocioException {
@@ -149,19 +170,8 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 			iscliente = false;
 		}
 		
-		try {
-			Integer c = intentoLogueoDAO.contarIntentosPorDia(Integer.parseInt(documentType), documentType, new Date());
-			if(c >= 0){
-				result.put("count", c);
-				return result;
-			}
-		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (DAOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		//validamos los intentos realizados
+		this.validarIntentos(documentNumber, documentType);
 		
 		//Verificamos si la persona este en nustra BD PG
 		Persona persona = this.obtenerPersonaDoiNumdocumento(documentType, documentNumber);
@@ -264,6 +274,27 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 
 		result.put("persona", datosCustumer);
 		return result;
+	}
+
+	@Override
+	public Integer contarIntentosPorDia(Integer documentType, String documentNumber, Date fecha)
+			throws NegocioException {
+		try {
+			return intentoLogueoDAO.contarIntentosPorDia(documentType, documentNumber, new Date());
+		} catch (DAOException e) {
+			lanzarExcepcionGrave(NegocioException.CODIGO.NEG_CONSULTA_FALLIDA, new Object[] { e.getMessage() }, "No se pudo ejecutar satisfactoriamente la consulta: " + e.getMessage(), e);
+		}
+		return 0;
+	}
+
+	@Override
+	public Integer numeroHorasUltimoIntentoHoy(Integer documentType, String documentNumber) throws NegocioException {
+		try {
+			return intentoLogueoDAO.numeroHorasUltimoIntentoHoy(documentType , documentNumber);
+		} catch (DAOException e) {
+			lanzarExcepcionGrave(NegocioException.CODIGO.NEG_CONSULTA_FALLIDA, new Object[] { e.getMessage() }, "No se pudo ejecutar satisfactoriamente la consulta: " + e.getMessage(), e);
+		}
+		return 0;
 	}
 	
 
