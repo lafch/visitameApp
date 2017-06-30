@@ -59,7 +59,6 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 				result =  zicServiceAccountHelper.getListCustomers(test);
 			}
 			
-			
 			if(result.getCodeError() != null){
 				lanzarExcepcionLeve(result.getCodeError(), new Object[]{}, result.getMessageError(), null);
 			}
@@ -130,6 +129,7 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		busqueda.add(Restrictions.eq("cdTipoDoi", Integer.parseInt(doi)));
 		busqueda.add(Restrictions.eq("nbNumDoi", numDoc));
 		List<Persona> list = this.obtenerPersona(busqueda);
+		
 		if(list != null & list.size() > 0){
 			return list.size();
 		}
@@ -166,6 +166,7 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 					persona.setNbPaterno(dataCliente.getLastName());
 					persona.setNbMaterno(dataCliente.getSurnames());
 					persona.setTmCreacion(new Date());
+					persona.setCdCreador(1);
 					persona = this.registrarPersona(persona);
 				}else{
 					
@@ -196,7 +197,7 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 			intento.setCdTipoDoi(persona.getCdTipoDoi());
 			intento.setNbNumDoi(persona.getNbNumDoi());
 			intento.setTmCreacion(new Date());
-			
+			intento.setCdCreador(1);
 			this.registrarIntentoLogueo(intento);
 			
 			result.put("success", true);

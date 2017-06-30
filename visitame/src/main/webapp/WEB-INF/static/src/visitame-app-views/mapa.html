@@ -227,7 +227,7 @@
 				    <iron-icon icon="flag" class="icono" ></iron-icon>
 					<label style="width: 55%;" class="subTitulo-bold">Rutas</label>
 					<div style="width: 35%; padding-top:0.5%; float:left;" >
-						<paper-button class="botonComoLlegar botonComollegarLink" noink>¿Como llegar?</paper-button>
+						<paper-button on-tap="sendNavigation" class="botonComoLlegar botonComollegarLink" noink>¿Como llegar?</paper-button>
 					</div>
 				</div>
 				<div class="botonera" >
@@ -330,6 +330,19 @@
 	      
 	      clearMap(){
 				this.mapPois.fitBounds(null);
+		  }
+	      
+	      sendNavigation(){
+	    	  if(this.detalleOficina){
+	    		  
+	    	  	let latitudeActual  = this.$.parametrosConfiguracion.getParametros().posicionActual.latitude;
+	    	  	let longitudeActual= this.$.parametrosConfiguracion.getParametros().posicionActual.longitude;
+	    	  	let latitudeIr = this.detalleOficina.latitude;
+	    	  	let longitudeIr = this.detalleOficina.longitude;
+	    	  	
+			  	window.location="http://maps.google.com/maps?saddr="+latitudeActual+","+longitudeActual+"&daddr="+latitudeIr+","+longitudeIr;
+	    	  }else
+	    		  console.log("Detalle de Oficina Seleccionada no se encontró");
 		  }
 	      
 	      reAjusteMap(){
