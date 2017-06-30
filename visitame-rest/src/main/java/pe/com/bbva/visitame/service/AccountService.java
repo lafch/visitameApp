@@ -27,4 +27,6 @@ public interface AccountService {
 	
 	Persona obtenerPersonaDoiNumdocumento(String doi , String numDoc) throws NegocioException;
 	
+	Map<String, Object> actualizarDatosContacto(String documentNumber, String documentType , String desDocumentType, String email, String telefono) throws NegocioException;
+	
 }
