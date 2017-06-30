@@ -122,6 +122,10 @@ CREATE SEQUENCE appvisitame.seq_tvisita005_seg_intento_logueo;
 ALTER SEQUENCE appvisitame.seq_tvisita005_seg_intento_logueo
     OWNER TO visitamestorm;
 
+-- CAMPOS ADICIONALES PERSONA
+ALTER TABLE appvisitame.tvisita004_per_persona
+ADD nb_cliente varchar(1); 
+    
 COMMIT;
     
     

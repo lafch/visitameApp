@@ -18,22 +18,21 @@ public class IVISTServiceAccountImpl implements IVISTServiceAccount {
 	@Autowired
 	private AccountService accountService;
 	
-	@Override
-	public CustomerDetail getCustomer(String documentNumber, Integer documentType)
-			throws ValidacionException, NegocioException {
-		CustomerDetail customerDetail = accountService.getCustomer(documentNumber, documentType);
-		return customerDetail;
-	}
 
 	@Override
-	public Map<String, Object> validarUsuario(String documentNumber, String documentType)
+	public Map<String, Object> validarUsuario(String documentNumber, String documentType , String desDocumentType)
 			throws ValidacionException, NegocioException {
 		
-		Persona persona = new Persona();
-		persona.setCdTipoDoi(11);//documentType
-		persona.setNbNumDoi(documentNumber);
 		
-		return accountService.validarUsuario(persona);
+		return accountService.validarUsuario(documentNumber,documentType,desDocumentType);
+	}
+
+
+	@Override
+	public CustomerDetail getCustomer(String documentNumber, String documentType, String test)
+			throws ValidacionException, NegocioException {
+		CustomerDetail customerDetail  = accountService.getCustomer(documentNumber, documentType,test);
+		return customerDetail;
 	}
 
 }

@@ -18,7 +18,7 @@ public class IntentoLogueo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="TVISITA005_SEG_INTENTO_LOGUEO_CDINTENTO_GENERATOR", sequenceName="SEQ_TVISITA005_SEG_INTENTO_LOGUEO")
+	@SequenceGenerator(name="TVISITA005_SEG_INTENTO_LOGUEO_CDINTENTO_GENERATOR", sequenceName="appvisitame.SEQ_TVISITA005_SEG_INTENTO_LOGUEO")
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="TVISITA005_SEG_INTENTO_LOGUEO_CDINTENTO_GENERATOR")
 	@Column(name="cd_intento")
 	private Integer cdIntento;

@@ -18,7 +18,7 @@ public class Persona implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="TVISITA004_PER_PERSONA_CDPERSONA_GENERATOR", sequenceName="SEQ_TVISITA004_PER_PERSONA")
+	@SequenceGenerator(name="TVISITA004_PER_PERSONA_CDPERSONA_GENERATOR", sequenceName="appvisitame.SEQ_TVISITA004_PER_PERSONA")
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="TVISITA004_PER_PERSONA_CDPERSONA_GENERATOR")
 	@Column(name="cd_persona")
 	private Integer cdPersona;
@@ -61,6 +61,9 @@ public class Persona implements Serializable {
 
 	@Column(name="tm_edicion")
 	private Date tmEdicion;
+	
+	@Column(name="nb_cliente")
+	private String isCliente;
 
 	public Persona() {
 	}
@@ -176,6 +179,16 @@ public class Persona implements Serializable {
 	public void setTmEdicion(Date tmEdicion) {
 		this.tmEdicion = tmEdicion;
 	}
+	
+	
+
+	public String getIsCliente() {
+		return isCliente;
+	}
+
+	public void setIsCliente(String isCliente) {
+		this.isCliente = isCliente;
+	}
 
 	@Override
 	public int hashCode() {
@@ -187,6 +200,7 @@ public class Persona implements Serializable {
 		result = prime * result + ((cdPersona == null) ? 0 : cdPersona.hashCode());
 		result = prime * result + ((cdTipoDoi == null) ? 0 : cdTipoDoi.hashCode());
 		result = prime * result + ((cdTipoPersona == null) ? 0 : cdTipoPersona.hashCode());
+		result = prime * result + ((isCliente == null) ? 0 : isCliente.hashCode());
 		result = prime * result + ((nbEmail == null) ? 0 : nbEmail.hashCode());
 		result = prime * result + ((nbMaterno == null) ? 0 : nbMaterno.hashCode());
 		result = prime * result + ((nbNombre == null) ? 0 : nbNombre.hashCode());
@@ -237,6 +251,11 @@ public class Persona implements Serializable {
 				return false;
 		} else if (!cdTipoPersona.equals(other.cdTipoPersona))
 			return false;
+		if (isCliente == null) {
+			if (other.isCliente != null)
+				return false;
+		} else if (!isCliente.equals(other.isCliente))
+			return false;
 		if (nbEmail == null) {
 			if (other.nbEmail != null)
 				return false;
@@ -286,9 +305,7 @@ public class Persona implements Serializable {
 				+ ", cdEditor=" + cdEditor + ", cdTipoDoi=" + cdTipoDoi + ", cdTipoPersona=" + cdTipoPersona
 				+ ", nbEmail=" + nbEmail + ", nbMaterno=" + nbMaterno + ", nbNombre=" + nbNombre + ", nbNumDoi="
 				+ nbNumDoi + ", nbPaterno=" + nbPaterno + ", nbTelefono=" + nbTelefono + ", tmCreacion=" + tmCreacion
-				+ ", tmEdicion=" + tmEdicion + "]";
+				+ ", tmEdicion=" + tmEdicion + ", isCliente=" + isCliente + "]";
 	}
-	
-	
 
 }

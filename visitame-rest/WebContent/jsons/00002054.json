@@ -1,0 +1,87 @@
+{
+    "data": [
+        {
+            "customerId": "00002054",
+            "firstName": "CARITINA",
+            "lastName": "VASCONCELOS",
+            "surnames": "CARTER",
+            "birthData": {
+                "country": {
+                    "id": "USA"
+                },
+                "birthDate": "1942-11-22"
+            },
+            "nationalities": [
+                {
+                    "id": "N"
+                },
+                {
+                    "id": "PER"
+                }
+            ],
+            "identityDocuments": [
+                {
+                    "documentType": {
+                        "id": "DNI"
+                    },
+                    "expirationDate": "2019-01-01",
+                    "documentNumber": "07020946"
+                }
+            ],
+            "membershipDate": "1989-09-13",
+            "personalTitle": {
+                "id": "DOCTOR"
+            },
+            "maritalStatus": {
+                "id": "WIDOWED"
+            },
+            "gender": {
+                "id": "MALE"
+            },
+            "bank": {
+                "branch": {
+                    "branchId": "0147"
+                }
+            },
+            "residence": {
+                "country": {
+                    "id": "USA"
+                },
+                "residenceType": {
+                    "id": "TEMPORARY"
+                },
+                "startDate": "1966-01-01"
+            },
+            "contactDetails": [
+                {
+                    "contactDetailId": "F00121122790000",
+                    "contact": "2112279",
+                    "contactType": {
+                        "id": "PHONE_NUMBER"
+                    },
+                    "country": {
+                        "id": "PER"
+                    },
+                    "regionalCode": "001",
+                    "extension": "0000",
+                    "isPreferential": false,
+                    "isChecked": false
+                },
+                {
+                    "contactDetailId": "C001999651283",
+                    "contact": "999651283",
+                    "contactType": {
+                        "id": "MOBILE_NUMBER"
+                    },
+                    "country": {
+                        "id": "PER"
+                    },
+                    "regionalCode": "001",
+                    "extension": "00000",
+                    "isPreferential": false,
+                    "isChecked": false
+                }
+            ]
+        }
+    ]
+}

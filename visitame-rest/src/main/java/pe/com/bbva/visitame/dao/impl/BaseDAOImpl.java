@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.hibernate.Criteria;
+import org.hibernate.FlushMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.hibernate4.HibernateCallback;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
+import org.springframework.transaction.annotation.Transactional;
 
 import pe.com.bbva.visitame.dao.BaseDAO;
 import pe.com.bbva.visitame.exception.DAOException;
@@ -41,6 +43,7 @@ public abstract class BaseDAOImpl<Entidad extends Serializable, Id extends Seria
 	protected abstract Class<Entidad> getClase();
 	
 	@Override
+	@Transactional(readOnly= false)
 	public Entidad crear(Entidad entidad) throws DAOException {
 		try {
 			getHibernateTemplate().persist(entidad);
@@ -51,6 +54,7 @@ public abstract class BaseDAOImpl<Entidad extends Serializable, Id extends Seria
 		
 	}
 	
+	@Transactional(readOnly= false)
 	public List<Entidad> crearEntidades(List<Entidad> entidades) throws DAOException {
 		try {
 			for (Entidad entidad : entidades) {
@@ -73,6 +77,7 @@ public abstract class BaseDAOImpl<Entidad extends Serializable, Id extends Seria
 	}
 
 	@Override
+	@Transactional(readOnly= false)
 	public Entidad modificar(Entidad entidad)  throws DAOException {
 		try {
 			getHibernateTemplate().update(entidad);
@@ -84,6 +89,7 @@ public abstract class BaseDAOImpl<Entidad extends Serializable, Id extends Seria
 	}
 
 	@Override
+	@Transactional(readOnly= false)
 	public void eliminar(Id id) throws DAOException {
 		try {
 			getHibernateTemplate().delete(obtener(id));

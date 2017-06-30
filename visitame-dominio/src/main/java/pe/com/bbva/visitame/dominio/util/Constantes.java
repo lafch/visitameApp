@@ -1423,4 +1423,10 @@ public final class Constantes {
 		
 	}
 	
+	public static class EQUIVALENTES {
+		public final static String TDOI_EXT_EQUIV = "FOREIGNERS";
+	}
+	
+	
+	
 }
