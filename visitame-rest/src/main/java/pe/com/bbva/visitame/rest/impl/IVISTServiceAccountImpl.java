@@ -18,15 +18,11 @@ public class IVISTServiceAccountImpl implements IVISTServiceAccount {
 	@Autowired
 	private AccountService accountService;
 	
-
 	@Override
 	public Map<String, Object> validarUsuario(String documentNumber, String documentType , String desDocumentType)
 			throws ValidacionException, NegocioException {
-		
-		
 		return accountService.validarUsuario(documentNumber,documentType,desDocumentType);
 	}
-
 
 	@Override
 	public CustomerDetail getCustomer(String documentNumber, String documentType, String test)
@@ -35,4 +31,10 @@ public class IVISTServiceAccountImpl implements IVISTServiceAccount {
 		return customerDetail;
 	}
 
+	@Override
+	public Map<String, Object>  actualizarDatosContacto(String documentNumber, String documentType , String desDocumentType, String email, String telefono)
+			throws ValidacionException, NegocioException {
+		return accountService.actualizarDatosContacto(documentNumber,documentType,desDocumentType,email,telefono);
+	}
+	
 }

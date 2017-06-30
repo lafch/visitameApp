@@ -221,5 +221,35 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		}
 		return null;
 	}
+	
+	@Override
+	public Map<String, Object> actualizarDatosContacto(String documentNumber, String documentType , String desDocumentType,
+			String email, String telefono) throws NegocioException {
+		
+		Map<String, Object> result = new HashMap<String, Object>();		
+		CustomerDetail datosCustumer = getCustomer(documentNumber, documentType,documentNumber+".json");
+		
+		//Verificamos si la persona este en nustra BD PG
+		Persona persona = this.obtenerPersonaDoiNumdocumento(documentType, documentNumber);
+		
+		//Si no existe persona en nuestra BD
+		if(persona != null){
+			if(email != null && !email.isEmpty()){
+				persona.setNbEmail(email);
+			}
+			if(telefono != null && !telefono.isEmpty()){
+				persona.setNbTelefono(telefono);
+			}
+			
+			this.registrarPersona(persona);
+			
+		}else{
+			System.out.println("Persona no está registrada en la Base de Datos");
+		}
+
+		result.put("persona", datosCustumer);
+		return result;
+	}
+	
 
 }
