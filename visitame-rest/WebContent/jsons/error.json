@@ -1,0 +1,11 @@
+{
+    "version": 1,
+    "severity": "FATAL",
+    "http-status": 409,
+    "error-code": "unavailableRequestConsultOffice",
+    "error-message": "Estimado cliente, en estos momentos no podemos completar su solitud online/en linea. Por favor acérquese a cualquiera de nuestras oficinas que con gusto lo atenderemos.",
+    "consumer-request-id": "fcc2352f-b114-4b44-acf8-f771540e4b0b",
+    "system-error-code": "unavailableRequestConsultOffice",
+    "system-error-description": "Estimado cliente, en estos momentos no podemos completar su solitud online/en linea. Por favor acérquese a cualquiera de nuestras oficinas que con gusto lo atenderemos.",
+    "system-error-cause": "PEE0001: PERSONA INEXISTENTE"
+}

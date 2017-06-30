@@ -19,7 +19,8 @@ public interface IVISTServiceAccount {
 	@Produces({MediaType.APPLICATION_JSON})
 	public CustomerDetail getCustomer(
 			@QueryParam("documentNumber") String documentNumber,
-			@QueryParam("documentType") Integer documentType
+			@QueryParam("documentType") String documentType,
+			@QueryParam("test") String test
 			) throws ValidacionException, NegocioException;
 
 	@GET
@@ -27,7 +28,8 @@ public interface IVISTServiceAccount {
 	@Produces({MediaType.APPLICATION_JSON})
 	public Map<String, Object> validarUsuario(
 			@QueryParam("documentNumber") String documentNumber,
-			@QueryParam("documentType") String documentType
+			@QueryParam("documentType") String documentType,
+			@QueryParam("desDocumentType") String desDocumentType
 			) throws ValidacionException, NegocioException;
 	
 }

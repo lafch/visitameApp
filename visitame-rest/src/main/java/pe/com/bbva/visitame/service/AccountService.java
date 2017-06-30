@@ -11,7 +11,7 @@ import pe.com.bbva.visitame.util.Busqueda;
 
 public interface AccountService {
 
-	CustomerDetail getCustomer( String documentNumber , Integer documentType) throws NegocioException;
+	CustomerDetail getCustomer( String documentNumber , String documentType , String test) throws NegocioException;
 	
 	List<Persona> obtenerPersona(Busqueda b) throws NegocioException;
 	
@@ -21,8 +21,10 @@ public interface AccountService {
 	
 	IntentoLogueo registrarIntentoLogueo(IntentoLogueo intento) throws NegocioException;
 	
-	Integer contarIntentosLogueo() throws NegocioException;
+	Integer contarIntentosLogueo(String doi , String numDoc) throws NegocioException;
 	
-	Map<String, Object> validarUsuario(Persona persona) throws NegocioException;
+	Map<String, Object> validarUsuario(String documentNumber, String documentType , String desDocumentType) throws NegocioException;
+	
+	Persona obtenerPersonaDoiNumdocumento(String doi , String numDoc) throws NegocioException;
 	
 }
