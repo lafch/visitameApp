@@ -19,7 +19,8 @@
     "google-map": "GoogleWebComponents/google-map#^1.2.0",
     "paper-dialog": "polymerelements/paper-dialog#^2.0.0",
     "paper-progress": "polymerelements/paper-progress#^2.0.1",
-    "paper-menu": "PolymerElements/paper-menu#^1.3.0"
+    "paper-menu": "PolymerElements/paper-menu#^1.3.0",
+    "google-recaptcha": "Zecat/google-recaptcha#^0.2.1"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0",
