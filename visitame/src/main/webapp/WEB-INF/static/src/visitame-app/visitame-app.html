@@ -67,20 +67,20 @@
     <!-- Main content -->
     <app-header-layout id = "headerMain" has-scrolling-region>
 
-      <app-header id="header" slot="header" condenses reveals effects="waterfall">
-        <app-toolbar >
+      <app-header id="header" slot="header"   effects="waterfall">
+        <app-toolbar>
           <paper-icon-button class="ver" icon="my-icons:menu" drawer-toggle></paper-icon-button>
           <paper-icon-button class="back-btn" icon="arrow-back" aria-label="Atrás" on-click="_regresar"></paper-icon-button>
           <div main-title>Visitame</div>
-        </app-toolbar>
+      	</app-toolbar>
 
-     <app-toolbar class="ver toolbarNavegador">
+      	<app-toolbar class="ver toolbarNavegador" primary>
           <paper-tabs selected="[[pagina]]" attr-for-selected="name" noink>
           	<paper-tab  name="oficinas"><a   href="visitame/oficinas">Oficinas</a></paper-tab>
           	<paper-tab  name="cajeros"><a   href="visitame/cajeros">Cajeros</a></paper-tab>
           	<paper-tab  name="agentes"><a  href="visitame/agentes">Agentes</a></paper-tab>
       	  </paper-tabs>
-        </app-toolbar>
+      	</app-toolbar>
         
         <app-toolbar class="ver buscador"  middle-justify="center">
             <paper-icon-button icon="[[iconoMapa]]" class="boton-mapa" on-click = "_verMapa" style="color:white;"></paper-icon-button>
@@ -205,6 +205,7 @@
         	   	  			viewOrigen = this.$.viewAgentes;	
         	   	  		}
 	        	   	  	viewOrigen.clearListOficinas();
+	        	   	 	viewOrigen.clearDetalleOficina();
 	        	   	    viewOrigen.getOficinasxUbicacion(places[0].geometry.location.lat(),places[0].geometry.location.lng());
 	        	   	 	this.center = {
 								latitude : places[0].geometry.location.lat(),
@@ -277,14 +278,17 @@
          }
          
          _verMapa(){
+        	 let viewOrigen = null;
           	 this.changeIconMapa();
   	  		if(this.pagina === "oficinas"){
-    	  		this.$.viewVisitas.cargarMapa(this.center);	
+  	  			viewOrigen = this.$.viewVisitas;
     	  	}else if(this.pagina === "cajeros"){
- 	  			this.$.viewCajeros.cargarMapa(this.center);	
+    	  		viewOrigen = this.$.viewCajeros;	
    	  		}else if(this.pagina === "agentes"){
-   	  			this.$.viewAgentes.cargarMapa(this.center);	
+   	  			viewOrigen = this.$.viewAgentes;	
    	  		}
+  	  		viewOrigen.cargarMapa(this.center);
+  	  		viewOrigen.clearDetalleOficina();
          }
 
     	 init(loading){

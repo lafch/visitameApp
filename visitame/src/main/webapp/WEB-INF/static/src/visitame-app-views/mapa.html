@@ -463,10 +463,14 @@
 	    		 let longitud = this.getParentApp().center.longitude; 
 		    	 this.getUnidadAtencion().loadMapa(latitud,longitud,this.item.type);
 		    	 this.viaDetalle = "mapa";
-		    	 this.$.mapContent.style.height = this.altoTotal+"px";
-				 this.$.detalle.style.height = "0px";	    	 
-				 this.$.divCentrarGps.style.display = 'block';
+		    	 this.cerrarDetalleVista();
 	    	   }
+	     }
+	     
+	     cerrarDetalleVista(){
+	    	 this.$.mapContent.style.height = this.altoTotal+"px";
+			 this.$.detalle.style.height = "0px";	    	 
+			 this.$.divCentrarGps.style.display = 'block';
 	     }
 	     
 	     abrirLogin(){
