@@ -240,7 +240,8 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 			if(telefono != null && !telefono.isEmpty()){
 				persona.setNbTelefono(telefono);
 			}
-			
+			persona.setCdEditor(1);
+			persona.setTmEdicion(new Date());
 			this.registrarPersona(persona);
 			
 		}else{
