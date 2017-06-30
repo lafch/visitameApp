@@ -1,5 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
+<link rel="lazy" href="../../bower_components/paper-spinner/paper-spinner.html">
 <!-- <link rel="import"	href="../../bower_components/google-map/google-map.html">
 <link rel="import"  href="../../bower_components/google-map/google-map-marker.html"> -->
 <link rel="import" href="../visitame-app-icons/main-icons.html">
@@ -128,7 +128,7 @@
     		}
     	
 	    	.subTitulo-bold{
-	    		font-size: 0.9em; 
+	    		font-size: 0.8em; 
 	    		font-weight: bold;
 	    		padding-top:0.5%;
 	    	}
@@ -145,7 +145,7 @@
     		paper-button.boton{
 				border: solid 1px #F2F2F2;
 				border-radius:5px;
-				font-size: 0.9em; 
+				font-size: 0.8em; 
     		}
     	}
     	
@@ -202,12 +202,12 @@
 		</div>
 		<div id="contenedorMapaDetalle">
 			<div id = "mapContent"></div>
-			<div id="detalle" class="contenedor">
+			<div id="detalle" class="contenedor" style="height: 0px; overflow:hidden;">
 				<div style = 'width:  90%; display: block; padding: 5%;'>
 				<div  class="bloque">
 					<label style="width: 100%;" class="titulo">{{detalleOficina.address2}}</label>
 					<label style="width: 100%;" class="subTitulo">{{detalleOficina.address}}</label>
-					<iron-icon icon="social:person" class="icono" ></iron-icon><label style="width: 90%; color:#008CDB;" class="subTitulo-bold">Usuarios en espera de atencion: 11</label>
+					<iron-icon icon="social:person" class="icono" ></iron-icon><label style="width: 90%; color:#008CDB;" class="subTitulo-bold">Usuarios en espera de atención: 11</label>
 				</div>
 				<div class="bloque">
 					<div style="display:inline-block;">
@@ -303,6 +303,9 @@
 				  },
 				  unidadAtencion:{
 	            	   type: Object
+	              },
+	              tipoUnidad:{
+	            		type: String  
 	              }
 				  
 	        }
@@ -398,6 +401,9 @@
 					        			   this.detalleOficina = item.data;
 					        			   this.item = item;
 					        			   this.eventoSeleccionadoMarker = e;
+					        			   this.mapPois.scrollwheel = false;
+					        			   this.mapPois.draggable = false;
+					        			   this.mapPois.zoomControl  = false;
 				        			   } 
 				        			   
 				        		  });
@@ -452,6 +458,7 @@
 	    	   if(this.viaDetalle === "mapa"){	
 				   this.$.mapContent.style.height = this.altoTotal+"px";
 				   this.$.detalle.style.height = "0px";	    	 
+				   this.$.detalle.style.overflow= "hidden";
 				   this.$.divCentrarGps.style.display = 'block';
 				   setTimeout(() => {
 					   google.maps.event.trigger(this.mapPois, "resize");	
@@ -468,9 +475,25 @@
 	     }
 	     
 	     cerrarDetalleVista(){
-	    	 this.$.mapContent.style.height = this.altoTotal+"px";
-			 this.$.detalle.style.height = "0px";	    	 
-			 this.$.divCentrarGps.style.display = 'block';
+			   if(this.tipoUnidad == 'O'){
+			 		this.$.mapContent.style.transition = '0.8s ease-in-out';
+			    	this.$.mapContent.style.height = this.altoTotal+"px";
+			 		this.$.detalle.style.transition = '0.8s ease-in-out';
+			    	this.$.detalle.style.height = "0px";
+					this.$.detalle.style.overflow= "hidden";
+	  			    this.$.divCentrarGps.style.display = 'block';
+			   }
+	     }
+	     
+	     cerrarDetalleVistaRapido(){
+	    	 if(this.tipoUnidad == 'O'){
+			 	this.$.mapContent.style.transition = '0.0s ease-in-out';
+	    	 	this.$.mapContent.style.height = this.altoTotal+"px";
+			 	this.$.detalle.style.transition = '0.0s ease-in-out';
+	    	 	this.$.detalle.style.height = "0px";
+				this.$.detalle.style.overflow= "hidden";
+			 	this.$.divCentrarGps.style.display = 'block';
+	    	 }
 	     }
 	     
 	     abrirLogin(){
@@ -529,7 +552,8 @@
 	                zoomControl: false,
 	                mapTypeControl: false,
 	                scaleControl: false,
-	                streetViewControl: false
+	                streetViewControl: false,
+	                fullscreenControl: false
 // 	                overviewMapControl: false,
 // 	                rotateControl: false
 	                

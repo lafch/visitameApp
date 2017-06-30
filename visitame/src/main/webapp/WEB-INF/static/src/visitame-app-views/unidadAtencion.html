@@ -41,8 +41,8 @@ display: none;
 						<img src="{{pathParent}}images/icon_{{item.iconColor}}.png" class="logoEstadoOficina"/>	
 					</div>
 					<div style="width: 80%; float:left">
-						<label class="titulo"    style="width: 100%; display: block;">{{item.name}}</label>
-						<label class="subtitulo" style="width: 100%; display: block;">{{item.description}}</label>	
+						<label class="titulo"    style="width: 100%; display: block; overflow:hidden; white-space:nowrap; text-overflow: ellipsis;">{{item.name}}</label>
+						<label class="subtitulo" style="width: 100%; display: block; overflow:hidden; white-space:nowrap; text-overflow: ellipsis;">{{item.description}}</label>	
 					</div>
 					<paper-icon-button icon="my-icons:chevron-right"></paper-icon-button>
 				</div>
@@ -121,6 +121,7 @@ display: none;
           }
 
           this.$.mapaOficinas.setMarkers(this.listOficinas,center);
+          this.$.mapaOficinas.tipoUnidad = this.tipoUnidad;
     	 
       }
       
@@ -196,6 +197,7 @@ display: none;
         }
 
         this.$.loadingLista.active = false;
+        this.$.loadingLista.style.zIndex = '1';
 
       }
       
@@ -242,15 +244,13 @@ display: none;
     	  });
       }
       getOficinasxUbicacion(latitude, longitude){
-
 		  this.$.noResultList.style.display = 'none';
     	  if(!this.$.loadingLista.active){
     		  this.$.loadingLista.active = true;
+    		  this.$.loadingLista.style.zIndex = '999';
           }
     	  
     	  this.loadMapa(latitude,longitude);
-    	 
-    
       }
      
       getMap(){
@@ -264,9 +264,9 @@ display: none;
     	  this.listOficinas = [];
       }
       clearDetalleOficina(){
-    	  this.$.mapaOficinas.cerrarDetalleVista();
+    	  this.$.mapaOficinas.cerrarDetalleVistaRapido();
       }
-
+      
       ready(){
 			super.ready();
 			this.$.noResultList.style.display = 'none';
