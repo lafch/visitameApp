@@ -1,27 +1,22 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
- <link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
 <link rel="import"	href="../visitame-app-services/configuracion-service.html">
 <link rel="import"	href="../visitame-app-services/customer-service.html">
- <!-- 
-<link rel="import" href="../../bower_components/google-recaptcha/google-recaptcha.html">-->
- <link rel="import" href="../../bower_components/paper-input/paper-input.html">
- <link rel="import" href="../../bower_components/paper-input/paper-input-error.html">
- 
- <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 
- <link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input-error.html"> 
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
  
- <link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
- <link rel="import" href="../../bower_components/paper-item/paper-item.html">
- <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
  
- <link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
-
-
- <link rel="import"	href="../../bower_components/paper-spinner/paper-spinner.html">
-
+<link rel="import"	href="../../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="../visitame-app-styles/main-style.html">
 <link rel="import" href="../visitame-app-styles/login-style.html">
 <link rel="import" href="../visitame-app-icons/main-icons.html">
@@ -29,7 +24,6 @@
 
 
 <dom-module id="login-view"> 
-
   <template>
    <meta charset="utf-8">
   	<customer-service      id="customerService"></customer-service>
@@ -37,11 +31,8 @@
   	<meta charset="utf-8">
     <style include="main-styles"></style>
     <style include="login-style"></style>
-    
     <paper-spinner class="paper-spinner-loading" id="loadingLista" active></paper-spinner>
-	
-	<app-header reveals>
-	
+	<app-header reveals>	
       <app-toolbar>
 	      <paper-icon-button id = "btnRetornarMain" on-click = "retornarMain" class="back-btn-login-main" icon="chevron-left" aria-label="Atrás" ></paper-icon-button>
 	      <div main-title>Ticket de atención</div>
@@ -96,45 +87,86 @@
 	      		</form> 
 	      	</iron-form>
     </div>
+			<div id = "panelResultTicket" style="display:none;">
+				<div class = "headerResultTicket"></div>
+				<div class = "ticket-body">
+					<div class="content">
+						<h3 class="text-grey-strong" >Hola {{persona.firstName}}</h3>
+						<p class="text1 textAfterTitle" >Tu número de atención es:</p>
+						<h2 class="text-celeste textNumTicket">F218</h2>
+						<p class="textEnAtencion" >En plataforma</p>
+						<div style="clear: both;"></div>
+						<p class="text-fecha-hora-atencion">Fecha y hora de atención: 03/07/2017 - 10:20 hrs</p>
+						<p class="text-grey-light">Para poder atenderte, por favor, acércate a la
+													siguiente oficina y verifica que tu número se
+													muestre en la pantalla de espera:</p>
       
-<div id = "panelResultTicket" style="display:none;">
-    	<div class = "headerResultTicket"></div>
-	    <div class = "ticket-body">
-       		<div class="content">
-       			<h3 class="text-grey-strong" >Hola Juan</h3>
-		        <p class="text1 textAfterTitle" >Tu número de atencion es:</p>
-		        <h2 class="text-celeste textNumTicket">F218</h2>
-	            <p class="textEnAtencion" >En plataforma</p>
-		        <div style="clear: both;"></div>
-            	<p class="text-fecha-hora-atencion">Fecha y hora de atención: 16/06/2017 - 14:20 hrs</p>
-				<p class="text-grey-light">Para poder atenderte, por favor, acércate a la
-										   siguiente oficina y verifica que tu número se
-										   muestre en la pantalla de espera:</p>
+
 				<div class = "content-franga-login">
 					<div class="box-init">
 						<div class="left">
 							<div class="content">
 								<h3>{{data.description}}</h3>
-								<p class="tickectDireccionOficina">{{data.address}}</p>
+								<p>{{data.address}}</p>
 							</div>
 						</div>
 						<div class=right>
 							<img src = "{{icon}}" />
 						</div>
 						<div class="usuario-atencion">
-							<iron-icon icon="my-icons:person"></iron-icon> 
+							<iron-icon icon="my-icons:person"></iron-icon>
 							<div>Usuario en espera de atención: 11</div>
 						</div>
 					</div>
 				</div>
-		       	<div class="botonera">
-		          	<paper-button class="reservar" raised on-click="retornarInit">Volver al mapa de oficinas</paper-button>
-		       	</div>      			
-       		</div>
-       	</div>
-    </div>
-      
-  </template>
+				<div class="separador-line"></div>
+				
+<div class ="panel-constancia">
+						
+							<h3 class="text-grey-strong">Enviar constancia a tu celular:</h3>
+							
+							<div class="panel-envio-telefono">
+											
+							<div class="content-input-form content-envio-operador" >
+								<paper-dropdown-menu label="Tipo operador" required>
+									<paper-listbox slot="dropdown-content" selected="{{tipoOperador}}" attr-for-selected="item">
+										<template is="dom-repeat" items="{{listTipoOperador}}" >
+											<paper-item item = "{{item}}" valor = "{{item.name}}">{{item.name}}</paper-item>
+										</template>
+									</paper-listbox>
+								</paper-dropdown-menu>
+							</div>
+							
+							<div class="content-input-form content-envio-telefono" >
+							<paper-input value = "{{numeroCelConstancia}}"></paper-input>
+							</div>
+							
+							</div>
+							
+							<h3 class="text-grey-strong">Enviar constancia a tu correo electrónico:</h3>
+							<div class="panel-envio-telefono">
+							
+							<div class="content-input-form" style="width: 100%;padding-top: 0px;margin-top: 0px;">
+								<paper-input value = "{{emailConstancia}}"></paper-input>
+							</div>
+							</div>
+							
+							<div class="botonera" style="padding-bottom: 0px;margin-bottom: 0px;">
+								<paper-button raised on-click="enviarConstancia">Enviar constancia</paper-button>
+							</div>
+						
+						</div>
+						
+						<div class="botonera" style="padding-top: 0px;margin-top: 0px;">
+							<paper-button class="reservar" raised on-click="retornarInit">Volver al mapa de oficinas</paper-button>
+						</div>
+					</div>
+					
+					
+					
+				</div>
+			</div>		
+			</template>
   <script>
   class LoginView extends Polymer.Element {
       static get is() { return 'login-view'; }

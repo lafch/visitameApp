@@ -19,7 +19,14 @@
            id = "ajaxTickectGenerate"
            url="{{contextPath}}account/validarUsuario"
            handle-as="json" 
-           ></iron-ajax>       
+           ></iron-ajax> 
+           
+     <iron-ajax
+           id = "ajaxActualizarDatosContacto"
+           url="{{contextPath}}account/actualizarDatosContacto"
+           handle-as="json" 
+           method = "PUT"
+           ></iron-ajax>              
 
   </template>
   
@@ -47,6 +54,14 @@
           this.$.ajaxTickectGenerate.set( 'params' , options.params);
           return this.$.ajaxTickectGenerate.generateRequest().completes;
       }
+
+      actualizarDatosContacto(options){
+          if(!options){ return;}
+          this.$.ajaxActualizarDatosContacto.set( 'params' , options.params);
+          return this.$.ajaxActualizarDatosContacto.generateRequest().completes;
+      }
+      
+      
     }
     window.customElements.define(CustomerService.is, CustomerService);
   </script>

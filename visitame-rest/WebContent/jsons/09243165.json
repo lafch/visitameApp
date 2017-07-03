@@ -1,0 +1,57 @@
+	{
+    "data": [
+        {
+            "customerId": "09243165",
+            "firstName": "ANA",
+            "lastName": "ALVA",
+            "surnames": "TRUJILLO",
+            "birthData": {
+                "country": {
+                    "id": "PER"
+                },
+                "birthDate": "1950-12-26"
+            },
+            "nationalities": [
+                {
+                    "id": "N"
+                },
+                {
+                    "id": "PER"
+                }
+            ],
+            "identityDocuments": [
+                {
+                    "documentType": {
+                        "id": "FOREIGNERS"
+                    },
+                    "expirationDate": "2004-01-01",
+                    "documentNumber": "103999"
+                }
+            ],
+            "membershipDate": "1992-03-27",
+            "personalTitle": {
+                "id": "MR"
+            },
+            "maritalStatus": {
+                "id": "MARRIED"
+            },
+            "gender": {
+                "id": "MALE"
+            },
+            "bank": {
+                "branch": {
+                    "branchId": "0107"
+                }
+            },
+            "residence": {
+                "country": {
+                    "id": "PER"
+                },
+                "residenceType": {
+                    "id": "PERMANENT"
+                },
+                "startDate": "1980-01-01"
+            }
+        }
+    ]
+}
