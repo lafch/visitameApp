@@ -71,7 +71,7 @@
         <app-toolbar>
           <paper-icon-button class="ver" icon="my-icons:menu" drawer-toggle></paper-icon-button>
           <paper-icon-button class="back-btn" icon="arrow-back" aria-label="Atrás" on-click="_regresar"></paper-icon-button>
-          <div main-title>Visítame</div>
+          <div main-title>Visitame</div>
       	</app-toolbar>
 
       	<app-toolbar class="ver toolbarNavegador" primary>
@@ -282,7 +282,7 @@
           	 this.changeIconMapa();
   	  		if(this.pagina === "oficinas"){
   	  			viewOrigen = this.$.viewVisitas;
-  	  			viewOrigen.clearDetalleOficina();
+  	  		viewOrigen.clearDetalleOficina();
     	  	}else if(this.pagina === "cajeros"){
     	  		viewOrigen = this.$.viewCajeros;	
    	  		}else if(this.pagina === "agentes"){
@@ -315,6 +315,7 @@
    	  		this.setFalse();
 			if(data){
 				this.$.loginView.renderData(data);
+// 				this.$.loginView.recargarCapcha();
 			}
 	    	this.$.ironPagesMain.style.display = 'none';
 			this.$.headerMain.style.display = 'none';
