@@ -42,7 +42,8 @@
     <script src="<%=request.getContextPath()%>/static/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
 
     <link rel="import" href="<%=request.getContextPath()%>/static/src/visitame-app/visitame-app.html">
-    <link rel="import" href="<%=request.getContextPath()%>/static/src/visitame-app-views/view-error-dialog.html">
+    <link rel="import" href="<%=request.getContextPath()%>/static/src/visitame-app/visitame-app.html">
+    <link rel="import" href="<%=request.getContextPath()%>/static/bower_components/re-captcha/re-captcha.html">
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqyFz0Q9ZZLMmgqJhck4soRfa0V1s71jQ&libraries=places"></script>
    
    	<script src="<%=request.getContextPath()%>/static/bower_components/sweetalert2/dist/sweetalert2.min.js"></script>
@@ -66,7 +67,9 @@
     
   </head>
   <body>
-    <visitame-app></visitame-app>
+    <visitame-app>
+    	<re-captcha id="default" sitekey="6LenrScUAAAAAKuaZ9nzSYUuxEKNxZxzU2fzbF9d"></re-captcha>
+    </visitame-app>
     <view-error-dialog id="dialog-error"></view-error-dialog>	
   </body>
   <script>
@@ -102,5 +105,10 @@
 		}
 		ventaMensaje.open();
 	}
+  	
+  	function recargar(){
+  		var ventaMensaje = document.getElementById('default');
+  		ventaMensaje.reset();
+  	}
   </script>
 </html>

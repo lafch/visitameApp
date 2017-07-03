@@ -1,12 +1,10 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
- <link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
 <link rel="import"	href="../visitame-app-services/configuracion-service.html">
 <link rel="import"	href="../visitame-app-services/customer-service.html">
- 
-<link rel="import" href="../../bower_components/google-recaptcha/google-recaptcha.html">
+
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../../bower_components/paper-input/paper-input-error.html">
- 
+<link rel="import" href="../../bower_components/paper-input/paper-input-error.html"> 
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 
 <link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
@@ -22,28 +20,89 @@
 <link rel="import" href="../visitame-app-styles/main-style.html">
 <link rel="import" href="../visitame-app-styles/login-style.html">
 <link rel="import" href="../visitame-app-icons/main-icons.html">
+<link rel="import" href="recaptcha.html">
 
 
 <dom-module id="login-view"> 
-<template>
-	<meta charset="utf-8">
-		<customer-service      id="customerService"></customer-service>
-		<configuracion-service id="configuracionService"></configuracion-service>
-		<meta charset="utf-8">
-			<style include="main-styles"></style>
-			<style include="login-style"></style>
-			<paper-spinner class="paper-spinner-loading" id="loadingLista" active></paper-spinner>
-			<app-header reveals>
-				<app-toolbar>
-					<paper-icon-button id = "btnRetornarMain" on-click = "retornarMain" class="back-btn-login-main" icon="chevron-left" aria-label="Atrás" ></paper-icon-button>
-					<div main-title>Ticket de atención</div>
-				</app-toolbar>
-			</app-header>
-			<div class = "content-form" id = "panelForm" >
-				<h3>Reserva tu ticket de atención para:</h3>
+  <template>
+   <meta charset="utf-8">
+  	<customer-service      id="customerService"></customer-service>
+  	<configuracion-service id="configuracionService"></configuracion-service>
+  	<meta charset="utf-8">
+    <style include="main-styles"></style>
+    <style include="login-style"></style>
+    <paper-spinner class="paper-spinner-loading" id="loadingLista" active></paper-spinner>
+	<app-header reveals>	
+      <app-toolbar>
+	      <paper-icon-button id = "btnRetornarMain" on-click = "retornarMain" class="back-btn-login-main" icon="chevron-left" aria-label="Atrás" ></paper-icon-button>
+	      <div main-title>Ticket de atención</div>
+      </app-toolbar>
+    </app-header>
+    
+	<div class = "content-form" id = "panelForm">
+		<h3>Reserva tu ticket de atención para:</h3>
+		<div class = "content-franga-login">
+			<div class ="up"></div>
+			<div class ="bottom"></div>
+			<div class="box-init">
+				<div class="left">
+					<div class="content">
+					<h3>{{data.description}}</h3>
+					<p>{{data.address}}</p>
+					</div>
+				</div>
+				<div class=right>
+					<img src = "{{icon}}" />
+				</div>
+				<div class="usuario-atencion">
+					<iron-icon icon="my-icons:person"></iron-icon> <div>Usuario en espera de atención: 11</div>
+				</div>
+			</div>
+		</div>
+	
+
+		<div class="form-reserva">
+	   		<iron-form id="login">
+	   			<form method="POST" >
+			      <div class="content-input-form">
+			          <paper-dropdown-menu label="Tipo documento" required>
+				          <paper-listbox slot="dropdown-content" selected="{{tipoDocumento}}" attr-for-selected="valor">
+				            <template is="dom-repeat" items="{{listTipoDoi}}" >
+				            	<paper-item valor="{{item.name}}">{{item.name}}</paper-item>
+				            </template>
+				          </paper-listbox>
+			          </paper-dropdown-menu>
+			       </div>
+	        	   <div class="content-input-form" >
+	          			<paper-input autofocus always-float-label required error-message$="{{mensaje}}" id="inputNumeroDocumento" pattern="[0-9]*"  maxlength$="[[numeroCaracteres]]" max$="[[numeroCaracteres]]" minlength$="[[numeroCaracteres]]"  label="Ingresar numero"  ></paper-input>
+	          	   </div>
+	          	   <div id="captcha">
+						<slot></slot>
+	          	   </div>
+	          	   <div class="botonera">
+	          		 <paper-button class="reservar" raised on-click="reservar">Reservar</paper-button>
+		          	 <paper-button raised on-click="cancelar">Cancelar</paper-button>
+	          	   </div>
+		           <div class="output"></div>
+	      		</form> 
+	      	</iron-form>
+    </div>
+			<div id = "panelResultTicket" style="display:none;">
+				<div class = "headerResultTicket"></div>
+				<div class = "ticket-body">
+					<div class="content">
+						<h3 class="text-grey-strong" >Hola {{persona.firstName}}</h3>
+						<p class="text1 textAfterTitle" >Tu número de atención es:</p>
+						<h2 class="text-celeste textNumTicket">F218</h2>
+						<p class="textEnAtencion" >En plataforma</p>
+						<div style="clear: both;"></div>
+						<p class="text-fecha-hora-atencion">Fecha y hora de atención: 03/07/2017 - 10:20 hrs</p>
+						<p class="text-grey-light">Para poder atenderte, por favor, acércate a la
+													siguiente oficina y verifica que tu número se
+													muestre en la pantalla de espera:</p>
+      
+
 				<div class = "content-franga-login">
-					<div class ="up"></div>
-					<div class ="bottom"></div>
 					<div class="box-init">
 						<div class="left">
 							<div class="content">
@@ -60,69 +119,9 @@
 						</div>
 					</div>
 				</div>
-				<div class="form-reserva">
-					<iron-form id="login">
-						<form method="POST" >
-							<div class="content-input-form">
-								<paper-dropdown-menu label="Tipo documento" required>
-									<paper-listbox slot="dropdown-content" selected="{{tipoDocumento}}" attr-for-selected="item">
-										<template is="dom-repeat" items="{{listTipoDoi}}" >
-											<paper-item item = "{{item}}" valor = "{{item.name}}">{{item.name}}</paper-item>
-										</template>
-									</paper-listbox>
-								</paper-dropdown-menu>
-							</div>
-							<div class="content-input-form" >
-								<paper-input autofocus always-float-label required error-message$="{{mensaje}}" id="inputNumeroDocumento" pattern="[0-9]*"  maxlength$="[[numeroCaracteres]]" max$="[[numeroCaracteres]]" minlength$="[[numeroCaracteres]]"  label="Ingresar numero" value = "{{numDocumento}}" ></paper-input>
-							</div>
-						<!-- 	<div id="captcha">
-								<google-recaptcha
-					           		id="invisibleRecaptcha"
-								    value="{{token}}"
-								    sitekey="6LenrScUAAAAAKuaZ9nzSYUuxEKNxZxzU2fzbF9d"></google-recaptcha>
-							</div> -->
-							<div class="botonera">
-								<paper-button class="reservar" raised on-click="reservar">Reservar</paper-button>
-								<paper-button raised on-click="cancelar">Cancelar</paper-button>
-							</div>
-							<div class="output"></div>
-						</form>
-					</iron-form>
-				</div>
-			</div>
-			<div id = "panelResultTicket" style="display:none;">
-				<div class = "headerResultTicket"></div>
-				<div class = "ticket-body">
-					<div class="content">
-						<h3 class="text-grey-strong" >Hola {{persona.firstName}}</h3>
-						<p class="text1 textAfterTitle" >Tu número de atención es:</p>
-						<h2 class="text-celeste textNumTicket">F218</h2>
-						<p class="textEnAtencion" >En plataforma</p>
-						<div style="clear: both;"></div>
-						<p class="text-fecha-hora-atencion">Fecha y hora de atención: 03/07/2017 - 10:20 hrs</p>
-						<p class="text-grey-light">Para poder atenderte, por favor, acércate a la
-													siguiente oficina y verifica que tu número se
-													muestre en la pantalla de espera:</p>
-						<div class = "content-franga-login">
-							<div class="box-init">
-								<div class="left">
-									<div class="content">
-										<h3>{{data.description}}</h3>
-										<p class="tickectDireccionOficina">{{data.address}}</p>
-									</div>
-								</div>
-								<div class=right>
-									<img src = "{{icon}}" />
-								</div>
-								<div class="usuario-atencion">
-									<iron-icon icon="my-icons:person"></iron-icon>
-									<div>Usuario en espera de atención: 11</div>
-								</div>
-							</div>
-						</div>
-						<div class="separador-line"></div>
-						
-						<div class ="panel-constancia">
+				<div class="separador-line"></div>
+				
+<div class ="panel-constancia">
 						
 							<h3 class="text-grey-strong">Enviar constancia a tu celular:</h3>
 							
@@ -166,8 +165,8 @@
 					
 					
 				</div>
-			</div>
-		</template>
+			</div>		
+			</template>
   <script>
   class LoginView extends Polymer.Element {
       static get is() { return 'login-view'; }
@@ -182,19 +181,9 @@
               			  type : Array,
               			  value : []
             		    },
-          listTipoOperador : {
-   			  type : Array,
-   			  value : []
- 		  },
- 		 tipoOperador : {
- 			type:Object
- 	 	  },
           tipoDocumento: {
           	type:Object,
           	observer: '_cambioTipoDocumento'
-          },
-          tipoOperador :{
-        	  type:Object
           },
            numeroCaracteres:{
         	   type:String,
@@ -204,26 +193,22 @@
           ,
           parentApp : {
 				type : Object
-              },
+              }
+          ,
           data:{
        	   type : Object,
        	   value : {}
-          },
+          }
+          ,
           icon : {
 			type : String
-          },
-          numDocumento:{
+          }
+          ,numDocumento:{
 				type : String
-          }, 
-          persona:{
+           } 
+          ,persona:{
 				type:Object
-              },
-          numeroCelConstancia : {
-               type : String
-          },
-          emailConstancia : {
-               type : String
-          }  
+              }
       	 }
       }
 		
@@ -247,11 +232,7 @@
 			this.icon = this.contextPath + 'static/' + data.icon
 		}
 
-/* 		try{
-			grecaptcha.render(this.$.maincontainer.querySelector('.g-recaptcha'), {
-			      'sitekey' : '6LfB6SYUAAAAAMjkzbg_4lctIV6nlFR7fsGUCT9p',
-			    });
-			}catch(e){} */
+		
 		
       }
       /*mostrarCaptcha(){
@@ -262,82 +243,19 @@
                           
          console.log('en el login');
          var configuracionService = this.$.configuracionService;
-		 var requestTiposDoi = configuracionService.listarTiposDoi({
-				params : {"codigoLista": "PERSON_DOI_TIPO"}
-	     });
-		 requestTiposDoi.then((xhr) => { 
-	    	 this.handleResponse(xhr.response);
-	     });
-
-		 var requestOperadores = configuracionService.listarTiposDoi({
-				params : {"codigoLista": "OPE_TIPO_CEL"}
-	     });
-		 requestOperadores.then((xhr) => { 
-	    	 this.buildCbmOperadores(xhr.response);
-	     });
+			 var requestTiposDoi = configuracionService.listarTiposDoi({
+					params : {"codigoLista": "PERSON_DOI_TIPO"}
+		     });
+			 requestTiposDoi.then((xhr) => { 
+		    	 this.handleResponse(xhr.response);
+		     });
+			 
      }
-
-      enviarConstancia(){
-		console.log('enviar constancia!');
-		
-		console.log(this.tipoOperador);
-		console.log(this.numeroCelConstancia);
-		console.log(this.emailConstancia);
-		console.log(this.numDocumento)
- 		console.log(this.tipoDocumento)
-
- 		
- 		
-
- 		  let customerService = this.$.customerService;
-		  let numeroDocumento = this.$.inputNumeroDocumento.value;
-
-		  let request = customerService.actualizarDatosContacto({
-					params : {
-						"documentNumber": this.numDocumento,
-						"documentType" :  this.tipoDocumento.id,
-						"telefono" : this.numeroCelConstancia,
-						"email" : this.emailConstancia
-					}
-		   });
-
-		   request.then((xhr,fail) => {
-
-			   if(xhr.response.success){
-
-				   swal(
-	                   		  'Mensaje',
-	                   		  'La constacia se envió de forma correcta.',
-	                   		  'success'
-	                   		); }
-
-		   });
- 		
-      }
 
       retornarMain(){
 		this.getParentApp().closeLogin();
       }
-
-      buildCbmOperadores(response) {
-          let data = [];
-          if(response.valores){
-            response.valores.forEach((valor,index)=>{
-                data.push(
-                  {
-                    name : valor.nbEtiqueta,
-                    id   : valor.cdValor,
-                    data : valor
-                  }
-                );
-            });
-            this.$.loadingLista.active = false;
-            this.listTipoOperador = data;
-          
-          }
-      }
-
-
+      
       handleResponse(response) {
           let data = [];
           if(response.valores){
@@ -356,9 +274,8 @@
       }
       
       _cambioTipoDocumento(){
-          
-    	 if(this.tipoDocumento === "EXT"){
-    		  this.numeroCaracteres="8";
+    	  if(this.tipoDocumento === "EXT"){
+    		  this.numeroCaracteres="11";
     		  
     	  }else{
     		  this.numeroCaracteres="8";
@@ -411,14 +328,14 @@
     			     });
     				 requestEsCliente.then((xhr,fail) => { 
         				 console.log(xhr.response);
-        				 if(xhr.response){
+        				 if(xhr.response.success){
         					 this.persona = xhr.response.persona.data[0];
             				 this.showPanelResult();
             			 }else{
 
             				    swal(
           	                   		  'Alerta',
-          	                   		   'Los datos enviados son incorrectos.',
+          	                   		  'Los datos ingresados son incorrectos.',
           	                   		  'warning'
           	                   		); 
 
@@ -461,23 +378,24 @@
       }
       
       reset(){
-    	  	this.$.inputNumeroDocumento.value="";
-    	  	this.$.inputNumeroDocumento.invalid = false;
-    		this.tipoOperador = {};
-    		this.numeroCelConstancia = '';
-    		this.emailConstancia = '';
-    		this.numDocumento = '';
-     		this.tipoDocumento = {};
-    	  
+    	  this.tipoDocumento = "DNI";
+    	  this.$.inputNumeroDocumento.value="";
+    	  this.$.inputNumeroDocumento.invalid = false;
       }
 
       cancelar(){
           
     	  SyncObjects(()=>{
     		  	this.reset();
-    	    	this.getParentApp().closeLogin();  
+    	    	this.getParentApp().closeLogin();   
     	  });
+    	  
+	    	recargar(); 
       }
+      
+//       cargarSeguridad(){
+//     	  this.$.recaptcha.ver
+//       }
       
     }
     window.customElements.define(LoginView.is, LoginView);

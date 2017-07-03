@@ -1,0 +1,39 @@
+<link rel="import"	    href="../../bower_components/polymer/polymer-element.html">
+<dom-module id="recaptcha-view">
+	<dom-bind>
+	<template>
+	 
+<!-- 	<template is="dom-if" if="{{condicion}}"> -->
+<!-- 		<google-recaptcha -->
+<!-- 		           		  id="invisibleRecaptcha" -->
+<!-- 					      value="{{token}}" -->
+<!-- 					      sitekey="6LenrScUAAAAAKuaZ9nzSYUuxEKNxZxzU2fzbF9d" -->
+
+<!-- 					      ></google-recaptcha>   -->
+					      
+					      <div class="g-recaptcha" data-sitekey="6LenrScUAAAAAKuaZ9nzSYUuxEKNxZxzU2fzbF9d"></div>	   	
+	</template>
+	</dom-bind>
+	<script>
+	class RecaptchaView extends Polymer.Element {
+	      static get is() { return 'recaptcha-view'; }
+	
+	      static get properties(){
+	        return {
+	        	condicion:{
+	        		type:Boolean,
+	        		value:false
+	        	}
+	              
+	        }
+	      }
+	      
+	      verRecaptcha(){
+	    	  this.condicion = true;
+	    	  this.$.invisibleRecaptcha.reset();
+	      }
+	      
+	}
+    window.customElements.define(RecaptchaView.is, RecaptchaView);
+  </script>
+</dom-module>
