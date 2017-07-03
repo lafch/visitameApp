@@ -39,7 +39,7 @@
 					<div main-title>Ticket de atención</div>
 				</app-toolbar>
 			</app-header>
-			<div class = "content-form" id = "panelForm">
+			<div class = "content-form" id = "panelForm" >
 				<h3>Reserva tu ticket de atención para:</h3>
 				<div class = "content-franga-login">
 					<div class ="up"></div>
@@ -75,12 +75,12 @@
 							<div class="content-input-form" >
 								<paper-input autofocus always-float-label required error-message$="{{mensaje}}" id="inputNumeroDocumento" pattern="[0-9]*"  maxlength$="[[numeroCaracteres]]" max$="[[numeroCaracteres]]" minlength$="[[numeroCaracteres]]"  label="Ingresar numero" value = "{{numDocumento}}" ></paper-input>
 							</div>
-							<div id="captcha">
+						<!-- 	<div id="captcha">
 								<google-recaptcha
-		           		id="invisibleRecaptcha"
-					    value="{{token}}"
-					    sitekey="6LenrScUAAAAAKuaZ9nzSYUuxEKNxZxzU2fzbF9d"></google-recaptcha>
-							</div>
+					           		id="invisibleRecaptcha"
+								    value="{{token}}"
+								    sitekey="6LenrScUAAAAAKuaZ9nzSYUuxEKNxZxzU2fzbF9d"></google-recaptcha>
+							</div> -->
 							<div class="botonera">
 								<paper-button class="reservar" raised on-click="reservar">Reservar</paper-button>
 								<paper-button raised on-click="cancelar">Cancelar</paper-button>
@@ -120,10 +120,51 @@
 								</div>
 							</div>
 						</div>
-						<div class="botonera">
+						<div class="separador-line"></div>
+						
+						<div class ="panel-constancia">
+						
+							<h3 class="text-grey-strong">Enviar constancia a tu celular:</h3>
+							
+							<div class="panel-envio-telefono">
+											
+							<div class="content-input-form content-envio-operador" >
+								<paper-dropdown-menu label="Tipo operador" required>
+									<paper-listbox slot="dropdown-content" selected="{{tipoOperador}}" attr-for-selected="item">
+										<template is="dom-repeat" items="{{listTipoOperador}}" >
+											<paper-item item = "{{item}}" valor = "{{item.name}}">{{item.name}}</paper-item>
+										</template>
+									</paper-listbox>
+								</paper-dropdown-menu>
+							</div>
+							
+							<div class="content-input-form content-envio-telefono" >
+							<paper-input value = "{{numeroCelConstancia}}"></paper-input>
+							</div>
+							
+							</div>
+							
+							<h3 class="text-grey-strong">Enviar constancia a tu correo electrónico:</h3>
+							<div class="panel-envio-telefono">
+							
+							<div class="content-input-form" style="width: 100%;padding-top: 0px;margin-top: 0px;">
+								<paper-input value = "{{emailConstancia}}"></paper-input>
+							</div>
+							</div>
+							
+							<div class="botonera" style="padding-bottom: 0px;margin-bottom: 0px;">
+								<paper-button raised on-click="enviarConstancia">Enviar constancia</paper-button>
+							</div>
+						
+						</div>
+						
+						<div class="botonera" style="padding-top: 0px;margin-top: 0px;">
 							<paper-button class="reservar" raised on-click="retornarInit">Volver al mapa de oficinas</paper-button>
 						</div>
 					</div>
+					
+					
+					
 				</div>
 			</div>
 		</template>
@@ -141,9 +182,19 @@
               			  type : Array,
               			  value : []
             		    },
+          listTipoOperador : {
+   			  type : Array,
+   			  value : []
+ 		  },
+ 		 tipoOperador : {
+ 			type:Object
+ 	 	  },
           tipoDocumento: {
           	type:Object,
           	observer: '_cambioTipoDocumento'
+          },
+          tipoOperador :{
+        	  type:Object
           },
            numeroCaracteres:{
         	   type:String,
@@ -153,22 +204,26 @@
           ,
           parentApp : {
 				type : Object
-              }
-          ,
+              },
           data:{
        	   type : Object,
        	   value : {}
-          }
-          ,
+          },
           icon : {
 			type : String
-          }
-          ,numDocumento:{
+          },
+          numDocumento:{
 				type : String
-           } 
-          ,persona:{
+          }, 
+          persona:{
 				type:Object
-              }
+              },
+          numeroCelConstancia : {
+               type : String
+          },
+          emailConstancia : {
+               type : String
+          }  
       	 }
       }
 		
@@ -207,19 +262,82 @@
                           
          console.log('en el login');
          var configuracionService = this.$.configuracionService;
-			 var requestTiposDoi = configuracionService.listarTiposDoi({
-					params : {"codigoLista": "PERSON_DOI_TIPO"}
-		     });
-			 requestTiposDoi.then((xhr) => { 
-		    	 this.handleResponse(xhr.response);
-		     });
-			 
+		 var requestTiposDoi = configuracionService.listarTiposDoi({
+				params : {"codigoLista": "PERSON_DOI_TIPO"}
+	     });
+		 requestTiposDoi.then((xhr) => { 
+	    	 this.handleResponse(xhr.response);
+	     });
+
+		 var requestOperadores = configuracionService.listarTiposDoi({
+				params : {"codigoLista": "OPE_TIPO_CEL"}
+	     });
+		 requestOperadores.then((xhr) => { 
+	    	 this.buildCbmOperadores(xhr.response);
+	     });
      }
+
+      enviarConstancia(){
+		console.log('enviar constancia!');
+		
+		console.log(this.tipoOperador);
+		console.log(this.numeroCelConstancia);
+		console.log(this.emailConstancia);
+		console.log(this.numDocumento)
+ 		console.log(this.tipoDocumento)
+
+ 		
+ 		
+
+ 		  let customerService = this.$.customerService;
+		  let numeroDocumento = this.$.inputNumeroDocumento.value;
+
+		  let request = customerService.actualizarDatosContacto({
+					params : {
+						"documentNumber": this.numDocumento,
+						"documentType" :  this.tipoDocumento.id,
+						"telefono" : this.numeroCelConstancia,
+						"email" : this.emailConstancia
+					}
+		   });
+
+		   request.then((xhr,fail) => {
+
+			   if(xhr.response.success){
+
+				   swal(
+	                   		  'Mensaje',
+	                   		  'La constacia se envió de forma correcta.',
+	                   		  'success'
+	                   		); }
+
+		   });
+ 		
+      }
 
       retornarMain(){
 		this.getParentApp().closeLogin();
       }
-      
+
+      buildCbmOperadores(response) {
+          let data = [];
+          if(response.valores){
+            response.valores.forEach((valor,index)=>{
+                data.push(
+                  {
+                    name : valor.nbEtiqueta,
+                    id   : valor.cdValor,
+                    data : valor
+                  }
+                );
+            });
+            this.$.loadingLista.active = false;
+            this.listTipoOperador = data;
+          
+          }
+      }
+
+
       handleResponse(response) {
           let data = [];
           if(response.valores){
@@ -300,7 +418,7 @@
 
             				    swal(
           	                   		  'Alerta',
-          	                   		   '',
+          	                   		   'Los datos enviados son incorrectos.',
           	                   		  'warning'
           	                   		); 
 
@@ -343,9 +461,14 @@
       }
       
       reset(){
-    	  this.tipoDocumento = "DNI";
-    	  this.$.inputNumeroDocumento.value="";
-    	  this.$.inputNumeroDocumento.invalid = false;
+    	  	this.$.inputNumeroDocumento.value="";
+    	  	this.$.inputNumeroDocumento.invalid = false;
+    		this.tipoOperador = {};
+    		this.numeroCelConstancia = '';
+    		this.emailConstancia = '';
+    		this.numDocumento = '';
+     		this.tipoDocumento = {};
+    	  
       }
 
       cancelar(){

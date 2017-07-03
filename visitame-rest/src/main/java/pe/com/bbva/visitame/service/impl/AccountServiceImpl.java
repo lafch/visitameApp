@@ -248,13 +248,11 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 	
 	
 	@Override
-	public Map<String, Object> actualizarDatosContacto(String documentNumber, String documentType , String desDocumentType,
+	public Map<String, Object> actualizarDatosContacto(String documentNumber, String documentType ,
 			String email, String telefono) throws NegocioException {
 		
 		Map<String, Object> result = new HashMap<String, Object>();		
-		CustomerDetail datosCustumer = getCustomer(documentNumber, documentType,documentNumber+".json");
-		
-		//Verificamos si la persona este en nustra BD PG
+
 		Persona persona = this.obtenerPersonaDoiNumdocumento(documentType, documentNumber);
 		
 		//Si no existe persona en nuestra BD
@@ -268,12 +266,14 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 			persona.setCdEditor(1);
 			persona.setTmEdicion(new Date());
 			this.registrarPersona(persona);
+			result.put("success", true);
 			
 		}else{
+			result.put("success", false);
 			System.out.println("Persona no está registrada en la Base de Datos");
 		}
 
-		result.put("persona", datosCustumer);
+		result.put("persona", persona);
 		return result;
 	}
 

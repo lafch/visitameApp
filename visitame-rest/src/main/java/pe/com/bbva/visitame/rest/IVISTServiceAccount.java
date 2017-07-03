@@ -39,7 +39,6 @@ public interface IVISTServiceAccount {
 	public Map<String, Object> actualizarDatosContacto(
 			@QueryParam("documentNumber") String documentNumber,
 			@QueryParam("documentType") String documentType,
-			@QueryParam("desDocumentType") String desDocumentType,
 			@QueryParam("email") String email,
 			@QueryParam("telefono") String telefono
 			) throws ValidacionException, NegocioException;
