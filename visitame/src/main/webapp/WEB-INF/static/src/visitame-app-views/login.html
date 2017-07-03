@@ -84,16 +84,16 @@
       <form method="POST" >
       <div class="content-input-form">
           <paper-dropdown-menu label="Tipo documento" required>
-	          <paper-listbox slot="dropdown-content" selected="{{tipoDocumento}}" attr-for-selected="valor">
+	          <paper-listbox slot="dropdown-content" selected="{{tipoDocumento}}" attr-for-selected="item">
 	            <template is="dom-repeat" items="{{listTipoDoi}}" >
-	            	<paper-item valor="{{item.name}}">{{item.name}}</paper-item>
+	            	<paper-item item = "{{item}}" valor = "{{item.name}}">{{item.name}}</paper-item>
 	            </template>
 	          </paper-listbox>
           </paper-dropdown-menu>
        </div>
         
           <div class="content-input-form" >
-          <paper-input autofocus always-float-label required error-message$="{{mensaje}}" id="inputNumeroDocumento" pattern="[0-9]*"  maxlength$="[[numeroCaracteres]]" max$="[[numeroCaracteres]]" minlength$="[[numeroCaracteres]]"  label="Ingresar numero"  ></paper-input>
+          <paper-input autofocus always-float-label required error-message$="{{mensaje}}" id="inputNumeroDocumento" pattern="[0-9]*"  maxlength$="[[numeroCaracteres]]" max$="[[numeroCaracteres]]" minlength$="[[numeroCaracteres]]"  label="Ingresar numero" value = "{{numDocumento}}" ></paper-input>
           </div>
            <!--  <div id="captcha">
          	 <google-recaptcha id="cap" force-in-body 
@@ -123,7 +123,7 @@
        <div class = "ticket-body">
        <div class="content">
        
-       <h3 class="text-grey-strong" >Hola Juan</h3>
+       <h3 class="text-grey-strong" >Hola {{persona.firstName}}</h3>
        
        <p class="text1 textAfterTitle" >Tu número de atencion es:</p>
        
@@ -133,7 +133,7 @@
     
     <div style="clear: both;"></div>
 
-	<p class="text-fecha-hora-atencion">Fecha y hora de atención: 16/06/2017 - 14:20 hrs</p>
+	<p class="text-fecha-hora-atencion">Fecha y hora de atención: 03/07/2017 - 10:20 hrs</p>
 	<p class="text-grey-light">Para poder atenderte, por favor, acércate a la
 siguiente oficina y verifica que tu número se
 muestre en la pantalla de espera:</p>
@@ -183,8 +183,7 @@ muestre en la pantalla de espera:</p>
               			  value : []
             		    },
           tipoDocumento: {
-          	type:String,
-          	value:'DNI',
+          	type:Object,
           	observer: '_cambioTipoDocumento'
           },
            numeroCaracteres:{
@@ -205,7 +204,12 @@ muestre en la pantalla de espera:</p>
           icon : {
 			type : String
           }
-           
+          ,numDocumento:{
+				type : String
+           } 
+          ,persona:{
+				type:Object
+              }
       	 }
       }
 		
@@ -263,7 +267,8 @@ muestre en la pantalla de espera:</p>
             response.valores.forEach((valor,index)=>{
                 data.push(
                   {
-                    name : valor.nbEtiqueta
+                    name : valor.nbEtiqueta,
+                    id   : valor.cdValor
                   }
                 );
             });
@@ -274,14 +279,15 @@ muestre en la pantalla de espera:</p>
       }
       
       _cambioTipoDocumento(){
-    	  if(this.tipoDocumento === "EXT"){
-    		  this.numeroCaracteres="11";
+          
+    	 if(this.tipoDocumento === "EXT"){
+    		  this.numeroCaracteres="8";
     		  
     	  }else{
     		  this.numeroCaracteres="8";
     	  }
     	  
-    	  this.$.inputNumeroDocumento.focus();
+    	  this.$.inputNumeroDocumento.focus(); 
     	  
     	  
       }
@@ -308,21 +314,43 @@ muestre en la pantalla de espera:</p>
       }
       
       reservar(){
-          this.showPanelResult();
-/*     	  if(this.$.inputNumeroDocumento.validate()){
-    		  var customerService = this.$.customerService;
+         
+     	  if(this.$.inputNumeroDocumento.validate()){
+     		 
+     		  console.log('datos envio')
+     		  console.log(this.numDocumento)
+     		  console.log(this.tipoDocumento)
+     		  
+         	  
+    	  var customerService = this.$.customerService;
     		  var numeroDocumento = this.$.inputNumeroDocumento.value;
-    			 if("undefined" !== typeof customerService){
-    				 var requestEsCliente = customerService._esCliente({
+
+				 var requestEsCliente = customerService.generarTicket({
     						params : {
-    							"documentNumber": numeroDocumento,
-    							"documentType":   this.tipoDocumento
+    							"documentNumber": this.numDocumento,
+    							"documentType":   this.tipoDocumento.id,
+    							"desDocumentType" : this.tipoDocumento.name
     						}
     			     });
     				 requestEsCliente.then((xhr,fail) => { 
-    			    	 this.handleResponse(xhr.response);
+        				 console.log(xhr.response);
+        				 if(xhr.response.success){
+        					 this.persona = xhr.response.persona.data[0];
+            				 this.showPanelResult();
+            			 }else{
+
+            				    swal(
+          	                   		  'Alerta',
+          	                   		  'Los datos ingresados son incorrectos.',
+          	                   		  'warning'
+          	                   		); 
+
+                	    }
+        				 
+    			    	// this.handleResponse(xhr.response);
     			     },(error) =>{
-    			    	 if("undefined" !== typeof error.code){
+        			     console.log(error)
+    			    	/*  if("undefined" !== typeof error.code){
     			     	  	console.log("error" + error.code); 
     			     	  	switch(error.code) {
     			      	    	case error.PERMISSION_DENIED:
@@ -343,17 +371,15 @@ muestre en la pantalla de espera:</p>
     			     		mensaje.mensajeError = "Error de servicio";
     			     		mensaje.severidad = "ALTA" ;
     			     		mostrarError(mensaje);
-    			     	 }
-    					});
-//     			     .catch((reason) => {
-//     			    	 console.log(reason);
-    			    	 
-//     			     } );
-    			 }  
+    			     	 } */
+    					})
+    			     .catch((reason) => {
+    			    	 console.log(reason);
+    			     } );
     		  
     	  }else{
     		  this.mensaje="*Campo obligatorio, ingresar solo numeros.";
-    	  } */
+    	  } 
     	  
       }
       

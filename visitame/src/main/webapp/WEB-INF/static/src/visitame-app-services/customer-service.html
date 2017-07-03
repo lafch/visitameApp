@@ -14,6 +14,12 @@
            url="{{contextPath}}account/getCustomer"
            handle-as="json" 
            ></iron-ajax>
+           
+    <iron-ajax
+           id = "ajaxTickectGenerate"
+           url="{{contextPath}}account/validarUsuario"
+           handle-as="json" 
+           ></iron-ajax>       
 
   </template>
   
@@ -34,6 +40,12 @@
           if(!options){ return;}
           this.$.ajaxCustomer.set( 'params' , options.params);
           return this.$.ajaxCustomer.generateRequest().completes;
+      }
+
+      generarTicket(options){
+          if(!options){ return;}
+          this.$.ajaxTickectGenerate.set( 'params' , options.params);
+          return this.$.ajaxTickectGenerate.generateRequest().completes;
       }
     }
     window.customElements.define(CustomerService.is, CustomerService);

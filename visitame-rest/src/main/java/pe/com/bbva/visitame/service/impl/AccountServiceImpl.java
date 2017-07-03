@@ -150,7 +150,7 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		if(numeroIntenciones >= Integer.parseInt(pMaxIntencionesPorDia.getTxValor())){
 			lanzarExcepcionLeve(Mensajes.TICKET.MAX_CUOTA_TICKET_DIA, new Object[] {  }, "UD. ha agotado la cuota máxima de tickets por día.", null);
 		}else{
-			if(horasUltimoIntento <= Integer.parseInt(pMaxHorasUltimoIntento.getTxValor())){
+			if(numeroIntenciones > 0 && horasUltimoIntento <= Integer.parseInt(pMaxHorasUltimoIntento.getTxValor())){
 				String txtHoras = (Integer.parseInt(pMaxHorasUltimoIntento.getTxValor())==1? "1 hora":pMaxHorasUltimoIntento.getTxValor()+" horas");
 				lanzarExcepcionLeve(Mensajes.TICKET.TIEMPO_ESPERA_SIGUIENTE_TICKET , new Object[] { txtHoras }, "UD. ha generado un ticket de atención recientemente, vuelva a intentarlo dentro de "+txtHoras+".", null);
 			}
@@ -245,6 +245,7 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		}
 		return null;
 	}
+	
 	
 	@Override
 	public Map<String, Object> actualizarDatosContacto(String documentNumber, String documentType , String desDocumentType,

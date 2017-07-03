@@ -469,11 +469,11 @@ element.
               if(xhr.status >= 500 && xhr.status < 600){
                   console.log(xhr.response)
             	  if(swal){
-	            	 /*   swal(
-	                   		  'Oops...',
+	            	    swal(
+	                   		  'Alerta',
 	                   		   xhr.response.errorMessage,
-	                   		  'error'
-	                   		); */
+	                   		  'warning'
+	                   		); 
                   } 
                }else{
                    if(swal){

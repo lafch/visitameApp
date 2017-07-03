@@ -9,7 +9,6 @@
     "ecmaVersion": 5
   },
   "rules": {
-
     "no-await-in-loop": "off",
     "comma-dangle": ["error", "never"],
     "no-cond-assign": ["error", "except-parens"],
@@ -224,6 +223,6 @@
     "space-unary-ops": ["error", { "words": true, "nonwords": false }],
     "spaced-comment": ["error", "always", { "markers": ["///"] }],
     "unicode-bom": ["error", "never"],
-    "wrap-regex": "off"
+    "wrap-regex": "off" 
   }
 }
