@@ -27,7 +27,6 @@
 <link rel="import" href="../visitame-app-commons/parametros-commons.html">
 <link rel="import" href="../visitame-app-views/login.html">
 
-
 <dom-module id="visitame-app">
   <template>
    <meta charset="utf-8">
@@ -71,7 +70,7 @@
         <app-toolbar>
           <paper-icon-button class="ver" icon="my-icons:menu" drawer-toggle></paper-icon-button>
           <paper-icon-button class="back-btn" icon="arrow-back" aria-label="Atrás" on-click="_regresar"></paper-icon-button>
-          <div main-title>Visitame</div>
+          <div main-title>Visítame</div>
       	</app-toolbar>
 
       	<app-toolbar class="ver toolbarNavegador" primary>
@@ -108,7 +107,9 @@
       
       
     </app-header-layout>
-    <login-view id ="loginView" style = "display:none"></login-view>  
+    <login-view id ="loginView" style = "display:none">
+    	<slot></slot>
+    </login-view>  
     
   </app-drawer-layout>
   
@@ -315,6 +316,7 @@
    	  		this.setFalse();
 			if(data){
 				this.$.loginView.renderData(data);
+// 				this.$.loginView.cargarSeguridad();
 // 				this.$.loginView.recargarCapcha();
 			}
 	    	this.$.ironPagesMain.style.display = 'none';

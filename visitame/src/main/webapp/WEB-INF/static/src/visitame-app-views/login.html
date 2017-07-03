@@ -25,6 +25,7 @@
 <link rel="import" href="../visitame-app-styles/main-style.html">
 <link rel="import" href="../visitame-app-styles/login-style.html">
 <link rel="import" href="../visitame-app-icons/main-icons.html">
+<link rel="import" href="recaptcha.html">
 
 
 <dom-module id="login-view"> 
@@ -85,10 +86,7 @@
 	          			<paper-input autofocus always-float-label required error-message$="{{mensaje}}" id="inputNumeroDocumento" pattern="[0-9]*"  maxlength$="[[numeroCaracteres]]" max$="[[numeroCaracteres]]" minlength$="[[numeroCaracteres]]"  label="Ingresar numero"  ></paper-input>
 	          	   </div>
 	          	   <div id="captcha">
-	        			<google-recaptcha
-		           		id="invisibleRecaptcha"
-					    value="{{token}}"
-					    sitekey="6LenrScUAAAAAKuaZ9nzSYUuxEKNxZxzU2fzbF9d"></google-recaptcha>  	   	
+						<slot></slot>
 	          	   </div>
 	          	   <div class="botonera">
 	          		 <paper-button class="reservar" raised on-click="reservar">Reservar</paper-button>
@@ -357,9 +355,15 @@
           
     	  SyncObjects(()=>{
     		  	this.reset();
-    	    	this.getParentApp().closeLogin();  
+    	    	this.getParentApp().closeLogin();   
     	  });
+    	  
+	    	recargar(); 
       }
+      
+//       cargarSeguridad(){
+//     	  this.$.recaptcha.ver
+//       }
       
     }
     window.customElements.define(LoginView.is, LoginView);
