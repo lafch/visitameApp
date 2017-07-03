@@ -32,6 +32,6 @@ public interface AccountService {
 	
 	Integer contarIntentosPorDia(Integer documentType , String documentNumber , Date fecha) throws NegocioException;
 	
-	Integer numeroHorasUltimoIntentoHoy(Integer documentType , String documentNumber) throws NegocioException;
+	Integer numeroMinutosUltimoIntentoHoy(Integer documentType , String documentNumber) throws NegocioException;
 	
 }
