@@ -145,13 +145,28 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		Parametro pMaxHorasUltimoIntento = configuracionService.obtenerParametro(Constantes.PARAMETRO.HORAS_ESPERA_ULT_INTENTO);
 		
 		Integer numeroIntenciones = this.contarIntentosPorDia(Integer.parseInt(documentType), documentNumber, new Date());
-		Integer horasUltimoIntento = this.numeroHorasUltimoIntentoHoy(Integer.parseInt(documentType), documentNumber);
+		Integer minutosUltimoIntento = this.numeroMinutosUltimoIntentoHoy(Integer.parseInt(documentType), documentNumber);
 
 		if(numeroIntenciones >= Integer.parseInt(pMaxIntencionesPorDia.getTxValor())){
 			lanzarExcepcionLeve(Mensajes.TICKET.MAX_CUOTA_TICKET_DIA, new Object[] {  }, "UD. ha agotado la cuota máxima de tickets por día.", null);
 		}else{
+			Integer horasUltimoIntento = (minutosUltimoIntento/60);
+			Integer minutosFaltantes = 60- (minutosUltimoIntento -(horasUltimoIntento*60));
+			
 			if(numeroIntenciones > 0 && horasUltimoIntento <= Integer.parseInt(pMaxHorasUltimoIntento.getTxValor())){
-				String txtHoras = (Integer.parseInt(pMaxHorasUltimoIntento.getTxValor())==1? "1 hora":pMaxHorasUltimoIntento.getTxValor()+" horas");
+				String txtHoras = "";
+				
+				if(horasUltimoIntento > 0){
+					txtHoras+=(horasUltimoIntento==1? "1 hora con ":horasUltimoIntento+" horas con ");
+					txtHoras+=(minutosFaltantes==1? "1 minuto":minutosFaltantes+" minutos");
+				}else{
+					if(minutosFaltantes == 60){
+						txtHoras+="1 hora";
+					}else{
+						txtHoras+=(minutosFaltantes==1? "1 minuto":minutosFaltantes+" minutos");
+					}
+					
+				}
 				lanzarExcepcionLeve(Mensajes.TICKET.TIEMPO_ESPERA_SIGUIENTE_TICKET , new Object[] { txtHoras }, "UD. ha generado un ticket de atención recientemente, vuelva a intentarlo dentro de "+txtHoras+".", null);
 			}
 		}
@@ -289,9 +304,9 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 	}
 
 	@Override
-	public Integer numeroHorasUltimoIntentoHoy(Integer documentType, String documentNumber) throws NegocioException {
+	public Integer numeroMinutosUltimoIntentoHoy(Integer documentType, String documentNumber) throws NegocioException {
 		try {
-			return intentoLogueoDAO.numeroHorasUltimoIntentoHoy(documentType , documentNumber);
+			return intentoLogueoDAO.numeroMinutosUltimoIntentoHoy(documentType , documentNumber);
 		} catch (DAOException e) {
 			lanzarExcepcionGrave(NegocioException.CODIGO.NEG_CONSULTA_FALLIDA, new Object[] { e.getMessage() }, "No se pudo ejecutar satisfactoriamente la consulta: " + e.getMessage(), e);
 		}

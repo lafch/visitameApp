@@ -41,6 +41,7 @@ public class IntentoLogueoDAOImpl extends BaseDAOImpl<IntentoLogueo, String> imp
 			invocacion.execute();
 			Integer count = invocacion.getInt(1);
 			invocacion.close();
+			conexion.close();
 			return count;
 		} catch (Exception e) {
 			logger.error("ERROR al invocar al procedimiento appvisitame.sp_contar_intentos_dia", e);
@@ -59,18 +60,19 @@ public class IntentoLogueoDAOImpl extends BaseDAOImpl<IntentoLogueo, String> imp
 	}
 
 	@Override
-	public Integer numeroHorasUltimoIntentoHoy(Integer doi, String numDoc) throws DAOException {
+	public Integer numeroMinutosUltimoIntentoHoy(Integer doi, String numDoc) throws DAOException {
 		java.sql.Connection conexion = null;
 		java.sql.CallableStatement invocacion = null;
 		try {
 			conexion = jdbcTemplate.getDataSource().getConnection();
-			invocacion = conexion.prepareCall("{ ? = call appvisitame.sp_horas_ultimo_intento(?,?) }");
+			invocacion = conexion.prepareCall("{ ? = call appvisitame.sp_minutos_ultimo_intento(?,?) }");
 			invocacion.registerOutParameter(1, Types.INTEGER);
 			invocacion.setInt(2, doi);
 			invocacion.setString(3, numDoc);
 			invocacion.execute();
 			Integer count = invocacion.getInt(1);
 			invocacion.close();
+			conexion.close();
 			return count;
 		} catch (Exception e) {
 			logger.error("ERROR al invocar al procedimiento appvisitame.sp_horas_ultimo_intento", e);

@@ -30,3 +30,25 @@ CREATE OR REPLACE FUNCTION appvisitame.sp_horas_ultimo_intento(tdoi int , numdoc
         RETURN v_count;
         END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION appvisitame.sp_minutos_ultimo_intento(tdoi int , numdoc varchar) RETURNS INT AS $$
+        DECLARE
+        v_count int; 
+        BEGIN
+        select 
+        (
+	       	DATE_PART('day', current_timestamp - l.tm_creacion) * 24 + 
+	               DATE_PART('hour', current_timestamp - l.tm_creacion) * 60 +
+	               DATE_PART('minute', current_timestamp - l.tm_creacion)                                   
+        ) 
+        into v_count
+        from appvisitame.tvisita005_seg_intento_logueo l
+        where 
+            l.tm_creacion::date = current_date
+            and l.nb_num_doi = numdoc
+            and l.cd_tipo_doi = tdoi
+        order by l.tm_creacion desc
+        limit 1;
+        RETURN v_count;
+        END;
+$$ LANGUAGE plpgsql;
