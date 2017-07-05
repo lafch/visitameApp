@@ -8,6 +8,7 @@ import pe.com.bbva.visitame.dominio.IntentoLogueo;
 import pe.com.bbva.visitame.dominio.Persona;
 import pe.com.bbva.visitame.dominio.dto.cuenta.CustomerDetail;
 import pe.com.bbva.visitame.exception.NegocioException;
+import pe.com.bbva.visitame.exception.SOAPException;
 import pe.com.bbva.visitame.util.Busqueda;
 
 public interface AccountService {

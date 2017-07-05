@@ -10,6 +10,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import pe.com.bbva.visitame.dominio.dto.cuenta.CustomerDetail;
 import pe.com.bbva.visitame.exception.NegocioException;
+import pe.com.bbva.visitame.exception.SOAPException;
 import pe.com.bbva.visitame.exception.ValidacionException;
 
 @Path("/account")
@@ -31,7 +32,7 @@ public interface IVISTServiceAccount {
 			@QueryParam("documentNumber") String documentNumber,
 			@QueryParam("documentType") String documentType,
 			@QueryParam("desDocumentType") String desDocumentType
-			) throws ValidacionException, NegocioException;
+			) throws ValidacionException, NegocioException, SOAPException;
 	
 	@PUT
 	@Path("/actualizarDatosContacto")

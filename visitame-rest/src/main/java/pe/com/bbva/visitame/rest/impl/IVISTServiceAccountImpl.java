@@ -5,9 +5,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import pe.com.bbva.visitame.dominio.Persona;
 import pe.com.bbva.visitame.dominio.dto.cuenta.CustomerDetail;
 import pe.com.bbva.visitame.exception.NegocioException;
+import pe.com.bbva.visitame.exception.SOAPException;
 import pe.com.bbva.visitame.exception.ValidacionException;
 import pe.com.bbva.visitame.rest.IVISTServiceAccount;
 import pe.com.bbva.visitame.service.AccountService;
@@ -20,7 +20,7 @@ public class IVISTServiceAccountImpl implements IVISTServiceAccount {
 	
 	@Override
 	public Map<String, Object> validarUsuario(String documentNumber, String documentType , String desDocumentType)
-			throws ValidacionException, NegocioException {
+			throws ValidacionException, NegocioException, SOAPException {
 		return accountService.validarUsuario(documentNumber,documentType,desDocumentType);
 	}
 

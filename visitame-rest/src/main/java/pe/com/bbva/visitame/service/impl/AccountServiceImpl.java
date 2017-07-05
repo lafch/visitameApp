@@ -21,11 +21,14 @@ import pe.com.bbva.visitame.dominio.Persona;
 import pe.com.bbva.visitame.dominio.dto.cuenta.Customer;
 import pe.com.bbva.visitame.dominio.dto.cuenta.CustomerDetail;
 import pe.com.bbva.visitame.dominio.dto.zic.ZicResult;
+import pe.com.bbva.visitame.dominio.reniec.Ciudadano;
 import pe.com.bbva.visitame.dominio.util.Constantes;
 import pe.com.bbva.visitame.dominio.util.Mensajes;
 import pe.com.bbva.visitame.exception.DAOException;
 import pe.com.bbva.visitame.exception.NegocioException;
+import pe.com.bbva.visitame.exception.SOAPException;
 import pe.com.bbva.visitame.helper.cuenta.ZICServiceAccountHelper;
+import pe.com.bbva.visitame.helper.reniec.ReniecServiceHelper;
 import pe.com.bbva.visitame.service.AccountService;
 import pe.com.bbva.visitame.service.ConfiguracionService;
 import pe.com.bbva.visitame.util.Busqueda;
@@ -49,6 +52,9 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 	
 	@Autowired
 	private ConfiguracionService configuracionService;
+
+	@Autowired 
+	private ReniecServiceHelper reniecServiceHelper;
 
 	@Override 
 	public CustomerDetail getCustomer(String documentNumber, String documentType , String test) throws NegocioException {
@@ -138,7 +144,30 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		}
 		return 0;
 	}
+	public Persona consultarReniec(String documentNumber, String documentType) throws SOAPException,NegocioException{
+		
+		Persona persona = null;
+		Ciudadano ciudadano = null;
+	
+		ciudadano = reniecServiceHelper.obtenerPersonaXDNI(documentNumber);
+		
+		// Para poder registrar un usuario existen o no se necesita una PERSONA, en el
+		// caso del servicio de Reniec tiene un CIUDADANO
+		
+		if(ciudadano!=null){
+			persona = new Persona();
+			persona.setCdTipoDoi(Integer.parseInt(documentType));
+			persona.setNbNumDoi(documentNumber);
+			persona.setNbNombre(ciudadano.getNombres());
+			persona.setNbPaterno(ciudadano.getApellidoPaterno());
+			persona.setNbMaterno(ciudadano.getApellidoMaterno());
+			persona.setTmCreacion(new Date());
+			persona.setCdCreador(1);
+		}
 
+		return persona;
+	}
+	
 	public void validarIntentos(String documentNumber, String documentType) throws NegocioException{
 		
 		Parametro pMaxIntencionesPorDia = configuracionService.obtenerParametro(Constantes.PARAMETRO.NUM_MAX_INTENTO_TICKET);
@@ -179,6 +208,7 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		Map<String, Object> result = new HashMap<String, Object>();		
 		CustomerDetail datosCustumer = getCustomer(documentNumber, documentType,documentNumber+".json");
 
+		
 		Boolean iscliente = true;
 		
 		if(datosCustumer == null){
@@ -195,6 +225,7 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		//La registramos detectando si es cliente o no
 		//por el metodo "getCustomer"
 		if(persona == null){
+			
 				if(iscliente){
 					Customer dataCliente = datosCustumer.getData().get(0);
 					persona = new Persona();
@@ -211,6 +242,20 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 					
 					//Verificar datos de la reniec
 					//si existe la persona se crearia en base a los datos de la reniec
+			
+					if(desDocumentType.equals("CE")){
+						result.put("persona", datosCustumer);
+						result.put("success", false);
+					}
+					
+					try {
+						persona = this.consultarReniec(documentNumber, desDocumentType);
+					} catch (SOAPException e) {
+						e.printStackTrace();
+					}
+					
+					if(persona!=null)
+						this.registrarPersona(datosCustumer, persona);
 					
 				}
 			
@@ -218,13 +263,8 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 			//si la persona existe en nuestra BD
 			//solo actualizamos el estado de si es cliente
 			//por si se ha modificado
-			if(datosCustumer != null){
-				persona.setIsCliente("S");
-			}else{
-				persona.setIsCliente("N");
-			}
+			this.registrarPersona(datosCustumer, persona);
 			
-			this.registrarPersona(persona);
 			
 		}
 		
@@ -244,11 +284,21 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 			result.put("success", false);
 		}
 		
-		
 		result.put("persona", datosCustumer);
 		return result;
 	}
 
+	
+	private void registrarPersona(CustomerDetail datosCustumer, Persona persona) throws NegocioException{
+		
+		if(datosCustumer != null)
+			persona.setIsCliente("S");
+		else
+			persona.setIsCliente("N");
+		
+		this.registrarPersona(persona);
+	}
+	
 	@Override
 	public Persona obtenerPersonaDoiNumdocumento(String doi, String numDoc) throws NegocioException {
 		Busqueda busqueda = Busqueda.forClass(Persona.class);
