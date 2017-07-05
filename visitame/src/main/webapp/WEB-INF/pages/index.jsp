@@ -63,12 +63,19 @@
         background-color: #fff;
         position: relative;
       }
+      
+/*       re-captcha.captcha > div{ */
+/*       	text-align: center; */
+/*       } */
+      
     </style>
     
   </head>
   <body>
     <visitame-app>
-    	<re-captcha id="recaptchaLogin" sitekey="6Lfd7CcUAAAAALern9JHrjPXMg1YsKRj2LID6MI6"></re-captcha>
+    	<div style="width: 100%; text-align: center;">
+    		<re-captcha id="recaptchaLogin" sitekey="6Lfd7CcUAAAAALern9JHrjPXMg1YsKRj2LID6MI6" class="captcha"></re-captcha>
+    	</div>
     </visitame-app>
     <view-error-dialog id="dialog-error"></view-error-dialog>	
   </body>
@@ -109,6 +116,21 @@
   	function recargar(){
   		var ventaMensaje = document.getElementById('default');
   		ventaMensaje.reset();
+  	}
+  	
+  	function scaleReCaptcha(){
+  	if (document.getElementsByClassName('captcha').length > 0)
+  	{parentWidth = document.getElementsByClassName('captcha')[0].clientWidth;
+  	         childWidth = document.getElementsByClassName('captcha')[0].firstChild.scrollWidth;
+  	         scale = (parentWidth)/304;
+  	         if(scale < 1.1){
+  	         	new_width = childWidth * scale;
+  	         	document.getElementsByClassName('captcha')[0].style.transform = 'scale(' + scale + ')';
+  	         	document.getElementsByClassName('captcha')[0].style.transformOrigin = '0 0';
+  	         }else{
+  	        	document.getElementsByClassName('captcha')[0].style.paddingLeft = "10%";
+  	         }
+  	     }
   	}
   </script>
 </html>
