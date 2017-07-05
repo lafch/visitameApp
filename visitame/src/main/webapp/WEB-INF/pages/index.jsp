@@ -32,6 +32,7 @@
     // Register the base URL
     const baseUrl = document.querySelector('#baseUrl').href;
     const baseRest = document.querySelector('#baseRest').href;
+    const IP_REMOTE = '<%=request.getRemoteAddr()%>';
     // Load and register pre-caching Service Worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {

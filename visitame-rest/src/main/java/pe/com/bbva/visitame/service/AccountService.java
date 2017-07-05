@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import pe.com.bbva.visitame.dominio.IntentoLogueo;
 import pe.com.bbva.visitame.dominio.Persona;
 import pe.com.bbva.visitame.dominio.dto.cuenta.CustomerDetail;
@@ -24,7 +26,7 @@ public interface AccountService {
 	
 	Integer contarIntentosLogueo(String doi , String numDoc) throws NegocioException;
 	
-	Map<String, Object> validarUsuario(String documentNumber, String documentType , String desDocumentType) throws NegocioException;
+	Map<String, Object> validarUsuario(String documentNumber, String documentType , String desDocumentType ,String captchaResponse , String ipRemote) throws NegocioException;
 	
 	Persona obtenerPersonaDoiNumdocumento(String doi , String numDoc) throws NegocioException;
 	

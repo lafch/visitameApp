@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,7 @@ import pe.com.bbva.visitame.exception.NegocioException;
 import pe.com.bbva.visitame.helper.cuenta.ZICServiceAccountHelper;
 import pe.com.bbva.visitame.service.AccountService;
 import pe.com.bbva.visitame.service.ConfiguracionService;
+import pe.com.bbva.visitame.service.GoogleService;
 import pe.com.bbva.visitame.util.Busqueda;
 
 @Service
@@ -49,6 +52,9 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 	
 	@Autowired
 	private ConfiguracionService configuracionService;
+	
+	@Autowired
+	private GoogleService googleService;
 
 	@Override 
 	public CustomerDetail getCustomer(String documentNumber, String documentType , String test) throws NegocioException {
@@ -174,7 +180,9 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 	}
 	
 	@Override
-	public Map<String, Object> validarUsuario(String documentNumber, String documentType , String desDocumentType) throws NegocioException {
+	public Map<String, Object> validarUsuario(String documentNumber, String documentType , String desDocumentType ,String captchaResponse ,String ipRemote) throws NegocioException {
+		
+		this.validarCaptcha(captchaResponse , ipRemote);
 		
 		Map<String, Object> result = new HashMap<String, Object>();		
 		CustomerDetail datosCustumer = getCustomer(documentNumber, documentType,documentNumber+".json");
@@ -247,6 +255,19 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		
 		result.put("persona", datosCustumer);
 		return result;
+	}
+
+	private void validarCaptcha(String captchaResponse , String ipRemote) throws NegocioException{
+		if(StringUtils.isBlank(captchaResponse)){
+			lanzarExcepcionLeve(Mensajes.GOOGLE.CAPTCHA_NO_VERIFICADO , new Object[] { }, "No se ha verificado el captcha.", null);
+		}
+		
+		boolean captchaValido = googleService.validarReCaptcha(ipRemote, captchaResponse);
+		
+		if(!captchaValido){
+			lanzarExcepcionLeve(Mensajes.GOOGLE.CAPTCHA_NO_VALIDO , new Object[] { }, "La verificación del captcha es incorrecta.", null);
+		}
+		
 	}
 
 	@Override

@@ -382,22 +382,37 @@
       }
       
       reservar(){
-         
+
+    	 
+          
      	  if(this.$.inputNumeroDocumento.validate()){
-     		 
+
+     		  let captchaResponse = document.querySelector('#recaptchaLogin').response;
+
+      		  if(!captchaResponse){
+      			swal(
+                   		  'Alerta',
+                   		   'No se ha verificado el captcha.',
+                   		  'warning'
+                   		);
+  				return;
+          	  }
      		  console.log('datos envio')
      		  console.log(this.numDocumento)
      		  console.log(this.tipoDocumento)
+     		  console.log(captchaResponse)
      		  
          	  
-    	  var customerService = this.$.customerService;
-    		  var numeroDocumento = this.$.inputNumeroDocumento.value;
+    	  	  let customerService = this.$.customerService;
+    		  let numeroDocumento = this.$.inputNumeroDocumento.value;
 
-				 var requestEsCliente = customerService.generarTicket({
+			  let requestEsCliente = customerService.generarTicket({
     						params : {
-    							"documentNumber": this.numDocumento,
-    							"documentType":   this.tipoDocumento.id,
-    							"desDocumentType" : this.tipoDocumento.name
+    							"documentNumber"	:	this.numDocumento,
+    							"documentType"		:  	this.tipoDocumento.id,
+    							"desDocumentType"	: 	this.tipoDocumento.name,
+    							"captchaResponse"	:   captchaResponse,
+    							"ipRemote"			:	IP_REMOTE
     						}
     			     });
     				 requestEsCliente.then((xhr,fail) => { 
@@ -415,31 +430,8 @@
 
                 	    }
         				 
-    			    	// this.handleResponse(xhr.response);
     			     },(error) =>{
         			     console.log(error)
-    			    	/*  if("undefined" !== typeof error.code){
-    			     	  	console.log("error" + error.code); 
-    			     	  	switch(error.code) {
-    			      	    	case error.PERMISSION_DENIED:
-    			      	    		this.errorDescripcion = "Usuario deneg&#243; utilizar la ubicación GPS."
-    			        	      break;
-    			        	    case error.POSITION_UNAVAILABLE:
-    			        	    	this.errorDescripcion = "La información de ubicación es inhabilitada."
-    			        	      break;
-    			        	    case error.TIMEOUT:
-    			        	    	this.errorDescripcion = "La solicitud para obtener la ubicación del usuario se ha agotado."
-    			        	      break;
-    			        	    case error.UNKNOWN_ERROR:
-    			        	    	this.errorDescripcion = "Un error desconocido ocurrió."
-    			        	      break;
-    			        	}
-    			     	 }else{
-    			     		var mensaje = new Object();
-    			     		mensaje.mensajeError = "Error de servicio";
-    			     		mensaje.severidad = "ALTA" ;
-    			     		mostrarError(mensaje);
-    			     	 } */
     					})
     			     .catch((reason) => {
     			    	 console.log(reason);
@@ -469,7 +461,6 @@
       cancelar(){
 
     	  SyncObjects(()=>{
-    		  console.log(document.querySelector('#recaptchaLogin').response);
     		  	this.reset();
     	    	this.getParentApp().closeLogin();  
     	  }); 

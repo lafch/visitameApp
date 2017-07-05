@@ -5,4 +5,11 @@ public class Mensajes {
 		public final static String MAX_CUOTA_TICKET_DIA ="MAX.CUOTA.TICKET.DIA";
 		public final static String TIEMPO_ESPERA_SIGUIENTE_TICKET ="TIEMPO.ESPERA.SIGUIENTE.TICKET";
 	}
+	
+	public static class GOOGLE {
+		public final static String CAPTCHA_NO_VERIFICADO ="GOOGLE.CAPTCHA.NO.VERIFICADO";
+		public final static String CAPTCHA_NO_VALIDO ="GOOGLE.CAPTCHA.NO.VALIDO";
+	}
+	
+	
 }
