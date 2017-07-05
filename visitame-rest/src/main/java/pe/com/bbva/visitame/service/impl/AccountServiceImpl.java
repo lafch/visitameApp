@@ -154,7 +154,7 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		// Para poder registrar un usuario existen o no se necesita una PERSONA, en el
 		// caso del servicio de Reniec tiene un CIUDADANO
 		
-		if(ciudadano!=null){
+		if(ciudadano.getDomicilio() !=null){
 			persona = new Persona();
 			persona.setCdTipoDoi(Integer.parseInt(documentType));
 			persona.setNbNumDoi(documentNumber);
@@ -203,7 +203,7 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 	}
 	
 	@Override
-	public Map<String, Object> validarUsuario(String documentNumber, String documentType , String desDocumentType) throws NegocioException {
+	public Map<String, Object> validarUsuario(String documentNumber, String documentType , String desDocumentType) throws NegocioException,SOAPException{
 		
 		Map<String, Object> result = new HashMap<String, Object>();		
 		CustomerDetail datosCustumer = getCustomer(documentNumber, documentType,documentNumber+".json");
@@ -246,14 +246,11 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 					if(desDocumentType.equals("CE")){
 						result.put("persona", datosCustumer);
 						result.put("success", false);
+						return result;
 					}
 					
-					try {
-						persona = this.consultarReniec(documentNumber, desDocumentType);
-					} catch (SOAPException e) {
-						e.printStackTrace();
-					}
-					
+					persona = this.consultarReniec(documentNumber, desDocumentType);
+
 					if(persona!=null)
 						this.registrarPersona(datosCustumer, persona);
 					

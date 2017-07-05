@@ -20,7 +20,7 @@ public class IVISTServiceAccountImpl implements IVISTServiceAccount {
 	
 	@Override
 	public Map<String, Object> validarUsuario(String documentNumber, String documentType , String desDocumentType)
-			throws ValidacionException, NegocioException, SOAPException {
+			throws ValidacionException, NegocioException,SOAPException {
 		return accountService.validarUsuario(documentNumber,documentType,desDocumentType);
 	}
 
