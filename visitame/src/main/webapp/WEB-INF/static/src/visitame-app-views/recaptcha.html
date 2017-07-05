@@ -2,16 +2,7 @@
 <dom-module id="recaptcha-view">
 	<dom-bind>
 	<template>
-	 
-<!-- 	<template is="dom-if" if="{{condicion}}"> -->
-<!-- 		<google-recaptcha -->
-<!-- 		           		  id="invisibleRecaptcha" -->
-<!-- 					      value="{{token}}" -->
-<!-- 					      sitekey="6LenrScUAAAAAKuaZ9nzSYUuxEKNxZxzU2fzbF9d" -->
-
-<!-- 					      ></google-recaptcha>   -->
-					      
-					      <div class="g-recaptcha" data-sitekey="6LenrScUAAAAAKuaZ9nzSYUuxEKNxZxzU2fzbF9d"></div>	   	
+		<div class="g-recaptcha" data-sitekey="6Lfd7CcUAAAAALern9JHrjPXMg1YsKRj2LID6MI6"></div>	   	
 	</template>
 	</dom-bind>
 	<script>
@@ -23,7 +14,10 @@
 	        	condicion:{
 	        		type:Boolean,
 	        		value:false
-	        	}
+	        	},
+	        	llaveDinamica:{
+		        	type:String
+		        }
 	              
 	        }
 	      }
@@ -32,6 +26,13 @@
 	    	  this.condicion = true;
 	    	  this.$.invisibleRecaptcha.reset();
 	      }
+
+
+
+	      getLlaveDinamica(){
+	    	  //recaptcha-token
+	    	  
+		  }
 	      
 	}
     window.customElements.define(RecaptchaView.is, RecaptchaView);

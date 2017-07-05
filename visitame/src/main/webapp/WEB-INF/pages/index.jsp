@@ -42,7 +42,6 @@
     <script src="<%=request.getContextPath()%>/static/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
 
     <link rel="import" href="<%=request.getContextPath()%>/static/src/visitame-app/visitame-app.html">
-    <link rel="import" href="<%=request.getContextPath()%>/static/src/visitame-app/visitame-app.html">
     <link rel="import" href="<%=request.getContextPath()%>/static/bower_components/re-captcha/re-captcha.html">
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqyFz0Q9ZZLMmgqJhck4soRfa0V1s71jQ&libraries=places"></script>
    
@@ -68,7 +67,7 @@
   </head>
   <body>
     <visitame-app>
-    	<re-captcha id="default" sitekey="6LenrScUAAAAAKuaZ9nzSYUuxEKNxZxzU2fzbF9d"></re-captcha>
+    	<re-captcha id="recaptchaLogin" sitekey="6Lfd7CcUAAAAALern9JHrjPXMg1YsKRj2LID6MI6"></re-captcha>
     </visitame-app>
     <view-error-dialog id="dialog-error"></view-error-dialog>	
   </body>
