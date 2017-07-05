@@ -3,8 +3,12 @@ package pe.com.bbva.visitame.rest.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import pe.com.bbva.visitame.dominio.dto.geolocalizacion.GeolocalizacionRequestParam;
 import pe.com.bbva.visitame.dominio.dto.geolocalizacion.PoiDetail;
@@ -23,6 +27,8 @@ public class IVISTServiceGeolocalizacionImpl implements IVISTServiceGeolocalizac
 	@Override
 	public Map<String, PoiDetail> obtenerOficinas(String latitud, String longitud, String radius,
 			String filter, String startAt, String limit,String type) throws ValidacionException, NegocioException {
+	
+
 		GeolocalizacionRequestParam param = new GeolocalizacionRequestParam();
 		
 		if(Constantes.ETIQUETAS_POIS.TYPE_CAJERO.equals(type)){

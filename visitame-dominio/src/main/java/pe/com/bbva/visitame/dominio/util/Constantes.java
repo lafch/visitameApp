@@ -79,20 +79,26 @@ public final class Constantes {
 		public static final String BIT_UNIX_FILA = "BIT_UNIX_FILE";
 		public static final String EXPO_CONTROL_BITACORA = "EXPO_CTR_BIT";
 		public static final String COD_APP_PIC_PRE_IDM = "COD_APP_PIC_PRE_IDM";
-		public static final String URL_WS_RENIEC = "URL_WS_RENIEC";
-		public static final String TO_WS_RENIEC = "TO_WS_RENIEC";
+
 		public static final String MAXIMO_DELEGACIONES = "MAX_DEL";
 		public static final String RANGO_TIEMPO_DELEGACIONES = "MAX_TIEM_DEL";
 		public static final String VIGENCIA_TSEC = "TO_VIG_TSEC";
 		public static final String MAXIMO_ANIO_DELEGAR =  "MAX_ANIO_DEL";
 		public static final String PUESTO_DELEGAR = "PUESTO_DELEGAR";
+		
+		//RENIEC
+		public static final String URL_WS_RENIEC = "URL_WS_RENIEC";
+		public static final String TO_WS_RENIEC = "TO_WS_RENIEC";
 		public static final String WS_PARAMETRO_RENIEC_CANAL = "WS_PAR_REN_CANAL";
 		public static final String WS_PARAMETRO_RENIEC_EMPRESA = "WS_PAR_REN_EMPRESA";
 		public static final String WS_PARAMETRO_RENIEC_COD_INTERFAZ = "WS_PAR_REN_COD_INTERFAZ";
 		public static final String WS_PARAMETRO_RENIEC_TIP_APLICACION = "WS_PAR_REN_TIP_APLICACION";
 		public static final String WS_PARAMETRO_RENIEC_CONS_DATOS = "WS_PAR_REN_ID_CONS_DATOS";
 		public static final String WS_PARAMETRO_RENIEC_CONS_FOTO = "WS_PAR_REN_ID_CONS_FOTO";
-		public static final String WS_PARAMETRO_RENIEC_CONS_FIRMA = "WS_PAR_REN_ID_CONS_FIRMA";		
+		public static final String WS_PARAMETRO_RENIEC_CONS_FIRMA = "WS_PAR_REN_ID_CONS_FIRMA";	
+		public static final String WS_PARAMETRO_RENIEC_COD_APP_VISITAME = "WS_PAR_COD_APP_VISITAME";
+		public static final String WS_PARAMETRO_RENIEC_USER = "P017737";
+	
 		public static final String PAGINA_SIZE_CUSTOMER = "PAG_SIZE_CUSTOM";
 		public static final String PAGINA_SIZE_RENTABILIDAD = "PAG_SIZE_RENTA";
 		public static final String PAGINA_SIZE_PARTICIPANTES = "PAG_SIZE_PARTI";
@@ -129,7 +135,9 @@ public final class Constantes {
 		public static final String PARAMETRO_IV_USER = "PAR_IV_USER";
 		public static final String PARAMETRO_IV_TICKET = "PAR_IV_TICKET";
 		public static final String PAGINA_SIZE_COTIZA = "PAG_SIZE_COTI";
-		public static final String PAGINA_SIZE_COLECTIVO = "PAG_SIZE_COL";		
+		public static final String PAGINA_SIZE_COLECTIVO = "PAG_SIZE_COL";	
+		
+		
 	}	
 	
 	public static class LISTA {
@@ -1429,6 +1437,14 @@ public final class Constantes {
 		public final static String TDOI_EXT_EQUIV = "FOREIGNERS";
 	}
 	
-	
+	public static class ETIQUETAS_CLASES {
+		
+		public static final String PERSONA= "persona";
+		public static final String SUCCESS= "success";
+		public static final String CARNET_EXTRANJERIA= "CE";
+		public static final String ES_CLIENTE= "S";
+		public static final String NO_ES_CLIENTE= "N";
+		
+	}
 	
 }

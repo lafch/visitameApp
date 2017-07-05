@@ -6,13 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-
 import pe.com.bbva.visitame.dao.IntentoLogueoDAO;
 import pe.com.bbva.visitame.dao.PersonaDAO;
 import pe.com.bbva.visitame.dominio.IntentoLogueo;
@@ -21,13 +19,17 @@ import pe.com.bbva.visitame.dominio.Persona;
 import pe.com.bbva.visitame.dominio.dto.cuenta.Customer;
 import pe.com.bbva.visitame.dominio.dto.cuenta.CustomerDetail;
 import pe.com.bbva.visitame.dominio.dto.zic.ZicResult;
+import pe.com.bbva.visitame.dominio.reniec.Ciudadano;
 import pe.com.bbva.visitame.dominio.util.Constantes;
 import pe.com.bbva.visitame.dominio.util.Mensajes;
 import pe.com.bbva.visitame.exception.DAOException;
 import pe.com.bbva.visitame.exception.NegocioException;
+import pe.com.bbva.visitame.exception.SOAPException;
 import pe.com.bbva.visitame.helper.cuenta.ZICServiceAccountHelper;
+import pe.com.bbva.visitame.helper.reniec.ReniecServiceHelper;
 import pe.com.bbva.visitame.service.AccountService;
 import pe.com.bbva.visitame.service.ConfiguracionService;
+import pe.com.bbva.visitame.service.GoogleService;
 import pe.com.bbva.visitame.util.Busqueda;
 
 @Service
@@ -49,6 +51,12 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 	
 	@Autowired
 	private ConfiguracionService configuracionService;
+	
+	@Autowired
+	private GoogleService googleService;
+
+	@Autowired 
+	private ReniecServiceHelper reniecServiceHelper;
 
 	@Override 
 	public CustomerDetail getCustomer(String documentNumber, String documentType , String test) throws NegocioException {
@@ -138,7 +146,30 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		}
 		return 0;
 	}
-
+	
+	public Persona consultarReniec(String documentNumber, String documentType) throws NegocioException{
+		
+		Persona persona = null;
+		Ciudadano ciudadano = null;
+	
+		try {
+			ciudadano = reniecServiceHelper.obtenerPersonaXDNI(documentNumber);
+			if(ciudadano.getDomicilio() !=null){
+				persona = new Persona();
+				persona.setCdTipoDoi(Integer.parseInt(documentType));
+				persona.setNbNumDoi(documentNumber);
+				persona.setNbNombre(ciudadano.getNombres());
+				persona.setNbPaterno(ciudadano.getApellidoPaterno());
+				persona.setNbMaterno(ciudadano.getApellidoMaterno());
+				persona.setTmCreacion(new Date());
+				persona.setCdCreador(1);
+			}
+		} catch (SOAPException e) {
+			lanzarExcepcionLeve(Constantes.MENSAJE.UI_SERVICIO_NO_DISPONIBLE , new Object[] {  }, "Servicio no disponible.", null);
+		}
+		return persona;
+	}
+	
 	public void validarIntentos(String documentNumber, String documentType) throws NegocioException{
 		
 		Parametro pMaxIntencionesPorDia = configuracionService.obtenerParametro(Constantes.PARAMETRO.NUM_MAX_INTENTO_TICKET);
@@ -174,11 +205,13 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 	}
 	
 	@Override
-	public Map<String, Object> validarUsuario(String documentNumber, String documentType , String desDocumentType) throws NegocioException {
+	public Map<String, Object> validarUsuario(String documentNumber, String documentType , String desDocumentType ,String captchaResponse ,String ipRemote) throws NegocioException {
 		
+		this.validarCaptcha(captchaResponse , ipRemote);
 		Map<String, Object> result = new HashMap<String, Object>();		
 		CustomerDetail datosCustumer = getCustomer(documentNumber, documentType,documentNumber+".json");
 
+		
 		Boolean iscliente = true;
 		
 		if(datosCustumer == null){
@@ -195,36 +228,38 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		//La registramos detectando si es cliente o no
 		//por el metodo "getCustomer"
 		if(persona == null){
+			
 				if(iscliente){
 					Customer dataCliente = datosCustumer.getData().get(0);
 					persona = new Persona();
 					persona.setCdTipoDoi(Integer.parseInt(documentType));
 					persona.setNbNumDoi(documentNumber);
-					persona.setIsCliente("S");
+					persona.setIsCliente(Constantes.ETIQUETAS_CLASES.ES_CLIENTE);
 					persona.setNbNombre(dataCliente.getFirstName());
 					persona.setNbPaterno(dataCliente.getLastName());
 					persona.setNbMaterno(dataCliente.getSurnames());
 					persona.setTmCreacion(new Date());
 					persona.setCdCreador(1);
 					persona = this.registrarPersona(persona);
-				}else{
-					
+				}else{	
 					//Verificar datos de la reniec
 					//si existe la persona se crearia en base a los datos de la reniec
-					
+					if(desDocumentType.equals(Constantes.ETIQUETAS_CLASES.CARNET_EXTRANJERIA)){
+						result.put(Constantes.ETIQUETAS_CLASES.PERSONA, datosCustumer);
+						result.put(Constantes.ETIQUETAS_CLASES.SUCCESS, false);
+						return result;
+					}
+					persona = this.consultarReniec(documentNumber, desDocumentType);
+					if(persona!=null)
+						this.registrarPersona(datosCustumer, persona);	
 				}
 			
 		}else{
 			//si la persona existe en nuestra BD
 			//solo actualizamos el estado de si es cliente
 			//por si se ha modificado
-			if(datosCustumer != null){
-				persona.setIsCliente("S");
-			}else{
-				persona.setIsCliente("N");
-			}
+			this.registrarPersona(datosCustumer, persona);
 			
-			this.registrarPersona(persona);
 			
 		}
 		
@@ -239,16 +274,39 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 			intento.setCdCreador(1);
 			this.registrarIntentoLogueo(intento);
 			
-			result.put("success", true);
+			result.put(Constantes.ETIQUETAS_CLASES.SUCCESS, true);
 		}else{
-			result.put("success", false);
+			result.put(Constantes.ETIQUETAS_CLASES.SUCCESS, false);
 		}
 		
-		
-		result.put("persona", datosCustumer);
+		result.put(Constantes.ETIQUETAS_CLASES.PERSONA, datosCustumer);
 		return result;
 	}
 
+	private void validarCaptcha(String captchaResponse , String ipRemote) throws NegocioException{
+		if(StringUtils.isBlank(captchaResponse)){
+			lanzarExcepcionLeve(Mensajes.GOOGLE.CAPTCHA_NO_VERIFICADO , new Object[] { }, "No se ha verificado el captcha.", null);
+		}
+		
+		boolean captchaValido = googleService.validarReCaptcha(ipRemote, captchaResponse);
+		
+		if(!captchaValido){
+			lanzarExcepcionLeve(Mensajes.GOOGLE.CAPTCHA_NO_VALIDO , new Object[] { }, "La verificación del captcha es incorrecta.", null);
+		}
+		
+	}
+
+	
+	private void registrarPersona(CustomerDetail datosCustumer, Persona persona) throws NegocioException{
+		
+		if(datosCustumer != null)
+			persona.setIsCliente(Constantes.ETIQUETAS_CLASES.ES_CLIENTE);
+		else
+			persona.setIsCliente(Constantes.ETIQUETAS_CLASES.NO_ES_CLIENTE);
+		
+		this.registrarPersona(persona);
+	}
+	
 	@Override
 	public Persona obtenerPersonaDoiNumdocumento(String doi, String numDoc) throws NegocioException {
 		Busqueda busqueda = Busqueda.forClass(Persona.class);
@@ -281,14 +339,14 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 			persona.setCdEditor(1);
 			persona.setTmEdicion(new Date());
 			this.registrarPersona(persona);
-			result.put("success", true);
+			result.put(Constantes.ETIQUETAS_CLASES.SUCCESS, true);
 			
 		}else{
-			result.put("success", false);
+			result.put(Constantes.ETIQUETAS_CLASES.SUCCESS, false);
 			System.out.println("Persona no está registrada en la Base de Datos");
 		}
 
-		result.put("persona", persona);
+		result.put(Constantes.ETIQUETAS_CLASES.PERSONA, persona);
 		return result;
 	}
 
