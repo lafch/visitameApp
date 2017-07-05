@@ -6,15 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-
 import pe.com.bbva.visitame.dao.IntentoLogueoDAO;
 import pe.com.bbva.visitame.dao.PersonaDAO;
 import pe.com.bbva.visitame.dominio.IntentoLogueo;
@@ -238,29 +234,24 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 					persona = new Persona();
 					persona.setCdTipoDoi(Integer.parseInt(documentType));
 					persona.setNbNumDoi(documentNumber);
-					persona.setIsCliente("S");
+					persona.setIsCliente(Constantes.ETIQUETAS_CLASES.ES_CLIENTE);
 					persona.setNbNombre(dataCliente.getFirstName());
 					persona.setNbPaterno(dataCliente.getLastName());
 					persona.setNbMaterno(dataCliente.getSurnames());
 					persona.setTmCreacion(new Date());
 					persona.setCdCreador(1);
 					persona = this.registrarPersona(persona);
-				}else{
-					
+				}else{	
 					//Verificar datos de la reniec
 					//si existe la persona se crearia en base a los datos de la reniec
-			
-					if(desDocumentType.equals("CE")){
-						result.put("persona", datosCustumer);
-						result.put("success", false);
+					if(desDocumentType.equals(Constantes.ETIQUETAS_CLASES.CARNET_EXTRANJERIA)){
+						result.put(Constantes.ETIQUETAS_CLASES.PERSONA, datosCustumer);
+						result.put(Constantes.ETIQUETAS_CLASES.SUCCESS, false);
 						return result;
 					}
-					
 					persona = this.consultarReniec(documentNumber, desDocumentType);
-
 					if(persona!=null)
-						this.registrarPersona(datosCustumer, persona);
-					
+						this.registrarPersona(datosCustumer, persona);	
 				}
 			
 		}else{
@@ -283,12 +274,12 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 			intento.setCdCreador(1);
 			this.registrarIntentoLogueo(intento);
 			
-			result.put("success", true);
+			result.put(Constantes.ETIQUETAS_CLASES.SUCCESS, true);
 		}else{
-			result.put("success", false);
+			result.put(Constantes.ETIQUETAS_CLASES.SUCCESS, false);
 		}
 		
-		result.put("persona", datosCustumer);
+		result.put(Constantes.ETIQUETAS_CLASES.PERSONA, datosCustumer);
 		return result;
 	}
 
@@ -309,9 +300,9 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 	private void registrarPersona(CustomerDetail datosCustumer, Persona persona) throws NegocioException{
 		
 		if(datosCustumer != null)
-			persona.setIsCliente("S");
+			persona.setIsCliente(Constantes.ETIQUETAS_CLASES.ES_CLIENTE);
 		else
-			persona.setIsCliente("N");
+			persona.setIsCliente(Constantes.ETIQUETAS_CLASES.NO_ES_CLIENTE);
 		
 		this.registrarPersona(persona);
 	}
@@ -348,14 +339,14 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 			persona.setCdEditor(1);
 			persona.setTmEdicion(new Date());
 			this.registrarPersona(persona);
-			result.put("success", true);
+			result.put(Constantes.ETIQUETAS_CLASES.SUCCESS, true);
 			
 		}else{
-			result.put("success", false);
+			result.put(Constantes.ETIQUETAS_CLASES.SUCCESS, false);
 			System.out.println("Persona no está registrada en la Base de Datos");
 		}
 
-		result.put("persona", persona);
+		result.put(Constantes.ETIQUETAS_CLASES.PERSONA, persona);
 		return result;
 	}
 

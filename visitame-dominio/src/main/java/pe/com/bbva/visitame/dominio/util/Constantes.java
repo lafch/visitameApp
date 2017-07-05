@@ -98,7 +98,7 @@ public final class Constantes {
 		public static final String WS_PARAMETRO_RENIEC_CONS_FIRMA = "WS_PAR_REN_ID_CONS_FIRMA";	
 		public static final String WS_PARAMETRO_RENIEC_COD_APP_VISITAME = "WS_PAR_COD_APP_VISITAME";
 		public static final String WS_PARAMETRO_RENIEC_USER = "P017737";
-		
+	
 		public static final String PAGINA_SIZE_CUSTOMER = "PAG_SIZE_CUSTOM";
 		public static final String PAGINA_SIZE_RENTABILIDAD = "PAG_SIZE_RENTA";
 		public static final String PAGINA_SIZE_PARTICIPANTES = "PAG_SIZE_PARTI";
@@ -1437,6 +1437,14 @@ public final class Constantes {
 		public final static String TDOI_EXT_EQUIV = "FOREIGNERS";
 	}
 	
-	
+	public static class ETIQUETAS_CLASES {
+		
+		public static final String PERSONA= "persona";
+		public static final String SUCCESS= "success";
+		public static final String CARNET_EXTRANJERIA= "CE";
+		public static final String ES_CLIENTE= "S";
+		public static final String NO_ES_CLIENTE= "N";
+		
+	}
 	
 }
