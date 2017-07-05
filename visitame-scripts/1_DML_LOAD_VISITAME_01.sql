@@ -23,32 +23,9 @@ INSERT INTO appvisitame.tvisita002_cfg_lista (cd_lista,cd_alterno,nb_etiqueta,nb
 
 -- INSERT VALORES TIPO OPERADOR CELULARES
 
-INSERT INTO appvisitame.tvisita003_cfg_valor (
-												cd_valor , cd_padre , cd_lista 
-												,cd_alterno , nb_etiqueta , nb_glosa , nb_valor , nu_orden , st_estado , cd_creador , tm_creacion , cd_editor,tm_edicion ) 
-												VALUES ( 
-												(SELECT nextval('appvisitame.seq_tvisita003_cfg_valor')) ,null,(SELECT CD_LISTA FROM appvisitame.tvisita002_cfg_lista WHERE CD_ALTERNO='OPE_TIPO_CEL'),
-												,'CLAR','Claro','Claro',1,'A',1,current_timestamp,null,null);
-												
-INSERT INTO appvisitame.tvisita003_cfg_valor (
-												cd_valor , cd_padre , cd_lista 
-												,cd_alterno , nb_etiqueta , nb_glosa , nb_valor , nu_orden , st_estado , cd_creador , tm_creacion , cd_editor,tm_edicion ) 
-												VALUES ( 
-												(SELECT nextval('appvisitame.seq_tvisita003_cfg_valor')) ,null,(SELECT CD_LISTA FROM appvisitame.tvisita002_cfg_lista WHERE CD_ALTERNO='OPE_TIPO_CEL'),
-												,'TELE','Movistar','Movistar',1,'A',1,current_timestamp,null,null);
-												
-INSERT INTO appvisitame.tvisita003_cfg_valor (
-												cd_valor , cd_padre , cd_lista 
-												,cd_alterno , nb_etiqueta , nb_glosa , nb_valor , nu_orden , st_estado , cd_creador , tm_creacion , cd_editor,tm_edicion ) 
-												VALUES ( 
-												(SELECT nextval('appvisitame.seq_tvisita003_cfg_valor')) ,null,(SELECT CD_LISTA FROM appvisitame.tvisita002_cfg_lista WHERE CD_ALTERNO='OPE_TIPO_CEL'),
-												,'NEXT','Entel','Entel',1,'A',1,current_timestamp,null,null);
-												
-INSERT INTO appvisitame.tvisita003_cfg_valor (
-												cd_valor , cd_padre , cd_lista 
-												,cd_alterno , nb_etiqueta , nb_glosa , nb_valor , nu_orden , st_estado , cd_creador , tm_creacion , cd_editor,tm_edicion ) 
-												VALUES ( 
-												(SELECT nextval('appvisitame.seq_tvisita003_cfg_valor')) ,null,(SELECT CD_LISTA FROM appvisitame.tvisita002_cfg_lista WHERE CD_ALTERNO='OPE_TIPO_CEL'),
-												,'BITE','Bitel','Bitel',1,'A',1,current_timestamp,null,null);
+INSERT INTO appvisitame.tvisita003_cfg_valor (cd_valor,cd_padre,cd_lista,cd_alterno,nb_etiqueta,nb_glosa,nb_valor,nu_orden,st_estado,cd_creador,tm_creacion,cd_editor,tm_edicion) VALUES ((SELECT nextval('appvisitame.seq_tvisita003_cfg_valor')),null,(SELECT CD_LISTA FROM appvisitame.tvisita002_cfg_lista WHERE CD_ALTERNO='OPE_TIPO_CEL'),'CLAR','Claro','Claro',null,1,'A',1,current_timestamp,null,null);
+INSERT INTO appvisitame.tvisita003_cfg_valor (cd_valor,cd_padre,cd_lista,cd_alterno,nb_etiqueta,nb_glosa,nb_valor,nu_orden,st_estado,cd_creador,tm_creacion,cd_editor,tm_edicion) VALUES ((SELECT nextval('appvisitame.seq_tvisita003_cfg_valor')),null,(SELECT CD_LISTA FROM appvisitame.tvisita002_cfg_lista WHERE CD_ALTERNO='OPE_TIPO_CEL'),'TELE','Movistar','Movistar',null,2,'A',1,current_timestamp,null,null);
+INSERT INTO appvisitame.tvisita003_cfg_valor (cd_valor,cd_padre,cd_lista,cd_alterno,nb_etiqueta,nb_glosa,nb_valor,nu_orden,st_estado,cd_creador,tm_creacion,cd_editor,tm_edicion) VALUES ((SELECT nextval('appvisitame.seq_tvisita003_cfg_valor')),null,(SELECT CD_LISTA FROM appvisitame.tvisita002_cfg_lista WHERE CD_ALTERNO='OPE_TIPO_CEL'),'NEXT','Entel','Entel',null,3,'A',1,current_timestamp,null,null);
+INSERT INTO appvisitame.tvisita003_cfg_valor (cd_valor,cd_padre,cd_lista,cd_alterno,nb_etiqueta,nb_glosa,nb_valor,nu_orden,st_estado,cd_creador,tm_creacion,cd_editor,tm_edicion) VALUES ((SELECT nextval('appvisitame.seq_tvisita003_cfg_valor')),null,(SELECT CD_LISTA FROM appvisitame.tvisita002_cfg_lista WHERE CD_ALTERNO='OPE_TIPO_CEL'),'BITE','Bitel','Bitel',null,4,'A',1,current_timestamp,null,null);
 
 COMMIT;
