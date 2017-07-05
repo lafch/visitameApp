@@ -23,11 +23,14 @@ import pe.com.bbva.visitame.dominio.Persona;
 import pe.com.bbva.visitame.dominio.dto.cuenta.Customer;
 import pe.com.bbva.visitame.dominio.dto.cuenta.CustomerDetail;
 import pe.com.bbva.visitame.dominio.dto.zic.ZicResult;
+import pe.com.bbva.visitame.dominio.reniec.Ciudadano;
 import pe.com.bbva.visitame.dominio.util.Constantes;
 import pe.com.bbva.visitame.dominio.util.Mensajes;
 import pe.com.bbva.visitame.exception.DAOException;
 import pe.com.bbva.visitame.exception.NegocioException;
+import pe.com.bbva.visitame.exception.SOAPException;
 import pe.com.bbva.visitame.helper.cuenta.ZICServiceAccountHelper;
+import pe.com.bbva.visitame.helper.reniec.ReniecServiceHelper;
 import pe.com.bbva.visitame.service.AccountService;
 import pe.com.bbva.visitame.service.ConfiguracionService;
 import pe.com.bbva.visitame.service.GoogleService;
@@ -55,6 +58,9 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 	
 	@Autowired
 	private GoogleService googleService;
+
+	@Autowired 
+	private ReniecServiceHelper reniecServiceHelper;
 
 	@Override 
 	public CustomerDetail getCustomer(String documentNumber, String documentType , String test) throws NegocioException {
@@ -144,7 +150,30 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		}
 		return 0;
 	}
-
+	
+	public Persona consultarReniec(String documentNumber, String documentType) throws NegocioException{
+		
+		Persona persona = null;
+		Ciudadano ciudadano = null;
+	
+		try {
+			ciudadano = reniecServiceHelper.obtenerPersonaXDNI(documentNumber);
+			if(ciudadano.getDomicilio() !=null){
+				persona = new Persona();
+				persona.setCdTipoDoi(Integer.parseInt(documentType));
+				persona.setNbNumDoi(documentNumber);
+				persona.setNbNombre(ciudadano.getNombres());
+				persona.setNbPaterno(ciudadano.getApellidoPaterno());
+				persona.setNbMaterno(ciudadano.getApellidoMaterno());
+				persona.setTmCreacion(new Date());
+				persona.setCdCreador(1);
+			}
+		} catch (SOAPException e) {
+			lanzarExcepcionLeve(Constantes.MENSAJE.UI_SERVICIO_NO_DISPONIBLE , new Object[] {  }, "Servicio no disponible.", null);
+		}
+		return persona;
+	}
+	
 	public void validarIntentos(String documentNumber, String documentType) throws NegocioException{
 		
 		Parametro pMaxIntencionesPorDia = configuracionService.obtenerParametro(Constantes.PARAMETRO.NUM_MAX_INTENTO_TICKET);
@@ -183,10 +212,10 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 	public Map<String, Object> validarUsuario(String documentNumber, String documentType , String desDocumentType ,String captchaResponse ,String ipRemote) throws NegocioException {
 		
 		this.validarCaptcha(captchaResponse , ipRemote);
-		
 		Map<String, Object> result = new HashMap<String, Object>();		
 		CustomerDetail datosCustumer = getCustomer(documentNumber, documentType,documentNumber+".json");
 
+		
 		Boolean iscliente = true;
 		
 		if(datosCustumer == null){
@@ -203,6 +232,7 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		//La registramos detectando si es cliente o no
 		//por el metodo "getCustomer"
 		if(persona == null){
+			
 				if(iscliente){
 					Customer dataCliente = datosCustumer.getData().get(0);
 					persona = new Persona();
@@ -219,6 +249,17 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 					
 					//Verificar datos de la reniec
 					//si existe la persona se crearia en base a los datos de la reniec
+			
+					if(desDocumentType.equals("CE")){
+						result.put("persona", datosCustumer);
+						result.put("success", false);
+						return result;
+					}
+					
+					persona = this.consultarReniec(documentNumber, desDocumentType);
+
+					if(persona!=null)
+						this.registrarPersona(datosCustumer, persona);
 					
 				}
 			
@@ -226,13 +267,8 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 			//si la persona existe en nuestra BD
 			//solo actualizamos el estado de si es cliente
 			//por si se ha modificado
-			if(datosCustumer != null){
-				persona.setIsCliente("S");
-			}else{
-				persona.setIsCliente("N");
-			}
+			this.registrarPersona(datosCustumer, persona);
 			
-			this.registrarPersona(persona);
 			
 		}
 		
@@ -252,7 +288,6 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 			result.put("success", false);
 		}
 		
-		
 		result.put("persona", datosCustumer);
 		return result;
 	}
@@ -270,6 +305,17 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		
 	}
 
+	
+	private void registrarPersona(CustomerDetail datosCustumer, Persona persona) throws NegocioException{
+		
+		if(datosCustumer != null)
+			persona.setIsCliente("S");
+		else
+			persona.setIsCliente("N");
+		
+		this.registrarPersona(persona);
+	}
+	
 	@Override
 	public Persona obtenerPersonaDoiNumdocumento(String doi, String numDoc) throws NegocioException {
 		Busqueda busqueda = Busqueda.forClass(Persona.class);

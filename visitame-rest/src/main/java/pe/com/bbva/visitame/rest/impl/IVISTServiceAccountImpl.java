@@ -2,12 +2,8 @@ package pe.com.bbva.visitame.rest.impl;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import pe.com.bbva.visitame.dominio.Persona;
 import pe.com.bbva.visitame.dominio.dto.cuenta.CustomerDetail;
 import pe.com.bbva.visitame.exception.NegocioException;
 import pe.com.bbva.visitame.exception.ValidacionException;
