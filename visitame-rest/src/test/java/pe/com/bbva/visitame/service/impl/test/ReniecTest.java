@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.google.gson.Gson;
+
+import pe.com.bbva.visitame.dominio.reniec.Ciudadano;
 import pe.com.bbva.visitame.exception.NegocioException;
 import pe.com.bbva.visitame.exception.SOAPException;
 import pe.com.bbva.visitame.helper.reniec.ReniecServiceHelper;
@@ -23,7 +26,10 @@ private ReniecServiceHelper reniecServiceHelper;
 
 @Test
 public void reniecTest() throws SOAPException, NegocioException{
-	reniecServiceHelper.obtenerPersonaXDNI("09243165");
+	Ciudadano c= reniecServiceHelper.obtenerPersonaXDNI("09243165");
+	Gson g = new Gson();
+	System.out.println(g.toJson(c));
+	
 
 }
 
