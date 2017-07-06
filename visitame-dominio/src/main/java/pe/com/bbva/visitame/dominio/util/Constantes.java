@@ -239,6 +239,8 @@ public final class Constantes {
 		public static final String LISTA_MONEDA_VALOR_VARIABLE_COTIZA = "14";
 		public static final String LISTA_ESTADO_SOLICITUD_COTIZA = "15";
 		public static final String LISTA_PRODCUTO_COTIZA = "99";
+		
+		public static final String LISTA_SATURACION_OFI = "SATURACION_OFI";
 	}
 	
 	public static class VALOR {
@@ -1353,6 +1355,10 @@ public final class Constantes {
 	
 	public enum Proceso {
 		CARGA_OFERTAS, CADUCIDAD_OFERTAS
+	}
+	
+	public enum EstadosSaturacion {
+			ALTA, MEDIA, BAJA
 	}
 	
 	public static class FAMILIA_RIESGO_SUBPRODUCTO {

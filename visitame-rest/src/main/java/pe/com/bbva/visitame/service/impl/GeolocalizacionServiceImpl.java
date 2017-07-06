@@ -4,6 +4,7 @@ package pe.com.bbva.visitame.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import pe.com.bbva.visitame.dominio.Valor;
 import pe.com.bbva.visitame.dominio.dto.geolocalizacion.GeolocalizacionRequestParam;
 import pe.com.bbva.visitame.dominio.dto.geolocalizacion.Poi;
 import pe.com.bbva.visitame.dominio.dto.geolocalizacion.PoiDetail;
@@ -11,6 +12,7 @@ import pe.com.bbva.visitame.dominio.dto.zic.ZicResult;
 import pe.com.bbva.visitame.dominio.util.Constantes;
 import pe.com.bbva.visitame.exception.NegocioException;
 import pe.com.bbva.visitame.helper.geolocalizacion.PoiServiceHelper;
+import pe.com.bbva.visitame.service.ConfiguracionService;
 import pe.com.bbva.visitame.service.GeolocalizacionService;
 import pe.com.bbva.visitame.util.MathUtil;
 
@@ -32,8 +34,12 @@ import org.xml.sax.InputSource;
 public class GeolocalizacionServiceImpl extends BaseServiceImpl implements GeolocalizacionService {
 
 	private static final long serialVersionUID = 1229565922149112061L;
+	
 	@Autowired
 	private PoiServiceHelper geolocalizacionServiceHelper;
+	
+	@Autowired
+	private ConfiguracionService configuracionService;
 	
 	@Override
 	public PoiDetail obtenerPois(GeolocalizacionRequestParam param) throws NegocioException {
@@ -86,18 +92,40 @@ public class GeolocalizacionServiceImpl extends BaseServiceImpl implements Geolo
 		return resultGeolocalizacion;
 	}
 	
-	public void setSaturacion(Poi poi) {
+	public void setSaturacion(Poi poi , List<Valor> rangosSaturacion) throws NegocioException {
 		//call servicio rest recibe codOficina
 		//para obtencion de satutacion cuando este disponible
 		Integer saturacion = MathUtil.generateRandom(1, 100);
 		poi.setSaturacion(saturacion.toString().toString());
+		
+		Integer saturacionBaja = null, saturacionMedia = null, saturacionAlta = null;  
+		
+		for (Valor valor : rangosSaturacion) {
+			if(Constantes.EstadosSaturacion.BAJA.toString().equals(valor.getCdAlterno())) {
+				saturacionBaja = Integer.parseInt(valor.getNbValor());
+			}else if(Constantes.EstadosSaturacion.MEDIA.toString().equals(valor.getCdAlterno())) {
+				saturacionMedia = Integer.parseInt(valor.getNbValor());
+			}else if(Constantes.EstadosSaturacion.ALTA.toString().equals(valor.getCdAlterno())) {
+				saturacionAlta = Integer.parseInt(valor.getNbValor());
+			}
+		}
+		
+		if(saturacion > 0 && saturacion <= saturacionBaja) {
+			System.out.println(saturacion+"->es baja");
+		}else if(saturacion > saturacionBaja && saturacion <= saturacionMedia) {
+			System.out.println(saturacion+"->es media");
+		}else if(saturacion > saturacionMedia) {
+			System.out.println(saturacion+"->es alta");
+		}
+		
 
 	}
 	
 	public PoiDetail obtenerPoisSaturacion(GeolocalizacionRequestParam param) throws NegocioException {
 		PoiDetail poiDetail = obtenerPois(param);
+		List<Valor> rangosSaturacion = configuracionService.listarValores(Constantes.LISTA.LISTA_SATURACION_OFI);
 		for(Poi poi : poiDetail.getPois()) {
-			this.setSaturacion(poi);
+			this.setSaturacion(poi,rangosSaturacion);
 		}
 		return poiDetail;
 	}
