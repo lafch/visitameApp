@@ -11,8 +11,7 @@
   <modules>
   	<module>visitame-dominio</module>
   	<module>visitame-rest</module>
-  	<module>visitame-movil</module>
-  	<module>visitame-ear</module>
   	<module>visitame</module>
+  	<module>visitame-ear</module>
   </modules>
 </project>

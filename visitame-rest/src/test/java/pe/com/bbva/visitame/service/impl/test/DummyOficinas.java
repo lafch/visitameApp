@@ -1,38 +1,36 @@
 package pe.com.bbva.visitame.service.impl.test;
 
-import java.util.HashMap;
-
-import java.util.Map;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.google.gson.Gson;
-
+import pe.com.bbva.visitame.dao.OficinaDAO;
+import pe.com.bbva.visitame.dominio.Oficina;
 import pe.com.bbva.visitame.dominio.dto.geolocalizacion.GeolocalizacionRequestParam;
 import pe.com.bbva.visitame.dominio.dto.geolocalizacion.Poi;
 import pe.com.bbva.visitame.dominio.dto.geolocalizacion.PoiDetail;
 import pe.com.bbva.visitame.dominio.util.Constantes;
+import pe.com.bbva.visitame.exception.DAOException;
 import pe.com.bbva.visitame.exception.NegocioException;
 import pe.com.bbva.visitame.service.GeolocalizacionService;
-
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { 
 									"classpath:test-context-datasource.xml",
 									"classpath:spring/applicationContext-Service.xml" 
 									}) 
-public class PoisTest {
-	
+public class DummyOficinas {
 	
 	@Autowired
 	private GeolocalizacionService geolocalizacionService; 
 	
+	@Autowired
+	private OficinaDAO oficinaDAO;
+	
 	@Test
-	public void testGeoPois() throws NegocioException {
+	public void setDataOficinasDummy() throws NegocioException, DAOException {
 	GeolocalizacionRequestParam param = new GeolocalizacionRequestParam();
 	
 		String type = "O";
@@ -60,9 +58,17 @@ public class PoisTest {
 		
 		PoiDetail detail = geolocalizacionService.obtenerPois(param);
 		System.out.println("Total de pois = "+detail.getPois().size());
-//		for (Poi poi : detail.getPois()) {
-//			
-//		}
+		
+		Oficina oficina = null;
+		
+		for (Poi poi : detail.getPois()) {
+			oficina = new Oficina();
+			oficina.setCodigo(poi.getCodoficina());
+			oficina.setNombreOficina(poi.getDescription());
+			oficina.setDireccion(poi.getAddress());
+			oficina.setSecuenciaTicket(0);
+			oficinaDAO.crear(oficina);
+		}
 		
 //		Map<String, PoiDetail> data = new HashMap<String, PoiDetail>();
 //		data.put("data", geolocalizacionService.obtenerPois(param));
@@ -70,5 +76,6 @@ public class PoisTest {
 //		System.out.println(gson.toJson(data));
 		
 	}
+	
 
 }
