@@ -116,5 +116,18 @@ public class Poi implements Serializable{
 	private String hours_sun;
 	public String getHours_sun() { return hours_sun; }
 	public void setHours_sun(String hours_sun) { this.hours_sun = hours_sun; }
+	
+	//Saturacion
+	
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	private String saturacion;
+	public String getSaturacion() { return saturacion; }
+	public void setSaturacion(String saturacion) { this.saturacion = saturacion; }
+
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	private String iconoSaturacion;
+	public String getIconoSaturacion() { return iconoSaturacion; }
+	public void setIconoSaturacion(String iconoSaturacion) { this.iconoSaturacion = iconoSaturacion; }
+	
 
 }

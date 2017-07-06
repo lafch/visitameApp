@@ -55,7 +55,7 @@ INSERT INTO appvisitame.TVISITA001_CFG_PARAMET (CD_PARAMETRO, NB_ETIQUETA, NB_GL
 VALUES ('TO_WS_RENIEC','TIME OUT WS LDAP','Corresponde al time out para el servicio de RENIEC','5000',1,now());
 
 
---INSERT TABLA OFICINAS (NO CONSIDERAR SECUENCIA)
+--INSERT TABLA OFICINAS
 INSERT INTO appvisitame.tvisita006_ofi_oficina (cd_oficina,cd_alterno,nb_oficina,nb_direccion,nu_sec_ticket) VALUES (
 'BR_PE_0486','SAN ISIDRO','AV. REPUBLICA DE PANAMÁ 3055',0);
 INSERT INTO appvisitame.tvisita006_ofi_oficina (cd_oficina,cd_alterno,nb_oficina,nb_direccion,nu_sec_ticket) VALUES (

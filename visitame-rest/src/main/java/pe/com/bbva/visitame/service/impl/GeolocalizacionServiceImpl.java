@@ -12,6 +12,7 @@ import pe.com.bbva.visitame.dominio.util.Constantes;
 import pe.com.bbva.visitame.exception.NegocioException;
 import pe.com.bbva.visitame.helper.geolocalizacion.PoiServiceHelper;
 import pe.com.bbva.visitame.service.GeolocalizacionService;
+import pe.com.bbva.visitame.util.MathUtil;
 
 import java.io.StringReader;
 
@@ -83,6 +84,22 @@ public class GeolocalizacionServiceImpl extends BaseServiceImpl implements Geolo
 		}
 		
 		return resultGeolocalizacion;
+	}
+	
+	public void setSaturacion(Poi poi) {
+		//call servicio rest recibe codOficina
+		//para obtencion de satutacion cuando este disponible
+		Integer saturacion = MathUtil.generateRandom(1, 100);
+		poi.setSaturacion(saturacion.toString().toString());
+
+	}
+	
+	public PoiDetail obtenerPoisSaturacion(GeolocalizacionRequestParam param) throws NegocioException {
+		PoiDetail poiDetail = obtenerPois(param);
+		for(Poi poi : poiDetail.getPois()) {
+			this.setSaturacion(poi);
+		}
+		return poiDetail;
 	}
 
 	private Poi getPoi(Element eElement){

@@ -8,4 +8,5 @@ public interface GeolocalizacionService {
 
 	PoiDetail obtenerPois(GeolocalizacionRequestParam param)  throws NegocioException;
 	
+	PoiDetail obtenerPoisSaturacion(GeolocalizacionRequestParam param)  throws NegocioException;
 }
