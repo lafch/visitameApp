@@ -259,8 +259,6 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 			//solo actualizamos el estado de si es cliente
 			//por si se ha modificado
 			this.registrarPersona(datosCustumer, persona);
-			
-			
 		}
 		
 		//finalmente si la persona existe
