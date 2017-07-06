@@ -24,7 +24,7 @@ public class Oficina implements Serializable {
 	private Integer id;
 	
 	@Column(name="cd_alterno")
-	private Integer codigo;
+	private String codigo;
 
 	@Column(name="nb_oficina")
 	private String nombreOficina ;
@@ -39,8 +39,8 @@ public class Oficina implements Serializable {
 	public Integer getId() { return id; }
 	public void setId(Integer id) { this.id = id; }
 	
-	public Integer getCodigo() { return codigo; }
-	public void setCodigo(Integer codigo) { this.codigo = codigo; }
+	public String getCodigo() { return codigo; }
+	public void setCodigo(String codigo) { this.codigo = codigo; }
 	
 	public String getNombreOficina() { return nombreOficina;}
 	public void setNombreOficina(String nombreOficina) { this.nombreOficina = nombreOficina; }
