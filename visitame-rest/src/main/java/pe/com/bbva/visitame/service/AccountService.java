@@ -37,4 +37,5 @@ public interface AccountService {
 	
 	Integer numeroMinutosUltimoIntentoHoy(Integer documentType , String documentNumber) throws NegocioException;
 	
+	Persona consultarReniec(String documentNumber, String documentType) throws NegocioException;
 }
