@@ -1,0 +1,79 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+<link rel="import" href="../visitame-app-styles/leyenda-style.html">
+<dom-module id="modal-leyenda">
+    <template>
+      
+  		<style include="leyenda-style"></style>
+        
+ 		<meta charset="utf-8">
+        <paper-dialog  class="roundbox boxshadow" id="animated" style="text-align:center;"entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+            <div class="titulo">Encuentra la oficina que te atienda más rápido</div>
+            <div style="color: gray; text-align: center;">Mira el color con el que aparece cada oficina en el mapa para saber cuántos usuarios esperan ser atendidos en este momento:</div>
+            <div class="contenedor">
+            	<span> 
+            		<img src="{{pathParent}}images/icon_marker_verde.png"/>
+                	<label class="descripcion">Entre 1 y 5 usuarios</label>
+                </span> 
+            </div>
+            <div class="contenedor">
+            	<span> 
+            		<img src="{{pathParent}}images/icon_marker_amarillo.png" />
+                	<label class="descripcion">Entre 6 y 10 usuarios</label>
+                </span> 
+            </div>
+            <div class="contenedor">
+            	<span> 
+            		<img src="{{pathParent}}images/icon_marker_morado.png"/>
+                	<label class="descripcion">Entre 11 y 15 usuarios</label>
+                </span> 
+            </div>
+             
+             <input type="checkbox" id="test1" style="visibility: hidden;" />
+			 <label for="test1">No volver a mostrar</label>
+			
+			<paper-button class="aceptar" on-click="guardar">Aceptar</paper-button>
+	
+        </paper-dialog>
+    </template>
+    <script>
+        class VisitameErrorDialog extends Polymer.Element {
+            static get is() {
+                return 'modal-leyenda';
+            }
+            static get properties() {
+                return {
+                    pathParent: {
+                        type: String,
+                        value: 'static/'
+                    }
+                };
+            }
+            ready() {
+                super.ready();
+                if (!localStorage.getItem("leyenda") || localStorage.getItem("leyenda") == "0") {
+                    this.$.animated.open();
+                }
+            }
+
+            guardar() {
+                if (typeof(Storage) !== "undefined") {
+                    let mostrar = this.$.test1.checked;
+                    console.log("Mostrar antiguo" + !localStorage.getItem("leyenda"));
+                    if (mostrar) {
+                        localStorage.setItem("leyenda", "1");
+                    } else {
+                        localStorage.setItem("leyenda", "0");
+                    }
+                }
+                this.$.animated.close();
+            }
+
+        }
+        window.customElements.define(VisitameErrorDialog.is, VisitameErrorDialog);
+    </script>
+</dom-module>
