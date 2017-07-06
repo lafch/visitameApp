@@ -47,6 +47,7 @@ public class GeolocalizacionServiceImpl extends BaseServiceImpl implements Geolo
 			}
 						
 			List<Poi> pois = new ArrayList<Poi>();
+		
 			DocumentBuilderFactory odbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder odb =  odbf.newDocumentBuilder();
 			InputSource is = new InputSource(new StringReader(resultStringXml.getEntidad().toString()));
