@@ -13,6 +13,8 @@
 		<mapping class="pe.com.bbva.visitame.dominio.Valor" />
 		<mapping class="pe.com.bbva.visitame.dominio.Persona" />
 		<mapping class="pe.com.bbva.visitame.dominio.IntentoLogueo" />
+		<mapping class="pe.com.bbva.visitame.dominio.Historico" />
+		<mapping class="pe.com.bbva.visitame.dominio.Oficina" />
 
 	</session-factory>
 </hibernate-configuration>
