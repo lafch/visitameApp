@@ -1,6 +1,7 @@
 package pe.com.bbva.visitame.service.impl.test;
 
 import java.util.HashMap;
+
 import java.util.Map;
 
 import org.junit.Test;
@@ -12,10 +13,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.google.gson.Gson;
 
 import pe.com.bbva.visitame.dominio.dto.geolocalizacion.GeolocalizacionRequestParam;
+import pe.com.bbva.visitame.dominio.dto.geolocalizacion.Poi;
 import pe.com.bbva.visitame.dominio.dto.geolocalizacion.PoiDetail;
 import pe.com.bbva.visitame.dominio.util.Constantes;
 import pe.com.bbva.visitame.exception.NegocioException;
 import pe.com.bbva.visitame.service.GeolocalizacionService;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { 
@@ -35,9 +38,9 @@ public class PoisTest {
 		String type = "O";
 		String latitud = "-12.094307";
 		String longitud = "-77.021424";
-		String radius = null;
-		String startAt = null;
-		String limit = null;
+		String radius = "1000000";
+		String startAt = "0";
+		String limit = "400";
 	//-12.094307, -77.021424
 		if(Constantes.ETIQUETAS_POIS.TYPE_CAJERO.equals(type)){
 			param.setFilter(Constantes.ETIQUETAS_POIS.FILTER_CAJERO);
@@ -54,10 +57,17 @@ public class PoisTest {
 		param.setRadius(radius);
 		param.setStartAt(startAt);
 		param.setLimit(limit);
-		Map<String, PoiDetail> data = new HashMap<String, PoiDetail>();
-		data.put("data", geolocalizacionService.obtenerPois(param));
-		Gson gson = new Gson();
-		System.out.println(gson.toJson(data));
+		
+		PoiDetail detail = geolocalizacionService.obtenerPois(param);
+		System.out.println("Total de pois = "+detail.getPois().size());
+//		for (Poi poi : detail.getPois()) {
+//			
+//		}
+		
+//		Map<String, PoiDetail> data = new HashMap<String, PoiDetail>();
+//		data.put("data", geolocalizacionService.obtenerPois(param));
+//		Gson gson = new Gson();
+//		System.out.println(gson.toJson(data));
 		
 	}
 
