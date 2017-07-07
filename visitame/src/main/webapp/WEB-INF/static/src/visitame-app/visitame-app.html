@@ -72,6 +72,9 @@
           <paper-icon-button class="ver" icon="my-icons:menu" drawer-toggle></paper-icon-button>
           <paper-icon-button class="back-btn" icon="arrow-back" aria-label="Atrás" on-click="_regresar"></paper-icon-button>
           <div main-title>Visítame</div>
+          
+          <paper-icon-button icon="arrow-back" aria-label="Atrás" on-click="_reload"></paper-icon-button>
+          
       	</app-toolbar>
 
       	<app-toolbar class="ver toolbarNavegador" primary>
@@ -343,7 +346,6 @@
          }
          
    	   	 closeLogin(){
-	   	  	console.log('close login');
 	   	  	
 	   	    this.$.loginView.style.display = 'none'; 
 	    	this.$.ironPagesMain.style.display = 'block';
@@ -385,6 +387,28 @@
     		  }, 1000*30);
      		  
 
+         }
+         
+         getViewByPage(page) {
+             let viewOrigen = null;
+             if (page === "oficinas") {
+                 viewOrigen = this.$.viewVisitas;
+             } else if (page === "cajeros") {
+                 viewOrigen = this.$.viewCajeros;
+             } else if (page === "agentes") {
+                 viewOrigen = this.$.viewAgentes;
+             }
+             return viewOrigen;
+         }
+         
+         _reload(){
+        	 
+        	 console.log('reload');
+        	 console.log(this.center);
+        	 console.log(this.getViewByPage('oficinas').getUnidadGestora());
+        	 let unidadGestoraOficinas = this.getViewByPage('oficinas').getUnidadGestora();
+        	 unidadGestoraOficinas.reloadData(this.center.latitude,this.center.longitude);
+        	
          }
 
        }

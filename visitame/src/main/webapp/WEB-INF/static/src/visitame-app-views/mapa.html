@@ -207,7 +207,7 @@
 				<div  class="bloque">
 					<label style="width: 100%;" class="titulo">{{detalleOficina.address2}}</label>
 					<label style="width: 100%;" class="subTitulo">{{detalleOficina.address}}</label>
-					<iron-icon icon="social:person" class="icono" ></iron-icon><label style="width: 90%; color:#008CDB;" class="subTitulo-bold">Usuarios en espera de atención: 11</label>
+					<iron-icon icon="social:person" class="icono" ></iron-icon><label style="width: 90%; color:#008CDB;" class="subTitulo-bold">Usuarios en espera de atención: {{detalleOficina.saturacion}}</label>
 				</div>
 				<div class="bloque">
 					<div style="display:inline-block;">
@@ -306,6 +306,9 @@
 	              },
 	              tipoUnidad:{
 	            		type: String  
+	              },
+	              dataMarkers:{
+	            	  type: Array
 	              }
 				  
 	        }
@@ -335,6 +338,10 @@
 				this.mapPois.fitBounds(null);
 		  }
 	      
+	      setDetalleOficina(detalleOficina){
+	    	  this.detalleOficina = detalleOficina;
+	      }
+	      
 	      sendNavigation(){
 	    	  if(this.detalleOficina){
 	    		  
@@ -357,20 +364,23 @@
 				console.log(e);
 			  }
 		  }
+	      
+	      refrescarMapa(data){
+	    	  this.dataMarkers = data;
+	    	 
+	      }
 		   
 	     setMarkers(data,center){
-	    	 
+	    	
 	    	 this.clearMarkers();
-		     
 				if(this.mapPois){
-						
 						var map = this.mapPois;
-			
 						google.maps.event.trigger(map, "resize");
-						
-				          if(data){
-				        	  data.forEach((item,index)=>{
-								  let pathIcon = this.pathParent+"/images/icon_marker_"+item.iconColor+".png";
+						this.dataMarkers = data;
+				          if(this.dataMarkers){
+				        	  
+				        	  this.dataMarkers.forEach((item,index)=>{
+								  let pathIcon = this.pathParent+"/images/icon_marker_"+item.iconColor;
 								  let point = {lat: parseFloat(item.latitude), lng: parseFloat(item.longitude)};
 				        		  let marker = new google.maps.Marker({
 				        	          position: point,
@@ -499,7 +509,7 @@
 	     abrirLogin(){
 	    	 this.getParentApp().showLogin({
 					item : this.item,
-					icon: "/images/icon_marker_"+this.item.iconColor+".png",
+					icon: "/images/icon_marker_"+this.item.iconColor,
 					e : this.eventoSeleccionadoMarker
  			});
 
@@ -510,6 +520,7 @@
 	    	 for (var i = 0; i < this.markers.length; i++) {
 	    		 this.markers[i].setMap(null);
 	         }
+	    	 this.markers = [];
 	    	 
 	     }
 	     centrarUbicacion() {

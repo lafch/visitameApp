@@ -34,7 +34,7 @@ display: none;
 			<paper-item data-unidad="{{item}}" class="segundo">
 				<div style="width: 100%;" class="contenedor">
 					<div style="float:left" class="logoEstadoOficina">
-						<img src="{{pathParent}}images/icon_{{item.iconColor}}.png" class="logoEstadoOficina"/>	
+						<img src="{{pathParent}}images/icon_{{item.iconColor}}" class="logoEstadoOficina"/>	
 					</div>
 					<div style="width: 80%; float:left">
 						<label class="titulo"    style="width: 100%; display: block; overflow:hidden; white-space:nowrap; text-overflow: ellipsis;">{{item.name}}</label>
@@ -156,23 +156,18 @@ display: none;
             }
       }
       
-      handleResponse(response) {
+      handleResponse(response,reload) {
     	this.getParentApp().$.btnChangeMapaView.disabled = true;
         let data = [];
         if(response.data.pois.length > 0){
           let i = 1;
           let iconColor;
           response.data.pois.forEach((poi,index)=>{
-              if(i > 3){ i = 1; }
 			
-              if(this.tipoUnidad == "C" || this.tipoUnidad == "A" ){
+              if(this.tipoUnidad == "C" || this.tipoUnidad == "A" || !poi.iconoSaturacion){
 				iconColor = 'azul';
-              }else if(i == 1){
-                iconColor = 'morado';
-              }else if(i == 2){
-                iconColor = 'amarillo';
-              }else if(i == 3){
-                iconColor = 'verde';
+              }else{
+            	iconColor = poi.iconoSaturacion;
               }
 
               var tituloUnidad = this.tipoUnidad === "O" ? "OFICINAS " : (this.tipoUnidad === "C" ? "CAJEROS " : "AGENTES ");
@@ -206,23 +201,28 @@ display: none;
     	  return  this.$.mapaOficinas.getMap();
       }
 
+      reloadData(latitud , longitud , tipo){
+    	  var geolocalizacionService = this.$.geoLocalizacionService;
+		     var requestOficinas = geolocalizacionService.listarOficinas({
+					params : {
+								"latitud": latitud,
+							  	"longitud": longitud,
+						    	"radius": this.$.parametrosConfiguracion.getParametros().radAlcance, 
+						    	"type": tipo || this.tipoUnidad
+						    }
+			});
+		     requestOficinas.then((xhr) => {
+				this.handleResponse(xhr.response,true);
+		    });
+    	  
+      }
+      
       loadMapa(latitud,longitud,tipo){
 			
     	  SyncObjects(()=>{
         		//console.log(this.$.parametrosConfiguracion.getParametros())
         		this.resetearMapa();
-				 var geolocalizacionService = this.$.geoLocalizacionService;
-			     var requestOficinas = geolocalizacionService.listarOficinas({
-						params : {
-									"latitud": latitud,
-								  	"longitud": longitud,
-							    	"radius": this.$.parametrosConfiguracion.getParametros().radAlcance, 
-							    	"type": tipo || this.tipoUnidad
-							    }
-				});
-			     requestOficinas.then((xhr) => {
-					this.handleResponse(xhr.response);
-			    });
+				this.reloadData(latitud , longitud , tipo);
 
           });	
     	  

@@ -180,9 +180,9 @@ INSERT INTO appvisitame.tvisita003_cfg_valor (cd_valor,cd_padre,cd_lista,cd_alte
 
 ALTER TABLE appvisitame.tvisita003_cfg_valor ADD COLUMN nb_icono varchar(400);
 
-UPDATE appvisitame.tvisita003_cfg_valor SET nb_icono = 'icon_marker_naranja.png' WHERE cd_alterno='ALTA';
-UPDATE appvisitame.tvisita003_cfg_valor SET nb_icono = 'icon_marker_amarillo.png' WHERE cd_alterno='MEDIA';
-UPDATE appvisitame.tvisita003_cfg_valor SET nb_icono = 'icon_marker_verde.png' WHERE cd_alterno='BAJA';
+UPDATE appvisitame.tvisita003_cfg_valor SET nb_icono = 'morado.png' WHERE cd_alterno='ALTA';
+UPDATE appvisitame.tvisita003_cfg_valor SET nb_icono = 'amarillo.png' WHERE cd_alterno='MEDIA';
+UPDATE appvisitame.tvisita003_cfg_valor SET nb_icono = 'verde.png' WHERE cd_alterno='BAJA';
 
 
 
