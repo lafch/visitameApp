@@ -201,7 +201,8 @@ display: none;
     	  return  this.$.mapaOficinas.getMap();
       }
 
-      reloadData(latitud , longitud , tipo){
+      reloadData(latitud , longitud , tipo ,reaload){
+    	  this.$.loadingLista.active = true;
     	  var geolocalizacionService = this.$.geoLocalizacionService;
 		     var requestOficinas = geolocalizacionService.listarOficinas({
 					params : {
@@ -213,6 +214,26 @@ display: none;
 			});
 		     requestOficinas.then((xhr) => {
 				this.handleResponse(xhr.response,true);
+				
+	/* 			if(reaload){
+					
+					this.$.mapaOficinas.refrescarMapa(this.listOficinas);
+					
+					this.$.mapaOficinas.buildMarkers();
+					
+					this.listOficinas.forEach((itemData)=>{
+						
+						if(this.$.mapaOficinas.detalleOficina.idPoi == itemData.data.idPoi){
+							this.$.mapaOficinas.detalleOficina = itemData.data;
+							this.$.mapaOficinas.item = itemData;
+						}
+						
+					});
+					
+					
+				
+				} */
+				
 		    });
     	  
       }
@@ -222,7 +243,7 @@ display: none;
     	  SyncObjects(()=>{
         		//console.log(this.$.parametrosConfiguracion.getParametros())
         		this.resetearMapa();
-				this.reloadData(latitud , longitud , tipo);
+				this.reloadData(latitud , longitud , tipo , false);
 
           });	
     	  

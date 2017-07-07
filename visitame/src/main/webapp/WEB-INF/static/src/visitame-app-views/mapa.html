@@ -369,6 +369,55 @@
 	    	  this.dataMarkers = data;
 	    	 
 	      }
+	      
+	     buildMarkers(){
+	    	 if(this.markers.length > 0) {  this.clearMarkers(); }
+	    	 
+	    	 if(this.dataMarkers){
+	        	  
+	        	  this.dataMarkers.forEach((item,index)=>{
+					  let pathIcon = this.pathParent+"/images/icon_marker_"+item.iconColor;
+					  let point = {lat: parseFloat(item.latitude), lng: parseFloat(item.longitude)};
+	        		  let marker = new google.maps.Marker({
+	        	          position: point,
+	        	          map: this.mapPois,
+	        	          title: item.name,
+	        	          icon: pathIcon
+	        	        });
+
+	        		  marker.addListener('click', (e) => {
+	        			   if(item.type == 'O'){
+								//console.log(this.getParentApp());
+		        			   //this.getParentApp().showLogin();
+		        			   var alto = this.altoTotal/4;
+		        			   var altoDetalle = alto * 3;
+		        			   this.$.divCentrarGps.style.display = 'none';
+		        			   this.$.mapContent.style.height = alto+"px";
+	    	    			   this.$.mapContent.style.transition = '0.8s ease-in-out';
+	        				   this.$.detalle.style.height = altoDetalle+"px";
+	        				   this.$.detalle.style.transition = '0.8s ease-in-out';
+							   var centroide = {lat: parseFloat(item.latitude), lng: parseFloat(item.longitude)};
+							   
+							   setTimeout(() => {
+							   	   google.maps.event.trigger(this.mapPois, "resize");	
+							   		this.mapPois.panTo(marker.getPosition());
+							   		this.mapPois.setZoom(17);
+							   }, 600);
+							   
+		        			   this.detalleOficina = item.data;
+		        			   this.item = item;
+		        			   this.eventoSeleccionadoMarker = e;
+		        			   this.mapPois.scrollwheel = false;
+		        			   this.mapPois.draggable = false;
+		        			   this.mapPois.zoomControl  = false;
+	        			   } 
+	        			   
+	        		  });
+	        		  this.markers.push(marker);
+		          });
+		      }
+	    	 
+	     }
 		   
 	     setMarkers(data,center){
 	    	
@@ -377,50 +426,8 @@
 						var map = this.mapPois;
 						google.maps.event.trigger(map, "resize");
 						this.dataMarkers = data;
-				          if(this.dataMarkers){
-				        	  
-				        	  this.dataMarkers.forEach((item,index)=>{
-								  let pathIcon = this.pathParent+"/images/icon_marker_"+item.iconColor;
-								  let point = {lat: parseFloat(item.latitude), lng: parseFloat(item.longitude)};
-				        		  let marker = new google.maps.Marker({
-				        	          position: point,
-				        	          map: this.mapPois,
-				        	          title: item.name,
-				        	          icon: pathIcon
-				        	        });
-
-				        		  marker.addListener('click', (e) => {
-				        			   if(item.type == 'O'){
-											//console.log(this.getParentApp());
-					        			   //this.getParentApp().showLogin();
-					        			   var alto = this.altoTotal/4;
-					        			   var altoDetalle = alto * 3;
-					        			   this.$.divCentrarGps.style.display = 'none';
-					        			   this.$.mapContent.style.height = alto+"px";
-				    	    			   this.$.mapContent.style.transition = '0.8s ease-in-out';
-				        				   this.$.detalle.style.height = altoDetalle+"px";
-				        				   this.$.detalle.style.transition = '0.8s ease-in-out';
-										   var centroide = {lat: parseFloat(item.latitude), lng: parseFloat(item.longitude)};
-										   
-										   setTimeout(() => {
-										   	   google.maps.event.trigger(map, "resize");	
-										   	   map.panTo(marker.getPosition());
-										       map.setZoom(17);
-										   }, 600);
-										   
-					        			   this.detalleOficina = item.data;
-					        			   this.item = item;
-					        			   this.eventoSeleccionadoMarker = e;
-					        			   this.mapPois.scrollwheel = false;
-					        			   this.mapPois.draggable = false;
-					        			   this.mapPois.zoomControl  = false;
-				        			   } 
-				        			   
-				        		  });
-				        		  this.markers.push(marker);
-					          });
-				        	  
-					      }
+				
+						this.buildMarkers();
 			
 				      	setTimeout(() => {
 							map.setZoom(16);

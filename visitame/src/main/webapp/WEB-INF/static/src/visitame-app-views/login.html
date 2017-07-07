@@ -56,7 +56,7 @@
 						</div>
 						<div class="usuario-atencion">
 							<iron-icon icon="my-icons:person"></iron-icon>
-							<div>Usuario en espera de atención: 11</div>
+							<div>Usuario en espera de atención: {{data.saturacion}}</div>
 						</div>
 					</div>
 				</div>
@@ -114,7 +114,7 @@
 								</div>
 								<div class="usuario-atencion">
 									<iron-icon icon="my-icons:person"></iron-icon>
-									<div>Usuario en espera de atención: 11</div>
+									<div>Usuario en espera de atención: {{data.saturacion}}</div>
 								</div>
 							</div>
 						</div>
@@ -235,6 +235,7 @@
 
       renderData(data){
         this.returnPanelResult();
+        console.log(data);
 		if(data && data.item && data.item.data){
 			this.data = data.item.data;
 		}else{

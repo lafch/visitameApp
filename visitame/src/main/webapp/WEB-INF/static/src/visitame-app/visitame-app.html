@@ -73,7 +73,7 @@
           <paper-icon-button class="back-btn" icon="arrow-back" aria-label="Atrás" on-click="_regresar"></paper-icon-button>
           <div main-title>Visítame</div>
           
-          <paper-icon-button icon="arrow-back" aria-label="Atrás" on-click="_reload"></paper-icon-button>
+          <paper-icon-button icon="refresh" aria-label="Actualizar" on-click="_reload"></paper-icon-button>
           
       	</app-toolbar>
 
@@ -402,12 +402,8 @@
          }
          
          _reload(){
-        	 
-        	 console.log('reload');
-        	 console.log(this.center);
-        	 console.log(this.getViewByPage('oficinas').getUnidadGestora());
         	 let unidadGestoraOficinas = this.getViewByPage('oficinas').getUnidadGestora();
-        	 unidadGestoraOficinas.reloadData(this.center.latitude,this.center.longitude);
+        	 unidadGestoraOficinas.reloadData(this.center.latitude,this.center.longitude,null,true);
         	
          }
 
