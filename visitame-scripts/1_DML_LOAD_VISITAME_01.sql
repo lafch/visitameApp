@@ -164,9 +164,9 @@ INSERT INTO appvisitame.tvisita002_cfg_lista (cd_lista,cd_alterno,nb_etiqueta,nb
 VALUES ( (SELECT nextval('appvisitame.seq_tvisita002_cfg_lista')) ,'SATURACION_OFI','Saturacion de oficinas','Saturacion de oficinas','A',1,current_timestamp,null,null);
 
 -- INSERT VALORES SATURACION DE OFICINA
-INSERT INTO appvisitame.tvisita003_cfg_valor (cd_valor,cd_padre,cd_lista,cd_alterno,nb_etiqueta,nb_glosa,nb_valor,nu_orden,st_estado,cd_creador,tm_creacion,cd_editor,tm_edicion) VALUES ((SELECT nextval('appvisitame.seq_tvisita003_cfg_valor')),null,(SELECT CD_LISTA FROM appvisitame.tvisita002_cfg_lista WHERE CD_ALTERNO='SATURACION_OFI'),'ALTA','ALTA','Saturacion Alta',5,1,'A',1,current_timestamp,null,null);
+INSERT INTO appvisitame.tvisita003_cfg_valor (cd_valor,cd_padre,cd_lista,cd_alterno,nb_etiqueta,nb_glosa,nb_valor,nu_orden,st_estado,cd_creador,tm_creacion,cd_editor,tm_edicion) VALUES ((SELECT nextval('appvisitame.seq_tvisita003_cfg_valor')),null,(SELECT CD_LISTA FROM appvisitame.tvisita002_cfg_lista WHERE CD_ALTERNO='SATURACION_OFI'),'ALTA','ALTA','Saturacion Alta',15,1,'A',1,current_timestamp,null,null);
 INSERT INTO appvisitame.tvisita003_cfg_valor (cd_valor,cd_padre,cd_lista,cd_alterno,nb_etiqueta,nb_glosa,nb_valor,nu_orden,st_estado,cd_creador,tm_creacion,cd_editor,tm_edicion) VALUES ((SELECT nextval('appvisitame.seq_tvisita003_cfg_valor')),null,(SELECT CD_LISTA FROM appvisitame.tvisita002_cfg_lista WHERE CD_ALTERNO='SATURACION_OFI'),'MEDIA','MEDIA','Saturacion media',10,2,'A',1,current_timestamp,null,null);
-INSERT INTO appvisitame.tvisita003_cfg_valor (cd_valor,cd_padre,cd_lista,cd_alterno,nb_etiqueta,nb_glosa,nb_valor,nu_orden,st_estado,cd_creador,tm_creacion,cd_editor,tm_edicion) VALUES ((SELECT nextval('appvisitame.seq_tvisita003_cfg_valor')),null,(SELECT CD_LISTA FROM appvisitame.tvisita002_cfg_lista WHERE CD_ALTERNO='SATURACION_OFI'),'BAJA','BAJA','Saturacion baja',15,3,'A',1,current_timestamp,null,null);
+INSERT INTO appvisitame.tvisita003_cfg_valor (cd_valor,cd_padre,cd_lista,cd_alterno,nb_etiqueta,nb_glosa,nb_valor,nu_orden,st_estado,cd_creador,tm_creacion,cd_editor,tm_edicion) VALUES ((SELECT nextval('appvisitame.seq_tvisita003_cfg_valor')),null,(SELECT CD_LISTA FROM appvisitame.tvisita002_cfg_lista WHERE CD_ALTERNO='SATURACION_OFI'),'BAJA','BAJA','Saturacion baja',5,3,'A',1,current_timestamp,null,null);
 
 
 -- INSERT LISTA VALORES ESTADO DE ENVIO DE TICKET
@@ -177,6 +177,12 @@ VALUES ( (SELECT nextval('appvisitame.seq_tvisita002_cfg_lista')) ,'ESTADO_TICKE
 INSERT INTO appvisitame.tvisita003_cfg_valor (cd_valor,cd_padre,cd_lista,cd_alterno,nb_etiqueta,nb_glosa,nb_valor,nu_orden,st_estado,cd_creador,tm_creacion,cd_editor,tm_edicion) VALUES ((SELECT nextval('appvisitame.seq_tvisita003_cfg_valor')),null,(SELECT CD_LISTA FROM appvisitame.tvisita002_cfg_lista WHERE CD_ALTERNO='ESTADO_TICKET'),'COLA','ALTA','Ticket en cola','COLA',1,'A',1,current_timestamp,null,null);
 INSERT INTO appvisitame.tvisita003_cfg_valor (cd_valor,cd_padre,cd_lista,cd_alterno,nb_etiqueta,nb_glosa,nb_valor,nu_orden,st_estado,cd_creador,tm_creacion,cd_editor,tm_edicion) VALUES ((SELECT nextval('appvisitame.seq_tvisita003_cfg_valor')),null,(SELECT CD_LISTA FROM appvisitame.tvisita002_cfg_lista WHERE CD_ALTERNO='ESTADO_TICKET'),'ENVIADO','MEDIA','Ticket enviado','ENVIADO',2,'A',1,current_timestamp,null,null);
 
+
+ALTER TABLE appvisitame.tvisita003_cfg_valor ADD COLUMN nb_icono varchar(400);
+
+UPDATE appvisitame.tvisita003_cfg_valor SET nb_icono = 'icon_marker_naranja.png' WHERE cd_alterno='ALTA';
+UPDATE appvisitame.tvisita003_cfg_valor SET nb_icono = 'icon_marker_amarillo.png' WHERE cd_alterno='MEDIA';
+UPDATE appvisitame.tvisita003_cfg_valor SET nb_icono = 'icon_marker_verde.png' WHERE cd_alterno='BAJA';
 
 
 

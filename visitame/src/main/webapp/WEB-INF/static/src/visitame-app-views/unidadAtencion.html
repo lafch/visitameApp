@@ -164,8 +164,10 @@ display: none;
           let iconColor;
           response.data.pois.forEach((poi,index)=>{
               if(i > 3){ i = 1; }
-
-              if(i == 1){
+			
+              if(this.tipoUnidad == "C" || this.tipoUnidad == "A" ){
+				iconColor = 'azul';
+              }else if(i == 1){
                 iconColor = 'morado';
               }else if(i == 2){
                 iconColor = 'amarillo';
