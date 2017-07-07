@@ -165,7 +165,7 @@ display: none;
           response.data.pois.forEach((poi,index)=>{
 			
               if(this.tipoUnidad == "C" || this.tipoUnidad == "A" || !poi.iconoSaturacion){
-				iconColor = 'azul';
+				iconColor = 'azul.png';
               }else{
             	iconColor = poi.iconoSaturacion;
               }
@@ -201,7 +201,8 @@ display: none;
     	  return  this.$.mapaOficinas.getMap();
       }
 
-      reloadData(latitud , longitud , tipo){
+      reloadData(latitud , longitud , tipo ,reaload){
+    	  this.$.loadingLista.active = true;
     	  var geolocalizacionService = this.$.geoLocalizacionService;
 		     var requestOficinas = geolocalizacionService.listarOficinas({
 					params : {
@@ -214,7 +215,28 @@ display: none;
 		     requestOficinas.then((xhr) => {
 				this.handleResponse(xhr.response,true);
 				this.$.mapaOficinas.setReloadMarkers(this.listOficinas);
+				
+	/* 			if(reaload){
+					
+					this.$.mapaOficinas.refrescarMapa(this.listOficinas);
+					
+					this.$.mapaOficinas.buildMarkers();
+					
+					this.listOficinas.forEach((itemData)=>{
+						
+						if(this.$.mapaOficinas.detalleOficina.idPoi == itemData.data.idPoi){
+							this.$.mapaOficinas.detalleOficina = itemData.data;
+							this.$.mapaOficinas.item = itemData;
+						}
+						
+					});
+					
+					
+				
+				} */
+				
 		    });
+    	  
       }
       
       loadMapa(latitud,longitud,tipo){
@@ -222,7 +244,7 @@ display: none;
     	  SyncObjects(()=>{
         		//console.log(this.$.parametrosConfiguracion.getParametros())
         		this.resetearMapa();
-				this.reloadData(latitud , longitud , tipo);
+				this.reloadData(latitud , longitud , tipo , false);
 
           });	
     	  
