@@ -81,7 +81,7 @@
       	</app-toolbar>
         
         <app-toolbar class="ver buscador"  middle-justify="center">
-            <paper-icon-button icon="[[iconoMapa]]" class="boton-mapa" on-click = "_verMapa" style="color:white;"></paper-icon-button>
+            <paper-icon-button icon="[[iconoMapa]]" id = "btnChangeMapaView" disabled = "true" class="boton-mapa" on-click = "_verMapa" style="color:white;"></paper-icon-button>
             <div class="buscador-contenedor">
             	<paper-input  id="buscador" class="buscador-input" no-label-float placeholder="Buscar direcci&#243;n">
             		<iron-icon class="iconoBuscar" icon="search"  slot="suffix"></iron-icon>
@@ -154,6 +154,10 @@
              },
              map:{
 				type : Object
+             },
+             mapaVisible:{
+            	 type:Boolean,
+            	 value:false
              }
            };
          }
@@ -270,16 +274,21 @@
          }
          
          changeIconMapa(){
+        	 
       		if(this.iconoMapa === 'maps:streetview'){
        			this.iconoMapa = 'list';
+       			this.mapaVisible = true;
        	  	}else{
        	  		this.iconoMapa = 'maps:streetview';
+       	  		this.mapaVisible = false;
        	  	}
+      		
+      		
          }
          
          _verMapa(){
         	 let viewOrigen = null;
-          	 this.changeIconMapa();
+          	
   	  		if(this.pagina === "oficinas"){
   	  			viewOrigen = this.$.viewVisitas;
   	  		viewOrigen.clearDetalleOficina();
@@ -288,7 +297,10 @@
    	  		}else if(this.pagina === "agentes"){
    	  			viewOrigen = this.$.viewAgentes;	
    	  		}
-  	  		viewOrigen.cargarMapa(this.center);
+  	  		
+  	  	 this.changeIconMapa();
+  	  		
+  	  	 viewOrigen.cargarMapa(this.center);
   	  		
   	  		
          }

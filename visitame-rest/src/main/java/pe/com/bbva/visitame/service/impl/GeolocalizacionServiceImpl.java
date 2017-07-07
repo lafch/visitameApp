@@ -99,6 +99,8 @@ public class GeolocalizacionServiceImpl extends BaseServiceImpl implements Geolo
 		poi.setSaturacion(saturacion.toString().toString());
 		
 		Integer saturacionBaja = null, saturacionMedia = null, saturacionAlta = null;  
+        
+		String saturacionVerde = null, saturacionAmarillo = null,  saturacionMorado = null;
 		
 		for (Valor valor : rangosSaturacion) {
 			if(Constantes.EstadosSaturacion.BAJA.toString().equals(valor.getCdAlterno())) {
@@ -112,6 +114,7 @@ public class GeolocalizacionServiceImpl extends BaseServiceImpl implements Geolo
 		
 		if(saturacion > 0 && saturacion <= saturacionBaja) {
 			System.out.println(saturacion+"->es baja");
+			//poi.setIconoSaturacion()
 		}else if(saturacion > saturacionBaja && saturacion <= saturacionMedia) {
 			System.out.println(saturacion+"->es media");
 		}else if(saturacion > saturacionMedia) {

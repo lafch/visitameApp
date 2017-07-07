@@ -107,14 +107,14 @@ display: none;
       }	
 
       cargarMapa(center){
-    	  
-          if(this.$.mapaOficinas.style.display == 'block'){
+    
+         if(this.$.mapaOficinas.style.display == 'block'){
         	  this.$.oficinasRecords.style.display = 'block';
     		  this.$.mapaOficinas.style.display = 'none';
             }else{
               this.$.oficinasRecords.style.display = 'none';
        		  this.$.mapaOficinas.style.display = 'block';
-          }
+          } 
 
           this.$.mapaOficinas.setMarkers(this.listOficinas,center);
           this.$.mapaOficinas.tipoUnidad = this.tipoUnidad;
@@ -157,6 +157,7 @@ display: none;
       }
       
       handleResponse(response) {
+    	this.getParentApp().$.btnChangeMapaView.disabled = true;
         let data = [];
         if(response.data.pois.length > 0){
           let i = 1;
@@ -193,7 +194,9 @@ display: none;
         }
 
         this.$.loadingLista.active = false;
-        this.$.loadingLista.style.zIndex = '1';
+        this.$.loadingLista.style.zIndex = '-1';
+        
+    	this.getParentApp().$.btnChangeMapaView.disabled = false;
 
       }
       
