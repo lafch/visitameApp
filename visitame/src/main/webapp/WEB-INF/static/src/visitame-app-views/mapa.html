@@ -207,7 +207,7 @@
 				<div  class="bloque">
 					<label style="width: 100%;" class="titulo">{{detalleOficina.address2}}</label>
 					<label style="width: 100%;" class="subTitulo">{{detalleOficina.address}}</label>
-					<iron-icon icon="social:person" class="icono" ></iron-icon><label style="width: 90%; color:#008CDB;" class="subTitulo-bold">Usuarios en espera de atención: 11</label>
+					<iron-icon icon="social:person" class="icono" ></iron-icon><label style="width: 90%; color:#008CDB;" class="subTitulo-bold">Usuarios en espera de atención: {{detalleOficina.saturacion}}</label>
 				</div>
 				<div class="bloque">
 					<div style="display:inline-block;">
@@ -306,6 +306,9 @@
 	              },
 	              tipoUnidad:{
 	            		type: String  
+	              },
+	              dataMarkers:{
+	            	  type: Array
 	              }
 				  
 	        }
@@ -335,6 +338,10 @@
 				this.mapPois.fitBounds(null);
 		  }
 	      
+	      setDetalleOficina(detalleOficina){
+	    	  this.detalleOficina = detalleOficina;
+	      }
+	      
 	      sendNavigation(){
 	    	  if(this.detalleOficina){
 	    		  
@@ -357,60 +364,70 @@
 				console.log(e);
 			  }
 		  }
+	      
+	      refrescarMapa(data){
+	    	  this.dataMarkers = data;
+	    	 
+	      }
+	      
+	     buildMarkers(){
+	    	 if(this.markers.length > 0) {  this.clearMarkers(); }
+	    	 
+	    	 if(this.dataMarkers){
+	        	  
+	        	  this.dataMarkers.forEach((item,index)=>{
+					  let pathIcon = this.pathParent+"/images/icon_marker_"+item.iconColor;
+					  let point = {lat: parseFloat(item.latitude), lng: parseFloat(item.longitude)};
+	        		  let marker = new google.maps.Marker({
+	        	          position: point,
+	        	          map: this.mapPois,
+	        	          title: item.name,
+	        	          icon: pathIcon
+	        	        });
+
+	        		  marker.addListener('click', (e) => {
+	        			   if(item.type == 'O'){
+								//console.log(this.getParentApp());
+		        			   //this.getParentApp().showLogin();
+		        			   var alto = this.altoTotal/4;
+		        			   var altoDetalle = alto * 3;
+		        			   this.$.divCentrarGps.style.display = 'none';
+		        			   this.$.mapContent.style.height = alto+"px";
+	    	    			   this.$.mapContent.style.transition = '0.8s ease-in-out';
+	        				   this.$.detalle.style.height = altoDetalle+"px";
+	        				   this.$.detalle.style.transition = '0.8s ease-in-out';
+							   var centroide = {lat: parseFloat(item.latitude), lng: parseFloat(item.longitude)};
+							   
+							   setTimeout(() => {
+							   	   google.maps.event.trigger(this.mapPois, "resize");	
+							   		this.mapPois.panTo(marker.getPosition());
+							   		this.mapPois.setZoom(17);
+							   }, 600);
+							   
+		        			   this.detalleOficina = item.data;
+		        			   this.item = item;
+		        			   this.eventoSeleccionadoMarker = e;
+		        			   this.mapPois.scrollwheel = false;
+		        			   this.mapPois.draggable = false;
+		        			   this.mapPois.zoomControl  = false;
+	        			   } 
+	        			   
+	        		  });
+	        		  this.markers.push(marker);
+		          });
+		      }
+	    	 
+	     }
 		   
 	     setMarkers(data,center){
-	    	 
+	    	
 	    	 this.clearMarkers();
-		     
 				if(this.mapPois){
-						
 						var map = this.mapPois;
-			
 						google.maps.event.trigger(map, "resize");
-						
-				          if(data){
-				        	  data.forEach((item,index)=>{
-								  let pathIcon = this.pathParent+"/images/icon_marker_"+item.iconColor+".png";
-								  let point = {lat: parseFloat(item.latitude), lng: parseFloat(item.longitude)};
-				        		  let marker = new google.maps.Marker({
-				        	          position: point,
-				        	          map: this.mapPois,
-				        	          title: item.name,
-				        	          icon: pathIcon
-				        	        });
-
-				        		  marker.addListener('click', (e) => {
-				        			   if(item.type == 'O'){
-											//console.log(this.getParentApp());
-					        			   //this.getParentApp().showLogin();
-					        			   var alto = this.altoTotal/4;
-					        			   var altoDetalle = alto * 3;
-					        			   this.$.divCentrarGps.style.display = 'none';
-					        			   this.$.mapContent.style.height = alto+"px";
-				    	    			   this.$.mapContent.style.transition = '0.8s ease-in-out';
-				        				   this.$.detalle.style.height = altoDetalle+"px";
-				        				   this.$.detalle.style.transition = '0.8s ease-in-out';
-										   var centroide = {lat: parseFloat(item.latitude), lng: parseFloat(item.longitude)};
-										   
-										   setTimeout(() => {
-										   	   google.maps.event.trigger(map, "resize");	
-										   	   map.panTo(marker.getPosition());
-										       map.setZoom(17);
-										   }, 600);
-										   
-					        			   this.detalleOficina = item.data;
-					        			   this.item = item;
-					        			   this.eventoSeleccionadoMarker = e;
-					        			   this.mapPois.scrollwheel = false;
-					        			   this.mapPois.draggable = false;
-					        			   this.mapPois.zoomControl  = false;
-				        			   } 
-				        			   
-				        		  });
-				        		  this.markers.push(marker);
-					          });
-				        	  
-					      }
+						this.dataMarkers = data;
+				
+						this.buildMarkers();
 			
 				      	setTimeout(() => {
 							map.setZoom(16);
@@ -499,7 +516,7 @@
 	     abrirLogin(){
 	    	 this.getParentApp().showLogin({
 					item : this.item,
-					icon: "/images/icon_marker_"+this.item.iconColor+".png",
+					icon: "/images/icon_marker_"+this.item.iconColor,
 					e : this.eventoSeleccionadoMarker
  			});
 
@@ -510,6 +527,7 @@
 	    	 for (var i = 0; i < this.markers.length; i++) {
 	    		 this.markers[i].setMap(null);
 	         }
+	    	 this.markers = [];
 	    	 
 	     }
 	     centrarUbicacion() {
@@ -522,6 +540,35 @@
 			 this.mapPois.setCenter(center);
 	    	 console.log(this.getParentApp().center);
 	     }
+	     
+	     setReloadMarkers(data){
+	    	 this.clearMarkers();
+				if(this.mapPois){
+						var map = this.mapPois;
+						this.dataMarkers = data;
+				          if(this.dataMarkers){
+				        	  
+				        	  this.dataMarkers.forEach((item,index)=>{
+								  let pathIcon = this.pathParent+"/images/icon_marker_"+item.iconColor;
+								  let point = {lat: parseFloat(item.latitude), lng: parseFloat(item.longitude)};
+				        		  let marker = new google.maps.Marker({
+				        	          position: point,
+				        	          map: this.mapPois,
+				        	          title: item.name,
+				        	          icon: pathIcon
+				        	        });
+									
+				        		  if(this.detalleOficina && this.detalleOficina.idPoi == item.data.idPoi){
+				        			  this.detalleOficina = item.data;
+				        			  this.item = item;
+				        		  }
+				        		  this.markers.push(marker);
+					          });
+				        	  
+					      }
+			          
+					}
+	    }
 	 
 	     ready() {
 	            super.ready();

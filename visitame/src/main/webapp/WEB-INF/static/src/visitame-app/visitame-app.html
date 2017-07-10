@@ -72,6 +72,9 @@
           <paper-icon-button class="ver" icon="my-icons:menu" drawer-toggle></paper-icon-button>
           <paper-icon-button class="back-btn" icon="arrow-back" aria-label="Atrás" on-click="_regresar"></paper-icon-button>
           <div main-title>Visítame</div>
+          
+          <paper-icon-button icon="refresh" aria-label="Actualizar" on-click="_reload"></paper-icon-button>
+          
       	</app-toolbar>
 
       	<app-toolbar class="ver toolbarNavegador" primary>
@@ -83,7 +86,7 @@
       	</app-toolbar>
         
         <app-toolbar class="ver buscador"  middle-justify="center">
-            <paper-icon-button icon="[[iconoMapa]]" class="boton-mapa" on-click = "_verMapa" style="color:white;"></paper-icon-button>
+            <paper-icon-button icon="[[iconoMapa]]" id = "btnChangeMapaView" disabled = "true" class="boton-mapa" on-click = "_verMapa" style="color:white;"></paper-icon-button>
             <div class="buscador-contenedor">
             	<paper-input  id="buscador" class="buscador-input" no-label-float placeholder="Buscar direcci&#243;n">
             		<iron-icon class="iconoBuscar" icon="search"  slot="suffix"></iron-icon>
@@ -156,6 +159,10 @@
              },
              map:{
 				type : Object
+             },
+             mapaVisible:{
+            	 type:Boolean,
+            	 value:false
              }
            };
          }
@@ -272,16 +279,21 @@
          }
          
          changeIconMapa(){
+        	 
       		if(this.iconoMapa === 'maps:streetview'){
        			this.iconoMapa = 'list';
+       			this.mapaVisible = true;
        	  	}else{
        	  		this.iconoMapa = 'maps:streetview';
+       	  		this.mapaVisible = false;
        	  	}
+      		
+      		
          }
          
          _verMapa(){
         	 let viewOrigen = null;
-          	 this.changeIconMapa();
+          	
   	  		if(this.pagina === "oficinas"){
   	  			viewOrigen = this.$.viewVisitas;
   	  		viewOrigen.clearDetalleOficina();
@@ -290,7 +302,10 @@
    	  		}else if(this.pagina === "agentes"){
    	  			viewOrigen = this.$.viewAgentes;	
    	  		}
-  	  		viewOrigen.cargarMapa(this.center);
+  	  		
+  	  	 this.changeIconMapa();
+  	  		
+  	  	 viewOrigen.cargarMapa(this.center);
   	  		
   	  		
          }
@@ -331,7 +346,6 @@
          }
          
    	   	 closeLogin(){
-	   	  	console.log('close login');
 	   	  	
 	   	    this.$.loginView.style.display = 'none'; 
 	    	this.$.ironPagesMain.style.display = 'block';
@@ -373,6 +387,24 @@
     		  }, 1000*30);
      		  
 
+         }
+         
+         getViewByPage(page) {
+             let viewOrigen = null;
+             if (page === "oficinas") {
+                 viewOrigen = this.$.viewVisitas;
+             } else if (page === "cajeros") {
+                 viewOrigen = this.$.viewCajeros;
+             } else if (page === "agentes") {
+                 viewOrigen = this.$.viewAgentes;
+             }
+             return viewOrigen;
+         }
+         
+         _reload(){
+        	 let unidadGestoraOficinas = this.getViewByPage('oficinas').getUnidadGestora();
+        	 unidadGestoraOficinas.reloadData(this.center.latitude,this.center.longitude,null,true);
+        	
          }
 
        }

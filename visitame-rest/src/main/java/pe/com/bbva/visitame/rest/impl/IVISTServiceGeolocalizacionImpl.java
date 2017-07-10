@@ -21,7 +21,7 @@ public class IVISTServiceGeolocalizacionImpl implements IVISTServiceGeolocalizac
 	private GeolocalizacionService geolocalizacionService;
 
 	@Override
-	public Map<String, PoiDetail> obtenerOficinas(String latitud, String longitud, String radius,
+	public Map<String, PoiDetail> listarUnidadAtencion(String latitud, String longitud, String radius,
 			String filter, String startAt, String limit,String type) throws ValidacionException, NegocioException {
 	
 
@@ -43,7 +43,11 @@ public class IVISTServiceGeolocalizacionImpl implements IVISTServiceGeolocalizac
 		param.setStartAt(startAt);
 		param.setLimit(limit);
 		Map<String, PoiDetail> data = new HashMap<String, PoiDetail>();
-		data.put("data", geolocalizacionService.obtenerPois(param));
+		if(Constantes.ETIQUETAS_POIS.TYPE_OFICINA.equals(type)) {
+			data.put("data", geolocalizacionService.obtenerPoisSaturacion(param));
+		}else {
+			data.put("data", geolocalizacionService.obtenerPois(param));
+		}
 		return data;
 	}
 

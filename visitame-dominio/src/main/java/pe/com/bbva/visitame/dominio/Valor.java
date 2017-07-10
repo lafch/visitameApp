@@ -53,6 +53,9 @@ public class Valor implements Serializable {
 
 	@Column(name="tm_edicion")
 	private Timestamp tmEdicion;
+	
+	@Column(name="nb_icono")
+	private String icono;
 
 	//bi-directional many-to-one association to Lista
 	@ManyToOne
@@ -167,6 +170,14 @@ public class Valor implements Serializable {
 		this.lista = lista;
 	}
 
+	public String getIcono() {
+		return icono;
+	}
+
+	public void setIcono(String icono) {
+		this.icono = icono;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -175,6 +186,7 @@ public class Valor implements Serializable {
 		result = prime * result + ((cdCreador == null) ? 0 : cdCreador.hashCode());
 		result = prime * result + ((cdEditor == null) ? 0 : cdEditor.hashCode());
 		result = prime * result + ((cdValor == null) ? 0 : cdValor.hashCode());
+		result = prime * result + ((icono == null) ? 0 : icono.hashCode());
 		result = prime * result + ((lista == null) ? 0 : lista.hashCode());
 		result = prime * result + ((nbEtiqueta == null) ? 0 : nbEtiqueta.hashCode());
 		result = prime * result + ((nbGlosa == null) ? 0 : nbGlosa.hashCode());
@@ -214,6 +226,11 @@ public class Valor implements Serializable {
 			if (other.cdValor != null)
 				return false;
 		} else if (!cdValor.equals(other.cdValor))
+			return false;
+		if (icono == null) {
+			if (other.icono != null)
+				return false;
+		} else if (!icono.equals(other.icono))
 			return false;
 		if (lista == null) {
 			if (other.lista != null)
@@ -263,11 +280,8 @@ public class Valor implements Serializable {
 		return "Valor [cdValor=" + cdValor + ", cdAlterno=" + cdAlterno + ", cdCreador=" + cdCreador + ", cdEditor="
 				+ cdEditor + ", nbEtiqueta=" + nbEtiqueta + ", nbGlosa=" + nbGlosa + ", nbValor=" + nbValor
 				+ ", nuOrden=" + nuOrden + ", stEstado=" + stEstado + ", tmCreacion=" + tmCreacion + ", tmEdicion="
-				+ tmEdicion + ", lista=" + lista + "]";
+				+ tmEdicion + ", icono=" + icono + ", lista=" + lista + "]";
 	}
-
-
-
 	
 	
 }
