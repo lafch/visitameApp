@@ -191,9 +191,10 @@ display: none;
         }
 
         this.$.loadingLista.active = false;
+        this.getParentApp().$.btnChangeMapaView.disabled = false;
         this.$.loadingLista.style.zIndex = '-1';
         
-    	this.getParentApp().$.btnChangeMapaView.disabled = false;
+    	
 
       }
       
@@ -203,6 +204,7 @@ display: none;
 
       reloadData(latitud , longitud , tipo ,reaload){
     	  this.$.loadingLista.active = true;
+    	  this.getParentApp().$.btnChangeMapaView.disabled = true;
     	  var geolocalizacionService = this.$.geoLocalizacionService;
 		     var requestOficinas = geolocalizacionService.listarOficinas({
 					params : {
@@ -270,6 +272,7 @@ display: none;
 		  this.$.noResultList.style.display = 'none';
     	  if(!this.$.loadingLista.active){
     		  this.$.loadingLista.active = true;
+    		  this.getParentApp().$.btnChangeMapaView.disabled = true;
     		  this.$.loadingLista.style.zIndex = '999';
           }
     	  
