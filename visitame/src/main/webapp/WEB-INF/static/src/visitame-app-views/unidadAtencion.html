@@ -214,6 +214,7 @@ display: none;
 			});
 		     requestOficinas.then((xhr) => {
 				this.handleResponse(xhr.response,true);
+				this.$.mapaOficinas.setReloadMarkers(this.listOficinas);
 				
 	/* 			if(reaload){
 					

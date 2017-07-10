@@ -540,6 +540,35 @@
 			 this.mapPois.setCenter(center);
 	    	 console.log(this.getParentApp().center);
 	     }
+	     
+	     setReloadMarkers(data){
+	    	 this.clearMarkers();
+				if(this.mapPois){
+						var map = this.mapPois;
+						this.dataMarkers = data;
+				          if(this.dataMarkers){
+				        	  
+				        	  this.dataMarkers.forEach((item,index)=>{
+								  let pathIcon = this.pathParent+"/images/icon_marker_"+item.iconColor;
+								  let point = {lat: parseFloat(item.latitude), lng: parseFloat(item.longitude)};
+				        		  let marker = new google.maps.Marker({
+				        	          position: point,
+				        	          map: this.mapPois,
+				        	          title: item.name,
+				        	          icon: pathIcon
+				        	        });
+									
+				        		  if(this.detalleOficina && this.detalleOficina.idPoi == item.data.idPoi){
+				        			  this.detalleOficina = item.data;
+				        			  this.item = item;
+				        		  }
+				        		  this.markers.push(marker);
+					          });
+				        	  
+					      }
+			          
+					}
+	    }
 	 
 	     ready() {
 	            super.ready();
