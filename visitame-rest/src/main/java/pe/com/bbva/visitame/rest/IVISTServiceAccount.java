@@ -37,7 +37,8 @@ public interface IVISTServiceAccount {
 			@QueryParam("documentType") String documentType,
 			@QueryParam("desDocumentType") String desDocumentType,
 			@QueryParam("captchaResponse") String captchaResponse,
-			@QueryParam("ipRemote") String ipRemote
+			@QueryParam("ipRemote") String ipRemote,
+			@QueryParam("codOficina")  String codOficina
 			) throws ValidacionException, NegocioException;
 	
 	@PUT

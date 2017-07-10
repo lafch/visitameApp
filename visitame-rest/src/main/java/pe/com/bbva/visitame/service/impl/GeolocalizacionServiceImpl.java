@@ -130,6 +130,7 @@ public class GeolocalizacionServiceImpl extends BaseServiceImpl implements Geolo
 		return poiDetail;
 	}
 
+	
 	private Poi getPoi(Element eElement){
 		
 			Poi poi = new Poi();

@@ -27,7 +27,7 @@ public interface AccountService {
 	
 	Integer contarIntentosLogueo(String doi , String numDoc) throws NegocioException;
 	
-	Map<String, Object> validarUsuario(String documentNumber, String documentType , String desDocumentType ,String captchaResponse , String ipRemote) throws NegocioException;
+	Map<String, Object> validarUsuario(String documentNumber, String documentType , String desDocumentType ,String captchaResponse , String ipRemote, String codOficina) throws NegocioException;
 	
 	Persona obtenerPersonaDoiNumdocumento(String doi , String numDoc) throws NegocioException;
 	

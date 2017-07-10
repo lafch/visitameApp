@@ -17,9 +17,9 @@ public class IVISTServiceAccountImpl implements IVISTServiceAccount {
 	private AccountService accountService;
 	
 	@Override
-	public Map<String, Object> validarUsuario(String documentNumber, String documentType , String desDocumentType , String captchaResponse , String ipRemote)
+	public Map<String, Object> validarUsuario(String documentNumber, String documentType , String desDocumentType , String captchaResponse , String ipRemote, String codOficina)
 			throws ValidacionException, NegocioException {
-		return accountService.validarUsuario(documentNumber,documentType,desDocumentType , captchaResponse , ipRemote);
+		return accountService.validarUsuario(documentNumber,documentType,desDocumentType , captchaResponse , ipRemote, codOficina);
 	}
 
 	@Override
