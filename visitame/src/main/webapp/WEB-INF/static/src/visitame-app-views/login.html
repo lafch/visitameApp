@@ -94,10 +94,10 @@
 					<div class="content">
 						<h3 class="text-grey-strong" >Hola {{persona.firstName}}</h3>
 						<p class="text1 textAfterTitle" >Tu número de atención es:</p>
-						<h2 class="text-celeste textNumTicket">F218</h2>
+						<h2 class="text-celeste textNumTicket">{{ticket}}</h2>
 						<p class="textEnAtencion" >En plataforma</p>
 						<div style="clear: both;"></div>
-						<p class="text-fecha-hora-atencion">Fecha y hora de atención: 03/07/2017 - 10:20 hrs</p>
+						<p class="text-fecha-hora-atencion">Fecha y hora de atención: {{fecHoraAtencion}} hrs</p>
 						<p class="text-grey-light">Para poder atenderte, por favor, acércate a la
 													siguiente oficina y verifica que tu número se
 													muestre en la pantalla de espera:</p>
@@ -221,7 +221,14 @@
           },
           emailConstancia : {
                type : String
-          }  
+          },
+          fecHoraAtencion : {
+              type : String
+          },
+          ticket : {
+             type : String
+          }
+          
       	 }
       }
 		
@@ -402,7 +409,6 @@
      		  console.log(this.numDocumento)
      		  console.log(this.tipoDocumento)
      		  console.log(captchaResponse)
-     		  
          	  
     	  	  let customerService = this.$.customerService;
     		  let numeroDocumento = this.$.inputNumeroDocumento.value;
@@ -413,13 +419,16 @@
     							"documentType"		:  	this.tipoDocumento.id,
     							"desDocumentType"	: 	this.tipoDocumento.name,
     							"captchaResponse"	:   captchaResponse,
-    							"ipRemote"			:	IP_REMOTE
+    							"ipRemote"			:	IP_REMOTE,
+    							"codOficina"		:	this.data.codoficina
     						}
     			     });
     				 requestEsCliente.then((xhr,fail) => { 
         				 console.log(xhr.response);
-        				 if(xhr.response){
+        				 if(xhr.response && xhr.response.success){
         					 this.persona = xhr.response.persona.data[0];
+        					 this.ticket = xhr.response.ticketResponse.ticket;
+        					 this.fecHoraAtencion = moment(new Date(xhr.response.ticketResponse.fecGenerado)).format("DD/MM/YYYY - HH:mm");
             				 this.showPanelResult();
             			 }else{
 
@@ -428,14 +437,18 @@
           	                   		   'Los datos enviados son incorrectos.',
           	                   		  'warning'
           	                   		); 
+            				    
+            				    document.querySelector('#recaptchaLogin').reset();
 
                 	    }
         				 
     			     },(error) =>{
-        			     console.log(error)
+        			     console.log(error);
+        			     document.querySelector('#recaptchaLogin').reset();
     					})
     			     .catch((reason) => {
     			    	 console.log(reason);
+    			    	 document.querySelector('#recaptchaLogin').reset();
     			     } );
     		  
     	  }else{

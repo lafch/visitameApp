@@ -213,7 +213,7 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 	@Override
 	public Map<String, Object> validarUsuario(String documentNumber, String documentType , String desDocumentType ,String captchaResponse ,String ipRemote, String codOficina) throws NegocioException {
 		
-		//this.validarCaptcha(captchaResponse , ipRemote);
+		this.validarCaptcha(captchaResponse , ipRemote);
 		Map<String, Object> result = new HashMap<String, Object>();		
 		CustomerDetail datosCustumer = getCustomer(documentNumber, documentType,documentNumber+".json");
 
@@ -271,6 +271,13 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		//se registra el intento de logueo
 		if(persona != null){
 			
+			//Generación de Ticket 
+			String ticket =  ticketService.generarTicket(codOficina, documentNumber);
+			Map<String, Object> ticketResponse = new HashMap<String, Object>();	
+			ticketResponse.put("ticket", ticket);
+			ticketResponse.put("fecGenerado", new Date());
+			result.put("ticketResponse", ticketResponse);
+			
 			IntentoLogueo intento = new IntentoLogueo();
 			intento.setCdTipoDoi(persona.getCdTipoDoi());
 			intento.setNbNumDoi(persona.getNbNumDoi());
@@ -279,14 +286,6 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 			this.registrarIntentoLogueo(intento);
 			
 			result.put(Constantes.ETIQUETAS_CLASES.SUCCESS, true);
-			
-			//Generación de Ticket 
-			
-			String ticket =  ticketService.generarTicket(codOficina, documentNumber);
-			Map<String, Object> ticketResponse = new HashMap<String, Object>();	
-			ticketResponse.put("ticket", ticket);
-			ticketResponse.put("fecGenerado", new Date());
-			result.put("ticketResponse", ticketResponse);
 			
 		}else{
 			result.put(Constantes.ETIQUETAS_CLASES.SUCCESS, false);
