@@ -50,7 +50,7 @@
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/static/bower_components/sweetalert2/dist/sweetalert2.min.css">
 
 	<!-- Include a polyfill for ES6 Promises (optional) for IE11 and Android browser -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
+	<!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script> -->
 <!--     	
 <script src="https://www.google.com/recaptcha/api.js"
         ></script> -->
