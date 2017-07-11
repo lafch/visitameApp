@@ -48,7 +48,8 @@ public interface IVISTServiceAccount {
 			@QueryParam("documentNumber") String documentNumber,
 			@QueryParam("documentType") String documentType,
 			@QueryParam("email") String email,
-			@QueryParam("telefono") String telefono
+			@QueryParam("telefono") String telefono,
+			@QueryParam("tipoOperador") String tipoOperador
 			) throws ValidacionException, NegocioException;
 	
 }
