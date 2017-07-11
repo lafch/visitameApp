@@ -133,5 +133,17 @@
   	         }
   	     }
   	}
+
+  	
+	var promise = screen.orientation.lock(screen.orientation.type);
+	
+	promise
+    .then(function() {
+      console.log('Bloque de orientacion de pantalla listo!');
+    
+    })
+    .catch(function(err) {
+    	console.log('No se puede bloquear la orientacion de pantalla: ' + err);
+    });
   </script>
 </html>

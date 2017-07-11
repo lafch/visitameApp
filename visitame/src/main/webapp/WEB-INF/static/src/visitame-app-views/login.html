@@ -388,9 +388,6 @@
       }
       
       reservar(){
-
-    	 
-          
      	  if(this.$.inputNumeroDocumento.validate()){
 
      		  let captchaResponse = document.querySelector('#recaptchaLogin').response;
@@ -403,10 +400,6 @@
                    		);
   				return;
           	  }
-     		  console.log('datos envio')
-     		  console.log(this.numDocumento)
-     		  console.log(this.tipoDocumento)
-     		  console.log(captchaResponse)
          	  
     	  	  let customerService = this.$.customerService;
     		  let numeroDocumento = this.$.inputNumeroDocumento.value;
