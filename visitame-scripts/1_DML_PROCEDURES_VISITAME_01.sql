@@ -52,3 +52,20 @@ CREATE OR REPLACE FUNCTION appvisitame.sp_minutos_ultimo_intento(tdoi int , numd
         RETURN v_count;
         END;
 $$ LANGUAGE plpgsql;
+
+-- FUNCTION GENERAR TICKET Y ACTUALIZAR  10/07/2017 
+CREATE OR REPLACE FUNCTION appvisitame.sp_generar_ticket_oficina(codOficinas varchar) RETURNS INT AS $$
+        DECLARE
+        v_ticket int; 
+        BEGIN
+        SELECT max (nu_sec_ticket) + 1 into v_ticket
+        FROM appvisitame.tvisita006_ofi_oficina 
+        where appvisitame.tvisita006_ofi_oficina.cd_alterno = codOficinas;
+
+		UPDATE appvisitame.tvisita006_ofi_oficina
+        SET  nu_sec_ticket = v_ticket
+        WHERE appvisitame.tvisita006_ofi_oficina.cd_alterno = codOficinas;
+        
+        RETURN v_ticket;
+        END;
+$$ LANGUAGE plpgsql;

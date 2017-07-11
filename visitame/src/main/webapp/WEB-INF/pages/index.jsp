@@ -47,6 +47,7 @@
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqyFz0Q9ZZLMmgqJhck4soRfa0V1s71jQ&libraries=places"></script>
    
    	<script src="<%=request.getContextPath()%>/static/bower_components/sweetalert2/dist/sweetalert2.min.js"></script>
+   	<script src="<%=request.getContextPath()%>/static/bower_components/moment/min/moment.min.js"></script>
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/static/bower_components/sweetalert2/dist/sweetalert2.min.css">
 
 	<!-- Include a polyfill for ES6 Promises (optional) for IE11 and Android browser -->

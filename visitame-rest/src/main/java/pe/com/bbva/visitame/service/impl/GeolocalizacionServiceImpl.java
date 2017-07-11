@@ -95,29 +95,33 @@ public class GeolocalizacionServiceImpl extends BaseServiceImpl implements Geolo
 	public void setSaturacion(Poi poi , List<Valor> rangosSaturacion) throws NegocioException {
 		//call servicio rest recibe codOficina
 		//para obtencion de satutacion cuando este disponible
-		Integer saturacion = MathUtil.generateRandom(1, 100);
+		Integer saturacion = MathUtil.generateRandom(1, 20);
 		poi.setSaturacion(saturacion.toString().toString());
 		
 		Integer saturacionBaja = null, saturacionMedia = null, saturacionAlta = null;  
+        
+		String saturacionVerde = null, saturacionAmarillo = null,  saturacionMorado = null;
 		
 		for (Valor valor : rangosSaturacion) {
 			if(Constantes.EstadosSaturacion.BAJA.toString().equals(valor.getCdAlterno())) {
 				saturacionBaja = Integer.parseInt(valor.getNbValor());
+				saturacionVerde = valor.getIcono();
 			}else if(Constantes.EstadosSaturacion.MEDIA.toString().equals(valor.getCdAlterno())) {
 				saturacionMedia = Integer.parseInt(valor.getNbValor());
+				saturacionAmarillo = valor.getIcono();
 			}else if(Constantes.EstadosSaturacion.ALTA.toString().equals(valor.getCdAlterno())) {
 				saturacionAlta = Integer.parseInt(valor.getNbValor());
+				saturacionMorado = valor.getIcono();
 			}
 		}
 		
 		if(saturacion > 0 && saturacion <= saturacionBaja) {
-			System.out.println(saturacion+"->es baja");
-		}else if(saturacion > saturacionBaja && saturacion <= saturacionMedia) {
-			System.out.println(saturacion+"->es media");
-		}else if(saturacion > saturacionMedia) {
-			System.out.println(saturacion+"->es alta");
+			poi.setIconoSaturacion(saturacionVerde);
+		}else if(saturacion > saturacionBaja && saturacion <= saturacionAlta) {
+			poi.setIconoSaturacion(saturacionAmarillo);
+		}else if(saturacion > saturacionAlta) {
+			poi.setIconoSaturacion(saturacionMorado);
 		}
-		
 
 	}
 	
@@ -130,6 +134,7 @@ public class GeolocalizacionServiceImpl extends BaseServiceImpl implements Geolo
 		return poiDetail;
 	}
 
+	
 	private Poi getPoi(Element eElement){
 		
 			Poi poi = new Poi();

@@ -35,6 +35,7 @@ import pe.com.bbva.visitame.helper.reniec.ReniecServiceHelper;
 import pe.com.bbva.visitame.service.AccountService;
 import pe.com.bbva.visitame.service.ConfiguracionService;
 import pe.com.bbva.visitame.service.GoogleService;
+import pe.com.bbva.visitame.service.TicketService;
 import pe.com.bbva.visitame.util.Busqueda;
 
 
@@ -57,6 +58,9 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 	
 	@Autowired
 	private ConfiguracionService configuracionService;
+	
+	@Autowired
+	private TicketService ticketService;
 	
 	@Autowired
 	private GoogleService googleService;
@@ -229,7 +233,7 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 	}
 	
 	@Override
-	public Map<String, Object> validarUsuario(String documentNumber, String documentType , String desDocumentType ,String captchaResponse ,String ipRemote) throws NegocioException {
+	public Map<String, Object> validarUsuario(String documentNumber, String documentType , String desDocumentType ,String captchaResponse ,String ipRemote, String codOficina) throws NegocioException {
 		
 		this.validarCaptcha(captchaResponse , ipRemote);
 		Map<String, Object> result = new HashMap<String, Object>();		
@@ -285,6 +289,13 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		//se registra el intento de logueo
 		if(persona != null){
 			
+			//Generación de Ticket 
+			String ticket =  ticketService.generarTicket(codOficina, documentNumber);
+			Map<String, Object> ticketResponse = new HashMap<String, Object>();	
+			ticketResponse.put("ticket", ticket);
+			ticketResponse.put("fecGenerado", new Date());
+			result.put("ticketResponse", ticketResponse);
+			
 			IntentoLogueo intento = new IntentoLogueo();
 			intento.setCdTipoDoi(persona.getCdTipoDoi());
 			intento.setNbNumDoi(persona.getNbNumDoi());
@@ -292,6 +303,7 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 			intento.setCdCreador(1);
 			this.registrarIntentoLogueo(intento);
 			result.put(Constantes.ETIQUETAS_CLASES.SUCCESS, true);
+			
 		}else{
 			result.put(Constantes.ETIQUETAS_CLASES.SUCCESS, false);
 		}

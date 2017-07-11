@@ -3,12 +3,8 @@ package pe.com.bbva.visitame.rest.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import pe.com.bbva.visitame.dominio.dto.geolocalizacion.GeolocalizacionRequestParam;
 import pe.com.bbva.visitame.dominio.dto.geolocalizacion.PoiDetail;
@@ -25,7 +21,7 @@ public class IVISTServiceGeolocalizacionImpl implements IVISTServiceGeolocalizac
 	private GeolocalizacionService geolocalizacionService;
 
 	@Override
-	public Map<String, PoiDetail> obtenerOficinas(String latitud, String longitud, String radius,
+	public Map<String, PoiDetail> listarUnidadAtencion(String latitud, String longitud, String radius,
 			String filter, String startAt, String limit,String type) throws ValidacionException, NegocioException {
 	
 
@@ -47,7 +43,11 @@ public class IVISTServiceGeolocalizacionImpl implements IVISTServiceGeolocalizac
 		param.setStartAt(startAt);
 		param.setLimit(limit);
 		Map<String, PoiDetail> data = new HashMap<String, PoiDetail>();
-		data.put("data", geolocalizacionService.obtenerPois(param));
+		if(Constantes.ETIQUETAS_POIS.TYPE_OFICINA.equals(type)) {
+			data.put("data", geolocalizacionService.obtenerPoisSaturacion(param));
+		}else {
+			data.put("data", geolocalizacionService.obtenerPois(param));
+		}
 		return data;
 	}
 

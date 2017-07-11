@@ -34,7 +34,7 @@ display: none;
 			<paper-item data-unidad="{{item}}" class="segundo">
 				<div style="width: 100%;" class="contenedor">
 					<div style="float:left" class="logoEstadoOficina">
-						<img src="{{pathParent}}images/icon_{{item.iconColor}}.png" class="logoEstadoOficina"/>	
+						<img src="{{pathParent}}images/icon_{{item.iconColor}}" class="logoEstadoOficina"/>	
 					</div>
 					<div style="width: 80%; float:left">
 						<label class="titulo"    style="width: 100%; display: block; overflow:hidden; white-space:nowrap; text-overflow: ellipsis;">{{item.name}}</label>
@@ -107,14 +107,14 @@ display: none;
       }	
 
       cargarMapa(center){
-    	  
-          if(this.$.mapaOficinas.style.display == 'block'){
+    
+         if(this.$.mapaOficinas.style.display == 'block'){
         	  this.$.oficinasRecords.style.display = 'block';
     		  this.$.mapaOficinas.style.display = 'none';
             }else{
               this.$.oficinasRecords.style.display = 'none';
        		  this.$.mapaOficinas.style.display = 'block';
-          }
+          } 
 
           this.$.mapaOficinas.setMarkers(this.listOficinas,center);
           this.$.mapaOficinas.tipoUnidad = this.tipoUnidad;
@@ -156,22 +156,18 @@ display: none;
             }
       }
       
-      handleResponse(response) {
+      handleResponse(response,reload) {
+    	this.getParentApp().$.btnChangeMapaView.disabled = true;
         let data = [];
         if(response.data.pois.length > 0){
           let i = 1;
           let iconColor;
           response.data.pois.forEach((poi,index)=>{
-              if(i > 3){ i = 1; }
 			
-              if(this.tipoUnidad == "C" || this.tipoUnidad == "A" ){
-				iconColor = 'azul';
-              }else if(i == 1){
-                iconColor = 'morado';
-              }else if(i == 2){
-                iconColor = 'amarillo';
-              }else if(i == 3){
-                iconColor = 'verde';
+              if(this.tipoUnidad == "C" || this.tipoUnidad == "A" || !poi.iconoSaturacion){
+				iconColor = 'azul.png';
+              }else{
+            	iconColor = poi.iconoSaturacion;
               }
 
               var tituloUnidad = this.tipoUnidad === "O" ? "OFICINAS " : (this.tipoUnidad === "C" ? "CAJEROS " : "AGENTES ");
@@ -195,7 +191,10 @@ display: none;
         }
 
         this.$.loadingLista.active = false;
-        this.$.loadingLista.style.zIndex = '1';
+        this.getParentApp().$.btnChangeMapaView.disabled = false;
+        this.$.loadingLista.style.zIndex = '-1';
+        
+    	
 
       }
       
@@ -203,23 +202,52 @@ display: none;
     	  return  this.$.mapaOficinas.getMap();
       }
 
+      reloadData(latitud , longitud , tipo ,reaload){
+    	  this.$.loadingLista.active = true;
+    	  this.getParentApp().$.btnChangeMapaView.disabled = true;
+    	  this.clearListOficinas();
+    	  var geolocalizacionService = this.$.geoLocalizacionService;
+		     var requestOficinas = geolocalizacionService.listarOficinas({
+					params : {
+								"latitud": latitud,
+							  	"longitud": longitud,
+						    	"radius": this.$.parametrosConfiguracion.getParametros().radAlcance, 
+						    	"type": tipo || this.tipoUnidad
+						    }
+			});
+		     requestOficinas.then((xhr) => {
+				this.handleResponse(xhr.response,true);
+				this.$.mapaOficinas.setReloadMarkers(this.listOficinas);
+				
+	/* 			if(reaload){
+					
+					this.$.mapaOficinas.refrescarMapa(this.listOficinas);
+					
+					this.$.mapaOficinas.buildMarkers();
+					
+					this.listOficinas.forEach((itemData)=>{
+						
+						if(this.$.mapaOficinas.detalleOficina.idPoi == itemData.data.idPoi){
+							this.$.mapaOficinas.detalleOficina = itemData.data;
+							this.$.mapaOficinas.item = itemData;
+						}
+						
+					});
+					
+					
+				
+				} */
+				
+		    });
+    	  
+      }
+      
       loadMapa(latitud,longitud,tipo){
 			
     	  SyncObjects(()=>{
         		//console.log(this.$.parametrosConfiguracion.getParametros())
         		this.resetearMapa();
-				 var geolocalizacionService = this.$.geoLocalizacionService;
-			     var requestOficinas = geolocalizacionService.listarOficinas({
-						params : {
-									"latitud": latitud,
-								  	"longitud": longitud,
-							    	"radius": this.$.parametrosConfiguracion.getParametros().radAlcance, 
-							    	"type": tipo || this.tipoUnidad
-							    }
-				});
-			     requestOficinas.then((xhr) => {
-					this.handleResponse(xhr.response);
-			    });
+				this.reloadData(latitud , longitud , tipo , false);
 
           });	
     	  
@@ -245,6 +273,7 @@ display: none;
 		  this.$.noResultList.style.display = 'none';
     	  if(!this.$.loadingLista.active){
     		  this.$.loadingLista.active = true;
+    		  this.getParentApp().$.btnChangeMapaView.disabled = true;
     		  this.$.loadingLista.style.zIndex = '999';
           }
     	  

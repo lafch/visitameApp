@@ -17,7 +17,7 @@ public interface IVISTServiceGeolocalizacio {
 	@GET
 	@Path("/pois")
 	@Produces({MediaType.APPLICATION_JSON})
-	public Map<String, PoiDetail> obtenerOficinas(
+	public Map<String, PoiDetail> listarUnidadAtencion(
 			@QueryParam("latitud") String latitud,
 			@QueryParam("longitud") String longitud,
 			@QueryParam("radius") String radius,
