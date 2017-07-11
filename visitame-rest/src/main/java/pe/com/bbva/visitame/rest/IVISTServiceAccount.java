@@ -37,7 +37,8 @@ public interface IVISTServiceAccount {
 			@QueryParam("documentType") String documentType,
 			@QueryParam("desDocumentType") String desDocumentType,
 			@QueryParam("captchaResponse") String captchaResponse,
-			@QueryParam("ipRemote") String ipRemote
+			@QueryParam("ipRemote") String ipRemote,
+			@QueryParam("codOficina")  String codOficina
 			) throws ValidacionException, NegocioException;
 	
 	@PUT
@@ -47,7 +48,8 @@ public interface IVISTServiceAccount {
 			@QueryParam("documentNumber") String documentNumber,
 			@QueryParam("documentType") String documentType,
 			@QueryParam("email") String email,
-			@QueryParam("telefono") String telefono
+			@QueryParam("telefono") String telefono,
+			@QueryParam("tipoOperador") String tipoOperador
 			) throws ValidacionException, NegocioException;
 	
 }

@@ -69,8 +69,8 @@ public class ConfiguracionServiceImpl extends BaseServiceImpl implements Configu
 		Busqueda busqueda = Busqueda.forClass(Valor.class);
 		try {
 			busqueda.createAlias("lista", "l");
-			busqueda.add(Restrictions.eq("l.codigo", listaCodigo));
-			busqueda.add(Restrictions.eq("codigo", valorCodigo));
+			busqueda.add(Restrictions.eq("l.cdAlterno", listaCodigo));
+			busqueda.add(Restrictions.eq("cdAlterno", valorCodigo));
 			busqueda.setCacheable(true);
 			busqueda.setComment(MessageFormat.format("buscar valores de la lista con código {0} y con código de valor {1}", listaCodigo, valorCodigo));
 			List<Valor> valores = valorDAO.listar(busqueda);

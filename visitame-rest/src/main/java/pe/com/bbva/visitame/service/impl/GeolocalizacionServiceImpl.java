@@ -116,13 +116,10 @@ public class GeolocalizacionServiceImpl extends BaseServiceImpl implements Geolo
 		}
 		
 		if(saturacion > 0 && saturacion <= saturacionBaja) {
-			System.out.println(saturacion+"->es baja");
 			poi.setIconoSaturacion(saturacionVerde);
 		}else if(saturacion > saturacionBaja && saturacion <= saturacionAlta) {
-			System.out.println(saturacion+"->es media");
 			poi.setIconoSaturacion(saturacionAmarillo);
 		}else if(saturacion > saturacionAlta) {
-			System.out.println(saturacion+"->es alta");
 			poi.setIconoSaturacion(saturacionMorado);
 		}
 
@@ -137,6 +134,7 @@ public class GeolocalizacionServiceImpl extends BaseServiceImpl implements Geolo
 		return poiDetail;
 	}
 
+	
 	private Poi getPoi(Element eElement){
 		
 			Poi poi = new Poi();

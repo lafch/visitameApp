@@ -17,9 +17,9 @@ public class IVISTServiceAccountImpl implements IVISTServiceAccount {
 	private AccountService accountService;
 	
 	@Override
-	public Map<String, Object> validarUsuario(String documentNumber, String documentType , String desDocumentType , String captchaResponse , String ipRemote)
+	public Map<String, Object> validarUsuario(String documentNumber, String documentType , String desDocumentType , String captchaResponse , String ipRemote, String codOficina)
 			throws ValidacionException, NegocioException {
-		return accountService.validarUsuario(documentNumber,documentType,desDocumentType , captchaResponse , ipRemote);
+		return accountService.validarUsuario(documentNumber,documentType,desDocumentType , captchaResponse , ipRemote, codOficina);
 	}
 
 	@Override
@@ -30,9 +30,10 @@ public class IVISTServiceAccountImpl implements IVISTServiceAccount {
 	}
 
 	@Override
-	public Map<String, Object>  actualizarDatosContacto(String documentNumber, String documentType, String email, String telefono)
+	public Map<String, Object>  actualizarDatosContacto(String documentNumber, String documentType, String email, String telefono,
+			String tipoOperador)
 			throws ValidacionException, NegocioException {
-		return accountService.actualizarDatosContacto(documentNumber,documentType,email,telefono);
+		return accountService.actualizarDatosContacto(documentNumber,documentType,email,telefono, tipoOperador);
 	}
 	
 }

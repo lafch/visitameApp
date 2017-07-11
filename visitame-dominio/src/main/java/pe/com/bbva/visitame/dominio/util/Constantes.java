@@ -241,6 +241,9 @@ public final class Constantes {
 		public static final String LISTA_PRODCUTO_COTIZA = "99";
 		
 		public static final String LISTA_SATURACION_OFI = "SATURACION_OFI";
+		
+		public static final String LISTA_TIPO_OPERADOR= "OPE_TIPO_CEL";
+		public static final String LISTA_ESTADO_TICKET= "ESTADO_TICKET";
 	}
 	
 	public static class VALOR {
@@ -919,6 +922,18 @@ public final class Constantes {
 		public static class MOTIVO_VISITA_COMERCIAL{
 			public final static String CODIGO = "COMER";
 		}
+		public static class OPERADOR_TELEFONICO{
+			public final static String CLAR = "CLAR";
+			public final static String TELE = "TELE";
+			public final static String NEXT = "NEXT";
+			public final static String BITE = "BITE";
+			
+		}
+		public static class ESTADO_TICKETS{
+			public final static String COLA = "COLA";
+			public final static String ENVIADO = "ENVIADO";
+		}
+		
 	}
 	
 	public static class MENU{
