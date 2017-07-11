@@ -191,9 +191,6 @@
           	type:Object,
           	observer: '_cambioTipoDocumento'
           },
-          tipoOperador :{
-        	  type:Object
-          },
            numeroCaracteres:{
         	   type:String,
         	   value:'8'
@@ -275,7 +272,7 @@
 		console.log(this.emailConstancia);
 		console.log(this.numDocumento)
  		console.log(this.tipoDocumento)
-
+		console.log(this.tipoOperador.data.cdAlterno)
  		
  		
 
@@ -287,7 +284,8 @@
 						"documentNumber": this.numDocumento,
 						"documentType" :  this.tipoDocumento.id,
 						"telefono" : this.numeroCelConstancia,
-						"email" : this.emailConstancia
+						"email" : this.emailConstancia,
+						"tipoOperador" : this.tipoOperador.data.cdAlterno
 					}
 		   });
 

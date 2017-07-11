@@ -12,11 +12,15 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
+
+import pe.com.bbva.visitame.dao.HistoricoDAO;
 import pe.com.bbva.visitame.dao.IntentoLogueoDAO;
 import pe.com.bbva.visitame.dao.PersonaDAO;
+import pe.com.bbva.visitame.dominio.Historico;
 import pe.com.bbva.visitame.dominio.IntentoLogueo;
 import pe.com.bbva.visitame.dominio.Parametro;
 import pe.com.bbva.visitame.dominio.Persona;
+import pe.com.bbva.visitame.dominio.Valor;
 import pe.com.bbva.visitame.dominio.dto.cuenta.Customer;
 import pe.com.bbva.visitame.dominio.dto.cuenta.CustomerDetail;
 import pe.com.bbva.visitame.dominio.dto.zic.ZicResult;
@@ -59,6 +63,9 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 
 	@Autowired 
 	private ReniecServiceHelper reniecServiceHelper;
+	
+	@Autowired 
+	private HistoricoDAO historicoDAO;
 
 	@Override 
 	public CustomerDetail getCustomer(String documentNumber, String documentType , String test) throws NegocioException {
@@ -119,6 +126,21 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		return null;
 	}
 
+	@Override
+	public Historico registrarHistorico(Historico historico) throws NegocioException {
+		try {
+			if(historico.getCodigo() == null){
+				historicoDAO.crear(historico);
+			}else{
+				historicoDAO.modificar(historico);
+			}
+			return historico;
+		} catch (Exception e) {
+			lanzarExcepcionGrave(NegocioException.CODIGO.NEG_CONSULTA_FALLIDA, new Object[] { e.getMessage() }, "No se pudo ejecutar satisfactoriamente la consulta: " + e.getMessage(), e);
+		}
+		return null;
+	}
+	
 	@Override
 	public IntentoLogueo registrarIntentoLogueo(IntentoLogueo intento) throws NegocioException {
 		try {
@@ -212,20 +234,15 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		this.validarCaptcha(captchaResponse , ipRemote);
 		Map<String, Object> result = new HashMap<String, Object>();		
 		CustomerDetail datosCustumer = getCustomer(documentNumber, documentType,documentNumber+".json");
-
 		
 		Boolean iscliente = true;
-		
 		if(datosCustumer == null){
 			iscliente = false;
 		}
-		
 		//validamos los intentos realizados
 		this.validarIntentos(documentNumber, documentType);
-		
 		//Verificamos si la persona este en nustra BD PG
 		Persona persona = this.obtenerPersonaDoiNumdocumento(documentType, documentNumber);
-		
 		//Si no existe persona en nuestra BD
 		//La registramos detectando si es cliente o no
 		//por el metodo "getCustomer"
@@ -243,6 +260,7 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 					persona.setTmCreacion(new Date());
 					persona.setCdCreador(1);
 					persona = this.registrarPersona(persona);
+					
 				}else{	
 					//Verificar datos de la reniec
 					//si existe la persona se crearia en base a los datos de la reniec
@@ -273,12 +291,10 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 			intento.setTmCreacion(new Date());
 			intento.setCdCreador(1);
 			this.registrarIntentoLogueo(intento);
-			
 			result.put(Constantes.ETIQUETAS_CLASES.SUCCESS, true);
 		}else{
 			result.put(Constantes.ETIQUETAS_CLASES.SUCCESS, false);
 		}
-		
 		result.put(Constantes.ETIQUETAS_CLASES.PERSONA, datosCustumer);
 		return result;
 	}
@@ -322,25 +338,30 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 	
 	@Override
 	public Map<String, Object> actualizarDatosContacto(String documentNumber, String documentType ,
-			String email, String telefono) throws NegocioException {
+			String email, String telefono,String tipoOperador) throws NegocioException {
 		
 		Map<String, Object> result = new HashMap<String, Object>();		
-
+			
 		Persona persona = this.obtenerPersonaDoiNumdocumento(documentType, documentNumber);
 		
 		//Si no existe persona en nuestra BD
 		if(persona != null){
 			if(email != null && !email.isEmpty()){
 				persona.setNbEmail(email);
+				//historico.setCorreo(email);
 			}
 			if(telefono != null && !telefono.isEmpty()){
 				persona.setNbTelefono(telefono);
+				//historico.setTelefono(telefono);
 			}
 			persona.setCdEditor(1);
 			persona.setTmEdicion(new Date());
-			this.registrarPersona(persona);
-			result.put(Constantes.ETIQUETAS_CLASES.SUCCESS, true);
 			
+			validarDatosHistorico(email, telefono,tipoOperador,persona);
+			
+			this.registrarPersona(persona);
+
+			result.put(Constantes.ETIQUETAS_CLASES.SUCCESS, true);
 		}else{
 			result.put(Constantes.ETIQUETAS_CLASES.SUCCESS, false);
 			System.out.println("Persona no está registrada en la Base de Datos");
@@ -350,6 +371,39 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		return result;
 	}
 
+	
+	public void validarDatosHistorico(String email, String telefono, String tipoOperador,Persona persona) throws NegocioException{
+		
+		if(email != null && !email.isEmpty() && !email.equals("undefined")  || telefono != null && !telefono.isEmpty() && !telefono.equals("undefined")  && tipoOperador!=null ){
+			Historico historico = new Historico();
+			if(email != null && !email.isEmpty()){
+				historico.setCorreo(email);
+			}
+			if(telefono != null && !telefono.isEmpty() && !telefono.equals("undefined")){
+				historico.setTelefono(telefono);
+			}
+			historico.setPersona(persona);
+			Valor valorTipoOperador=null;
+			if(tipoOperador!=null){
+				valorTipoOperador = configuracionService.obtenerValor(Constantes.LISTA.LISTA_TIPO_OPERADOR, tipoOperador);
+			}
+			
+			Valor estadoTicket = configuracionService.obtenerValor(Constantes.LISTA.LISTA_ESTADO_TICKET,
+					Constantes.VALOR.ESTADO_TICKETS.ENVIADO);
+			
+			historico.setTipoOperador(valorTipoOperador);
+			historico.setEstadoEnvio(estadoTicket);
+
+			historico.setTmCreacion(new Date());
+			historico.setCreador(1);
+			registrarHistorico(historico);
+			
+		}else{
+			lanzarExcepcionLeve(Mensajes.DATOS.INGRESAR_DATO_CONTACTO , new Object[] {  }, "Usted debe ingresar almenos un dato de contacto.", null);
+		}
+
+	}
+	
 	@Override
 	public Integer contarIntentosPorDia(Integer documentType, String documentNumber, Date fecha)
 			throws NegocioException {
