@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import pe.com.bbva.visitame.dominio.Historico;
 import pe.com.bbva.visitame.dominio.IntentoLogueo;
 import pe.com.bbva.visitame.dominio.Persona;
 import pe.com.bbva.visitame.dominio.dto.cuenta.CustomerDetail;
@@ -31,11 +32,13 @@ public interface AccountService {
 	
 	Persona obtenerPersonaDoiNumdocumento(String doi , String numDoc) throws NegocioException;
 	
-	Map<String, Object> actualizarDatosContacto(String documentNumber, String documentType , String email, String telefono) throws NegocioException;
+	Map<String, Object> actualizarDatosContacto(String documentNumber, String documentType , String email, String telefono, String tipoTelefono) throws NegocioException;
 	
 	Integer contarIntentosPorDia(Integer documentType , String documentNumber , Date fecha) throws NegocioException;
 	
 	Integer numeroMinutosUltimoIntentoHoy(Integer documentType , String documentNumber) throws NegocioException;
 	
 	Persona consultarReniec(String documentNumber, String documentType) throws NegocioException;
+	
+	Historico registrarHistorico(Historico historico) throws NegocioException;
 }

@@ -70,7 +70,7 @@ public class TicketServiceImpl extends BaseServiceImpl implements TicketService 
 	
 	private String completarCero(String letraInicio, int ticket){
 		String finalS ="";
-		int tamanionormal = 6;
+		int tamanionormal = 2;
 		finalS += letraInicio;
 		for ( int i=0;i < tamanionormal;i++) {
 			finalS+='0';

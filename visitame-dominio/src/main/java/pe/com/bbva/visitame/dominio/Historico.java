@@ -1,8 +1,7 @@
 package pe.com.bbva.visitame.dominio;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,9 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
 import pe.com.bbva.visitame.dominio.util.Constantes;
-
 
 /**
  * The persistent class for the tvisita003_cfg_valor database table.
@@ -35,7 +32,7 @@ public class Historico implements Serializable {
 	private Integer codigo;
 
 	@Column(name="nu_telefono")
-	private Integer telefono;
+	private String telefono;
 
 	@Column(name="nb_correo")
 	private String correo;
@@ -47,10 +44,10 @@ public class Historico implements Serializable {
 	private Integer editor;
 	
 	@Column(name="tm_creacion")
-	private Timestamp tmCreacion;
+	private Date tmCreacion;
 
 	@Column(name="tm_edicion")
-	private Timestamp tmEdicion;
+	private Date tmEdicion;
 
 	
 	@ManyToOne
@@ -71,8 +68,8 @@ public class Historico implements Serializable {
 	public Integer getCodigo() { return codigo; }
 	public void setCodigo(Integer codigo) { this.codigo = codigo; }
 	
-	public Integer getTelefono() { return telefono; }
-	public void setTelefono(Integer telefono) { this.telefono = telefono; }
+	public String getTelefono() { return telefono; }
+	public void setTelefono(String telefono) { this.telefono = telefono; }
 	
 	public String getCorreo() { return correo; }
 	public void setCorreo(String correo) { this.correo = correo; }
@@ -83,11 +80,11 @@ public class Historico implements Serializable {
 	public Integer getEditor() { return editor; }
 	public void setEditor(Integer editor) { this.editor = editor; }
 	
-	public Timestamp getTmCreacion() { return tmCreacion; }
-	public void setTmCreacion(Timestamp tmCreacion) { this.tmCreacion = tmCreacion; }
+	public Date getTmCreacion() { return tmCreacion; }
+	public void setTmCreacion(Date tmCreacion) { this.tmCreacion = tmCreacion; }
 	
-	public Timestamp getTmEdicion() { return tmEdicion; }
-	public void setTmEdicion(Timestamp tmEdicion) { this.tmEdicion = tmEdicion; }
+	public Date getTmEdicion() { return tmEdicion; }
+	public void setTmEdicion(Date tmEdicion) { this.tmEdicion = tmEdicion; }
 	
 	public Persona getPersona() { return persona; }
 	public void setPersona(Persona persona) { this.persona = persona; }
@@ -98,8 +95,6 @@ public class Historico implements Serializable {
 	
 	public Valor getTipoOperador() { return tipoOperador; }
 	public void setTipoOperador(Valor tipoOperador) { this.tipoOperador = tipoOperador; }
-
-	
 
 	@Override
 	public int hashCode() {

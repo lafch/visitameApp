@@ -16,5 +16,9 @@ public class Mensajes {
 		public final static String CAPTCHA_NO_VALIDO ="GOOGLE.CAPTCHA.NO.VALIDO";
 	}
 	
+	public static class DATOS {
+		public final static String INGRESAR_DATO_CONTACTO="INGRESAR.TELEFONO.MAIL";
+	}
+	
 	
 }
