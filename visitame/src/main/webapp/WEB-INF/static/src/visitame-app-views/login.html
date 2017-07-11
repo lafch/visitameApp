@@ -40,7 +40,7 @@
 				</app-toolbar>
 			</app-header>
 			<div class = "content-form" id = "panelForm" >
-				<h3>Reserva tu ticket de atención para:</h3>
+				<h3>Genera tu ticket de atención para:</h3>
 				<div class = "content-franga-login">
 					<div class ="up"></div>
 					<div class ="bottom"></div>
@@ -56,7 +56,7 @@
 						</div>
 						<div class="usuario-atencion">
 							<iron-icon icon="my-icons:person"></iron-icon>
-							<div>Usuario en espera de atención: {{data.saturacion}}</div>
+							<div>Número estimado de clientes en espera: {{data.saturacion}}</div>
 						</div>
 					</div>
 				</div>
@@ -75,12 +75,15 @@
 							<div class="content-input-form" >
 								<paper-input autofocus always-float-label required error-message$="{{mensaje}}" id="inputNumeroDocumento" pattern="[0-9]*"  maxlength$="[[numeroCaracteres]]" max$="[[numeroCaracteres]]" minlength$="[[numeroCaracteres]]"  label="Ingresar numero" value = "{{numDocumento}}" ></paper-input>
 							</div>
-							
+							<p class="recuerda">
+							(*)Recuerda que la generación del ticket nok implica la reserva del
+							 turno de atención en ventanilla. 
+							</p>
 							 <div id="captcha" style="width: 100%;">
 				                  <slot></slot>
 				              </div>
 							<div class="botonera">
-								<paper-button class="reservar" raised on-click="reservar">Reservar</paper-button>
+								<paper-button class="reservar" raised on-click="reservar">Generar Ticket</paper-button>
 								<paper-button raised on-click="cancelar">Cancelar</paper-button>
 							</div>
 							<div class="output"></div>
@@ -98,9 +101,8 @@
 						<p class="textEnAtencion" >En plataforma</p>
 						<div style="clear: both;"></div>
 						<p class="text-fecha-hora-atencion">Fecha y hora de atención: {{fecHoraAtencion}} hrs</p>
-						<p class="text-grey-light">Para poder atenderte, por favor, acércate a la
-													siguiente oficina y verifica que tu número se
-													muestre en la pantalla de espera:</p>
+						<p class="recuerda">(*)Recuerda que está prohibido el uso de celulares dentro de la oficina, 
+						por lo que te recomendamos recuerdes el número de ticket</p>
 						<div class = "content-franga-login">
 							<div class="box-init">
 								<div class="left">
@@ -114,7 +116,7 @@
 								</div>
 								<div class="usuario-atencion">
 									<iron-icon icon="my-icons:person"></iron-icon>
-									<div>Usuario en espera de atención: {{data.saturacion}}</div>
+									<div>Número estimado de clientes en espera: {{data.saturacion}}</div>
 								</div>
 							</div>
 						</div>
@@ -122,7 +124,7 @@
 						
 						<div class ="panel-constancia">
 						
-							<h3 class="text-grey-strong">Enviar constancia a tu celular:</h3>
+							<h3 class="text-grey-strong">Envia tu constancia a tu celular y/o correo electrónico:</h3>
 							
 							<div class="panel-envio-telefono">
 											
@@ -137,16 +139,14 @@
 							</div>
 							
 							<div class="content-input-form content-envio-telefono" >
-							<paper-input value = "{{numeroCelConstancia}}"></paper-input>
+							<paper-input value = "{{numeroCelConstancia}}" placeholder="Celular"></paper-input>
 							</div>
 							
 							</div>
-							
-							<h3 class="text-grey-strong">Enviar constancia a tu correo electrónico:</h3>
 							<div class="panel-envio-telefono">
 							
 							<div class="content-input-form" style="width: 100%;padding-top: 0px;margin-top: 0px;">
-								<paper-input value = "{{emailConstancia}}"></paper-input>
+								<paper-input value = "{{emailConstancia}}" placeholder="Correo electrónico"></paper-input>
 							</div>
 							</div>
 							
