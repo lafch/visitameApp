@@ -121,6 +121,11 @@
 		    };
     	}
     	
+    	paper-button.boton-ticket{
+			background-color: #0051A9;
+			color:#fff;
+    	}
+    	
     	@media (max-height: 660px) {
     		.titulo{
     			font-size: 1.1em; 
@@ -231,7 +236,7 @@
 					</div>
 				</div>
 				<div class="botonera" >
-					<paper-button class="boton" style="width:100%; margin-bottom:2%;" on-click="abrirLogin">Reservar ticket de atención</paper-button>
+					<paper-button class="boton boton-ticket" style="width:100%; margin-bottom:2%;" on-click="abrirLogin">Reservar ticket de atención</paper-button>
 					<paper-button class="boton" style="width:100%;" on-click="cerrarDetalle">Cancelar</paper-button>
 				</div>
 			</div>
@@ -569,6 +574,24 @@
 			          
 					}
 	    }
+	     reloadSizeDetalle() {
+	       this.altoHeader   = this.getParentApp().altoHeader;
+		   this.altoPantalla = this.getParentApp().altoPantalla;
+		   this.altoTotal    = this.altoPantalla - this.altoHeader;
+		   
+		   if(this.$.detalle.style.height !== "0px"){
+			   var alto = this.altoTotal/4;
+			   var altoDetalle = alto * 3;
+			   this.$.mapContent.style.height = alto+"px";
+			   this.$.detalle.style.height = altoDetalle+"px";   
+		   }else{
+			   this.$.mapContent.style.height = this.altoTotal+"px";   
+		   } 
+		   
+	       
+		   
+		   
+	     }
 	 
 	     ready() {
 	            super.ready();

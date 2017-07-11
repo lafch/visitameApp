@@ -5,36 +5,36 @@
 
     <template>
 		<style>
+			.ventana{
+				max-width: 400px;
+			}
 			img{
 				float: left; 
 				height: 40px;
 			}
-              .contenedor {
-                overflow: auto;
-                position: relative;
-                width: 200px;
-                margin:16px auto; 
-            }
-            .img-saturacion {
-                margin: 0px 17px 0 0;
-                width: 26px;
-                height: 34px;              
-                display: inline-block;
-            }
-            .titulo{
-                text-align: center;   
-                font-size: 5.1vw;
-			    font-weight: bold;
-			    font-family: 'Roboto', 'Noto', sans-serif;
-            }
-            .descripcion{ 
-   			 	
-				float: left;      
-                font-size: 4.1vw;
-				margin-left: 16px;
-				margin-top: 20px;
-				color: #a09e9e;
-            }	
+			
+			.leyenda-indicador-contenedor {
+				display: flex;
+				display: -webkit-flex; 
+				justify-content: center;
+				-webkit-justify-content: center;    
+				margin-top: 2%;
+			}
+			
+			.leyenda-indicador-contenedor-texto {
+				display: table; 
+				text-align: left;
+			} 
+			
+			.leyenda-indicador-texto {
+				display: table-cell; 
+				vertical-align: middle;
+			}
+			
+			.leyenda-indicador-img{
+				display: inline-table;
+			}
+			
 			.aceptar{
 				background: #0051A9;
 				color: #fff;
@@ -44,14 +44,13 @@
 				margin-bottom: 16px;
 				margin-top: 16px;
 			}
-			.boxshadow 
-			{
+			.boxshadow{
 			  -moz-box-shadow: 3px 3px 5px #535353;
 			  -webkit-box-shadow: 3px 3px 5px #535353;       
 			  box-shadow: 3px 3px 5px #535353;
 			}
-			.roundbox
-			{  
+			
+			.roundbox {  
 			  -moz-border-radius: 6px 6px 6px 6px;
 			  -webkit-border-radius: 6px;  
 			  border-radius: 6px 6px 6px 6px;

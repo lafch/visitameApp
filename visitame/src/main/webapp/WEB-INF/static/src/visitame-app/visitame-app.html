@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
@@ -55,23 +56,23 @@
 
   <modal-leyenda></modal-leyenda>
   <!-- Menu Toolbar -->
+<!--   <app-drawer-layout fullbleed> -->
   <app-drawer-layout fullbleed>
-    <app-drawer id="drawer" slot="drawer">
-      <iron-selector selected="[[pagina]]" attr-for-selected="name" class="drawer-list" role="navigation">
-        <a name="oficinas"  href="visitame/oficinas">Oficinas</a>
-        <a name="cajeros" href="visitame/cajeros">Cajeros</a>
-        <a name="agentes" href="visitame/agentes">Agentes</a>
-      </iron-selector>
-  </app-drawer>
-
+<!--     <app-drawer id="drawer" slot="drawer"> -->
+<!--       <iron-selector selected="[[pagina]]" attr-for-selected="name" class="drawer-list" role="navigation"> -->
+<!--         <a name="oficinas"  href="visitame/oficinas">Oficinas</a> -->
+<!--         <a name="cajeros" href="visitame/cajeros">Cajeros</a> -->
+<!--         <a name="agentes" href="visitame/agentes">Agentes</a> -->
+<!--       </iron-selector> -->
+<!--   </app-drawer> -->
     <!-- Main content -->
     <app-header-layout id = "headerMain" has-scrolling-region>
 
       <app-header id="header" slot="header"   effects="waterfall">
         <app-toolbar>
-          <paper-icon-button class="ver" icon="my-icons:menu" drawer-toggle></paper-icon-button>
+          <!--  <paper-icon-button class="ver" icon="my-icons:menu" drawer-toggle></paper-icon-button>-->
           <paper-icon-button class="back-btn" icon="arrow-back" aria-label="Atrás" on-click="_regresar"></paper-icon-button>
-          <div main-title>Visítame</div>
+          <div main-title style="text-align: center;">Visítame</div>
           
           <paper-icon-button icon="refresh" aria-label="Actualizar" on-click="_reload"></paper-icon-button>
           
@@ -126,7 +127,8 @@
      * @customElement
      * @polymer
      */
-     class VisitameApp extends Polymer.Element {
+//      class VisitameApp extends Polymer.Element {
+    class VisitameApp extends Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element){	
          static get is() { return 'visitame-app'; }
          static get properties() {
            return {
@@ -279,7 +281,6 @@
          }
          
          changeIconMapa(){
-        	 
       		if(this.iconoMapa === 'maps:streetview'){
        			this.iconoMapa = 'list';
        			this.mapaVisible = true;
@@ -287,13 +288,11 @@
        	  		this.iconoMapa = 'maps:streetview';
        	  		this.mapaVisible = false;
        	  	}
-      		
-      		
          }
          
          _verMapa(){
-        	 let viewOrigen = null;
-          	
+        	let viewOrigen = null;
+        	
   	  		if(this.pagina === "oficinas"){
   	  			viewOrigen = this.$.viewVisitas;
   	  		viewOrigen.clearDetalleOficina();
@@ -303,11 +302,8 @@
    	  			viewOrigen = this.$.viewAgentes;	
    	  		}
   	  		
-  	  	 this.changeIconMapa();
-  	  		
-  	  	 viewOrigen.cargarMapa(this.center);
-  	  		
-  	  		
+  	  	 	this.changeIconMapa();
+  	  	 	viewOrigen.cargarMapa(this.center);
          }
 
     	 init(loading){
@@ -365,6 +361,27 @@
        	  this.altoHeader   = this.$.header.clientHeight;
        	  this.altoPantalla = this.parentElement.clientHeight;
          }
+         
+        connectedCallback() {
+        	  super.connectedCallback();
+        	  this.addEventListener('iron-resize', this._onIronResize);
+        }
+
+        disconnectedCallback() {
+        	  super.disconnectedCallback();
+        	  this.removeEventListener('iron-resize', this._onIronResize);
+        }
+        
+        _onIronResize(){
+        	if(this.pagina === "oficinas"){
+        		this.altoHeader   = this.$.header.clientHeight;
+            	this.altoPantalla = this.parentElement.clientHeight;
+            	this.SyncObject(()=>{
+            		let mapa = this.$.viewVisitas.getMapaOficina();
+            		mapa.reloadSizeDetalle();
+            	});
+        	}
+        }
 
          _regresar(){
        	  window.location.href='visitame/oficinas';
