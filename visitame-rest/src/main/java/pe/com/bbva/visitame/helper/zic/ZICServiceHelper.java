@@ -14,6 +14,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import pe.com.bbva.visitame.dominio.gt.AuthenticationDatum;
 import pe.com.bbva.visitame.dominio.gt.AuthenticationRequest;
 import pe.com.bbva.visitame.dominio.gt.BackendUserRequest;
@@ -33,6 +35,9 @@ public class ZICServiceHelper {
 
 	@Value("${visitame.servicio.rest.grantingTicket.url}")
 	private String urlGrantingTicket;	
+	
+	@Value("${visitame.servicio.rest.grantingTicket.url.cal}")
+	private String urlGrantingTicketcal;	
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -92,4 +97,60 @@ public class ZICServiceHelper {
 		return null;
 	}
 	
+    
+ public String generarTSecCalidad() throws NegocioException {
+		
+    	
+//    	{
+//    		"authentication": {
+//    		  "userID": "ZM13006",
+//    		  "consumerID": "13000006",
+//    		  "authenticationType": "04",
+//    		  "authenticationData": [
+//    		    {
+//    		               "idAuthenticationData": "password",
+//    		       "authenticationData": [
+//    		             "147258"
+//    		       ]
+//    		    }
+//    		   ]
+//    		},
+//    		"backendUserRequest": {
+//    		   "userId": "",
+//    		   "accessCode": "",
+//    		   "dialogId": ""
+//    		}
+//    		}
+    	String picUser = DEFAULT_VISITAME_USER;		
+		
+    	AuthenticationRequest aReq = new AuthenticationRequest();
+		aReq.setUserID(DEFAULT_USER_ID); 
+		aReq.setConsumerID(picUser);
+		aReq.setAuthenticationType(IVTICKET_AUTHENTICATION_TYPE);
+		
+		AuthenticationDatum aDat = new AuthenticationDatum();
+		aDat.setIdAuthenticationData(IVTICKET_KEY);
+		aDat.setAuthenticationData(new ArrayList<String>());
+		aDat.getAuthenticationData().add(DEFAULT_AUTHENTICATION_DATA);
+		
+		List<AuthenticationDatum> listAuthenticationDatum = new ArrayList<AuthenticationDatum>();
+		listAuthenticationDatum.add(aDat);
+		aReq.setAuthenticationData(listAuthenticationDatum);
+		
+			
+		GrantingTicketRequest request = new GrantingTicketRequest();
+		request.setAuthentication(aReq);
+		request.setBackendUserRequest(new BackendUserRequest());
+		request.getBackendUserRequest().setAccessCode(StringUtils.EMPTY);
+		request.getBackendUserRequest().setDialogId(StringUtils.EMPTY);
+		request.getBackendUserRequest().setUserId(StringUtils.EMPTY);
+		
+		ResponseEntity<GrantingTicketResponse> responseEntity = restTemplate.postForEntity(urlGrantingTicketcal, request, GrantingTicketResponse.class);		
+		List<String> respuestas = responseEntity.getHeaders().get(HEADER_KEY_TSEC);
+		if(respuestas != null && !respuestas.isEmpty()){
+			return respuestas.get(0);
+		}		
+		return null;
+	}
+    
 }

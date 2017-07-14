@@ -1,7 +1,7 @@
 package pe.com.bbva.visitame.service.impl;
 
 import java.net.ConnectException;
-
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +25,10 @@ import pe.com.bbva.visitame.dominio.dto.cuenta.Customer;
 import pe.com.bbva.visitame.dominio.dto.cuenta.CustomerDetail;
 import pe.com.bbva.visitame.dominio.dto.zic.ZicResult;
 import pe.com.bbva.visitame.dominio.reniec.Ciudadano;
+import pe.com.bbva.visitame.dominio.sms.CelularSMS;
+import pe.com.bbva.visitame.dominio.sms.DistributionChannel;
+import pe.com.bbva.visitame.dominio.sms.EnvioSMSData;
+import pe.com.bbva.visitame.dominio.sms.Type;
 import pe.com.bbva.visitame.dominio.util.Constantes;
 import pe.com.bbva.visitame.dominio.util.Mensajes;
 import pe.com.bbva.visitame.exception.DAOException;
@@ -34,6 +38,7 @@ import pe.com.bbva.visitame.helper.cuenta.ZICServiceAccountHelper;
 import pe.com.bbva.visitame.helper.reniec.ReniecServiceHelper;
 import pe.com.bbva.visitame.service.AccountService;
 import pe.com.bbva.visitame.service.ConfiguracionService;
+import pe.com.bbva.visitame.service.EnvioSMSService;
 import pe.com.bbva.visitame.service.GoogleService;
 import pe.com.bbva.visitame.service.TicketService;
 import pe.com.bbva.visitame.util.Busqueda;
@@ -71,6 +76,9 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 	@Autowired 
 	private HistoricoDAO historicoDAO;
 
+	@Autowired
+	private EnvioSMSService envioSMSService;
+	
 	@Override 
 	public CustomerDetail getCustomer(String documentNumber, String documentType , String test) throws NegocioException {
 
@@ -373,16 +381,75 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 			
 			this.registrarPersona(persona);
 
+			EnvioSMSData envioSMSData = new EnvioSMSData(); 
+
+			DistributionChannel distributionChannel = new DistributionChannel();
+
+			List<CelularSMS> recipients = new ArrayList<CelularSMS>();
+			CelularSMS celular = new CelularSMS();
+			Type type = new Type();
+			type.setId(tipoOperador);
+			celular.setType(type);
+			celular.setName(telefono);
+			recipients.add(celular);
+
+			distributionChannel.setRecipients(recipients);
+			envioSMSData.setDistributionChannel(distributionChannel);
+
+			this.prepararBodySMS(envioSMSData);
+			
+			envioSMSService.enviarSMSDescarga(envioSMSData);
+
 			result.put(Constantes.ETIQUETAS_CLASES.SUCCESS, true);
+			result.put(Constantes.ETIQUETAS_CLASES.SUCCESS_SMS, true);
 		}else{
 			result.put(Constantes.ETIQUETAS_CLASES.SUCCESS, false);
+			result.put(Constantes.ETIQUETAS_CLASES.SUCCESS_SMS, false);
 			System.out.println("Persona no está registrada en la Base de Datos");
 		}
 
 		result.put(Constantes.ETIQUETAS_CLASES.PERSONA, persona);
 		return result;
 	}
-
+	
+	
+	private EnvioSMSData prepararBodySMS(EnvioSMSData envioSMSData){
+		
+		String titulo = "Confirmación ticket";
+		
+		envioSMSData.setTitle(titulo);
+		
+		Parametro mensajeDescarga = null;
+		try {
+			mensajeDescarga = configuracionService.obtenerParametro(Constantes.PARAMETRO.MENSAJE_CONFIRMACION);
+		} catch (NegocioException e) {
+			e.printStackTrace();
+		}
+		
+		envioSMSData.setBody( mensajeDescarga.getTxValor());
+		
+		Type type = new Type();
+		type.setId("002");
+		envioSMSData.getDistributionChannel().setType(type);
+		envioSMSData.getDistributionChannel().setChannelSender("");
+		
+		Type sendingType = new Type();
+		sendingType.setId("I");
+		envioSMSData.getDistributionChannel().setSendingType(sendingType);
+		
+				
+		Type template = new Type();
+		template.setId("PLT00226");
+		
+		Type inboxDestination = new Type();
+		inboxDestination.setId("0006");
+		
+		envioSMSData.getDistributionChannel().setTemplate(template);
+		envioSMSData.getDistributionChannel().setInboxDestination(inboxDestination);
+		
+		return envioSMSData;
+		
+	}
 	
 	public void validarDatosHistorico(String email, String telefono, String tipoOperador,Persona persona) throws NegocioException{
 		

@@ -79,6 +79,7 @@ public final class Constantes {
 		public static final String BIT_UNIX_FILA = "BIT_UNIX_FILE";
 		public static final String EXPO_CONTROL_BITACORA = "EXPO_CTR_BIT";
 		public static final String COD_APP_PIC_PRE_IDM = "COD_APP_PIC_PRE_IDM";
+		public final static String MENSAJE_CONFIRMACION = "MENSAJE_CONFIRMACION";
 
 		public static final String MAXIMO_DELEGACIONES = "MAX_DEL";
 		public static final String RANGO_TIEMPO_DELEGACIONES = "MAX_TIEM_DEL";
@@ -1462,6 +1463,7 @@ public final class Constantes {
 		
 		public static final String PERSONA= "persona";
 		public static final String SUCCESS= "success";
+		public static final String SUCCESS_SMS= "sms_success";
 		public static final String CARNET_EXTRANJERIA= "CE";
 		public static final String ES_CLIENTE= "S";
 		public static final String NO_ES_CLIENTE= "N";
