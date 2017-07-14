@@ -184,6 +184,8 @@ UPDATE appvisitame.tvisita003_cfg_valor SET nb_icono = 'morado.png' WHERE cd_alt
 UPDATE appvisitame.tvisita003_cfg_valor SET nb_icono = 'amarillo.png' WHERE cd_alterno='MEDIA';
 UPDATE appvisitame.tvisita003_cfg_valor SET nb_icono = 'verde.png' WHERE cd_alterno='BAJA';
 
+INSERT INTO appvisitame.tvisita001_cfg_paramet (cd_parametro,nb_etiqueta,nb_glosa,tx_valor,cd_creador,tm_creacion,cd_editor,tm_edicion) 
+VALUES ('MENSAJE_CONFIRMACION','MENSAJE_CONFIRMACION','Mensaje de texto para confirmación de ticket','BBVA Continental\r\nTicket generado F128. Hora de emisión 9:00am en la Of. BBVA – Av. Las Begonias 425.Te esperamos. \r\n',0,'2017-06-30 16:46:22.006000',null,null);
 
 
 COMMIT;
