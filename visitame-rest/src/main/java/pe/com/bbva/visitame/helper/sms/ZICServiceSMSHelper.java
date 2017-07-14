@@ -10,10 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
 import com.google.gson.Gson;
-
-import pe.com.bbva.visitame.dominio.dto.cuenta.CustomerDetail;
 import pe.com.bbva.visitame.dominio.dto.zic.ZicResult;
 import pe.com.bbva.visitame.dominio.sms.EnvioSMSData;
 import pe.com.bbva.visitame.dominio.sms.EnvioSMSResponse;
@@ -42,9 +39,7 @@ public class ZICServiceSMSHelper {
 	public ZicResult enviarSMS(EnvioSMSData payload) throws NegocioException, ConnectException {
 		ZicResult resultService = null;
 		String tSec = this.zicServiceHelper.generarTSecCalidad();
-		for(int numeroIntento = 1; numeroIntento <= 2; numeroIntento++) {
-			//if(numeroIntento == 1) { tSec = this.zicServiceHelper.generarTSec(false); }
-			//else { tSec = this.zicServiceHelper.generarTSec(true); }			
+		for(int numeroIntento = 1; numeroIntento <= 2; numeroIntento++) {		
 			resultService = new ZicResult();
 			HttpHeaders headers = new HttpHeaders();
 			headers.add(HEADER_TSEC, tSec);
@@ -57,7 +52,6 @@ public class ZICServiceSMSHelper {
 
 			ResponseEntity<EnvioSMSResponse> responseEntity = null;			
 			try {
-				//ZICServiceHelper.imprimirPayload(payload);
 				logger.info(LOG_PROMPT + "Enviar mensaje de descarga - enviarSMS(): " + url.toString());				
 				Gson gson  =  new Gson();
 				String body = gson.toJson(payload);

@@ -1,6 +1,6 @@
 package pe.com.bbva.visitame.dominio.util;
 
-
+import pe.com.bbva.visitame.dominio.sms.Type;
 
 public final class Constantes {
 
@@ -1467,6 +1467,22 @@ public final class Constantes {
 		public static final String CARNET_EXTRANJERIA= "CE";
 		public static final String ES_CLIENTE= "S";
 		public static final String NO_ES_CLIENTE= "N";
+		
+
+		
+	}
+	
+	public static class ETIQUETAS_ENVIO_SMS {
+		
+		public static final String DISTRIBUTION_CHANNEL_TYPE_ID= "002";
+		public static final String DISTRIBUTION_CHANNEL_SENDING_TYPE= "I";
+		public static final String DISTRIBUTION_CHANNEL_TEMPLATE_ID= "PLT00226";
+		public static final String DISTRIBUTION_CHANNEL_INBOX_DESTINATION= "0006";
+		public static final String TITULO_MENSAJE = "Confirmación ticket";
+
+		public static final String VALIDACION_SMS_DATA= "envioSMSData";
+		public static final String VALIDACION_SMS_DISTRIBUTION_CHANNEL= "DistributionChannel";
+		public static final String VALIDACION_SMS_RECIPIENT= "Recipients";
 		
 	}
 	

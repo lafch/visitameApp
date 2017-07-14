@@ -8,11 +8,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-
 import pe.com.bbva.visitame.dao.HistoricoDAO;
 import pe.com.bbva.visitame.dao.IntentoLogueoDAO;
 import pe.com.bbva.visitame.dao.PersonaDAO;
@@ -36,6 +37,7 @@ import pe.com.bbva.visitame.exception.NegocioException;
 import pe.com.bbva.visitame.exception.SOAPException;
 import pe.com.bbva.visitame.helper.cuenta.ZICServiceAccountHelper;
 import pe.com.bbva.visitame.helper.reniec.ReniecServiceHelper;
+import pe.com.bbva.visitame.helper.sms.ZICServiceSMSHelper;
 import pe.com.bbva.visitame.service.AccountService;
 import pe.com.bbva.visitame.service.ConfiguracionService;
 import pe.com.bbva.visitame.service.EnvioSMSService;
@@ -78,6 +80,9 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 
 	@Autowired
 	private EnvioSMSService envioSMSService;
+	
+	private static final Logger logger = LogManager.getLogger(ZICServiceSMSHelper.class);	
+	private static final String LOG_PROMPT = "ZICServiceSMSHelper > ";
 	
 	@Override 
 	public CustomerDetail getCustomer(String documentNumber, String documentType , String test) throws NegocioException {
@@ -368,15 +373,13 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		if(persona != null){
 			if(email != null && !email.isEmpty()){
 				persona.setNbEmail(email);
-				//historico.setCorreo(email);
 			}
 			if(telefono != null && !telefono.isEmpty()){
 				persona.setNbTelefono(telefono);
-				//historico.setTelefono(telefono);
 			}
 			persona.setCdEditor(1);
 			persona.setTmEdicion(new Date());
-			
+			//Registro en la tabla Historico
 			validarDatosHistorico(email, telefono,tipoOperador,persona);
 			
 			this.registrarPersona(persona);
@@ -397,25 +400,25 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 			envioSMSData.setDistributionChannel(distributionChannel);
 
 			this.prepararBodySMS(envioSMSData);
-			
-			envioSMSService.enviarSMSDescarga(envioSMSData);
+			//Envío de SMS de confirmación
+			envioSMSService.enviarSMSConfirmacion(envioSMSData);
 
 			result.put(Constantes.ETIQUETAS_CLASES.SUCCESS, true);
 			result.put(Constantes.ETIQUETAS_CLASES.SUCCESS_SMS, true);
 		}else{
 			result.put(Constantes.ETIQUETAS_CLASES.SUCCESS, false);
 			result.put(Constantes.ETIQUETAS_CLASES.SUCCESS_SMS, false);
-			System.out.println("Persona no está registrada en la Base de Datos");
+
+			logger.info(LOG_PROMPT + "Persona no está registrada en la Base de Datos ");					
 		}
 
 		result.put(Constantes.ETIQUETAS_CLASES.PERSONA, persona);
 		return result;
 	}
 	
-	
 	private EnvioSMSData prepararBodySMS(EnvioSMSData envioSMSData){
 		
-		String titulo = "Confirmación ticket";
+		String titulo = Constantes.ETIQUETAS_ENVIO_SMS.TITULO_MENSAJE;
 		
 		envioSMSData.setTitle(titulo);
 		
@@ -425,24 +428,22 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		} catch (NegocioException e) {
 			e.printStackTrace();
 		}
-		
 		envioSMSData.setBody( mensajeDescarga.getTxValor());
 		
 		Type type = new Type();
-		type.setId("002");
+		type.setId(Constantes.ETIQUETAS_ENVIO_SMS.DISTRIBUTION_CHANNEL_TYPE_ID);
 		envioSMSData.getDistributionChannel().setType(type);
 		envioSMSData.getDistributionChannel().setChannelSender("");
 		
 		Type sendingType = new Type();
-		sendingType.setId("I");
+		sendingType.setId(Constantes.ETIQUETAS_ENVIO_SMS.DISTRIBUTION_CHANNEL_SENDING_TYPE);
 		envioSMSData.getDistributionChannel().setSendingType(sendingType);
 		
-				
 		Type template = new Type();
-		template.setId("PLT00226");
+		template.setId(Constantes.ETIQUETAS_ENVIO_SMS.DISTRIBUTION_CHANNEL_TEMPLATE_ID);
 		
 		Type inboxDestination = new Type();
-		inboxDestination.setId("0006");
+		inboxDestination.setId(Constantes.ETIQUETAS_ENVIO_SMS.DISTRIBUTION_CHANNEL_INBOX_DESTINATION);
 		
 		envioSMSData.getDistributionChannel().setTemplate(template);
 		envioSMSData.getDistributionChannel().setInboxDestination(inboxDestination);

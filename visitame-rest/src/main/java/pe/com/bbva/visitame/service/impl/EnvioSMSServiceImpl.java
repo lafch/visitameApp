@@ -18,25 +18,25 @@ import pe.com.bbva.visitame.service.EnvioSMSService;
 public class EnvioSMSServiceImpl extends BaseServiceImpl implements EnvioSMSService {
 
 	private static final long serialVersionUID = -2214341561996003286L;
-	private static final String LOG_PROMPT = "CampanhasService > ";
 	
 	@Autowired
 	private ZICServiceSMSHelper serviceSMSHelper;
 	 
 	@Override
-	public int enviarSMSDescarga(EnvioSMSData envioSMSData) throws NegocioException {
+	public int enviarSMSConfirmacion(EnvioSMSData envioSMSData) throws NegocioException {
 		if (envioSMSData == null) {
-			lanzarExcepcionMedia(NegocioException.CODIGO.NEG_ARGUMENTO_OBLIGATORIO, new Object[] { "envioSMSData" },
+			lanzarExcepcionMedia(NegocioException.CODIGO.NEG_ARGUMENTO_OBLIGATORIO, new Object[] { Constantes.ETIQUETAS_ENVIO_SMS.VALIDACION_SMS_DATA },
 					"Debe ingresar los siguientes argumentos: envioSMSData", null);
 		}
 		if (envioSMSData.getDistributionChannel() == null) {
-			lanzarExcepcionMedia(NegocioException.CODIGO.NEG_ARGUMENTO_OBLIGATORIO, new Object[] { "DistributionChannel" },
+			lanzarExcepcionMedia(NegocioException.CODIGO.NEG_ARGUMENTO_OBLIGATORIO, new Object[] { Constantes.ETIQUETAS_ENVIO_SMS.VALIDACION_SMS_DISTRIBUTION_CHANNEL },
 					"Debe ingresar los siguientes argumentos: DistributionChannel", null);
 		}
 		if (envioSMSData.getDistributionChannel().getRecipients() == null) {
-			lanzarExcepcionMedia(NegocioException.CODIGO.NEG_ARGUMENTO_OBLIGATORIO, new Object[] { "Recipients" },
+			lanzarExcepcionMedia(NegocioException.CODIGO.NEG_ARGUMENTO_OBLIGATORIO, new Object[] { Constantes.ETIQUETAS_ENVIO_SMS.VALIDACION_SMS_RECIPIENT },
 					"Debe ingresar los siguientes argumentos: Recipients", null);
 		}
+		
 		ZicResult result = null;
 		try {
 			result = serviceSMSHelper.enviarSMS(envioSMSData);

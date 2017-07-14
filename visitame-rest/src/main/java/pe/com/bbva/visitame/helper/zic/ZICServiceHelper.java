@@ -100,27 +100,6 @@ public class ZICServiceHelper {
     
  public String generarTSecCalidad() throws NegocioException {
 		
-    	
-//    	{
-//    		"authentication": {
-//    		  "userID": "ZM13006",
-//    		  "consumerID": "13000006",
-//    		  "authenticationType": "04",
-//    		  "authenticationData": [
-//    		    {
-//    		               "idAuthenticationData": "password",
-//    		       "authenticationData": [
-//    		             "147258"
-//    		       ]
-//    		    }
-//    		   ]
-//    		},
-//    		"backendUserRequest": {
-//    		   "userId": "",
-//    		   "accessCode": "",
-//    		   "dialogId": ""
-//    		}
-//    		}
     	String picUser = DEFAULT_VISITAME_USER;		
 		
     	AuthenticationRequest aReq = new AuthenticationRequest();

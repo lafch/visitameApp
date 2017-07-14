@@ -6,6 +6,6 @@ import pe.com.bbva.visitame.exception.NegocioException;
 public interface EnvioSMSService {
 
 	//Envio SMS
-	int enviarSMSDescarga(EnvioSMSData envioSMSData) throws NegocioException;
+	int enviarSMSConfirmacion(EnvioSMSData envioSMSData) throws NegocioException;
 	
 }
