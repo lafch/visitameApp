@@ -286,7 +286,7 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 						result.put(Constantes.ETIQUETAS_CLASES.SUCCESS, false);
 						return result;
 					}
-					persona = this.consultarReniec(documentNumber, desDocumentType);
+					persona = this.consultarReniec(documentNumber, documentType);
 					if(persona!=null)
 						this.registrarPersona(datosCustumer, persona);	
 				}
