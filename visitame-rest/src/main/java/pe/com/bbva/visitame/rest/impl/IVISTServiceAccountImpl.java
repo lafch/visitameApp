@@ -31,9 +31,9 @@ public class IVISTServiceAccountImpl implements IVISTServiceAccount {
 
 	@Override
 	public Map<String, Object>  actualizarDatosContacto(String documentNumber, String documentType, String email, String telefono,
-			String tipoOperador)
+			String tipoOperador,String nroTicket,String direccion)
 			throws ValidacionException, NegocioException {
-		return accountService.actualizarDatosContacto(documentNumber,documentType,email,telefono, tipoOperador);
+		return accountService.actualizarDatosContacto(documentNumber,documentType,email,telefono, tipoOperador,nroTicket, direccion);
 	}
 	
 }

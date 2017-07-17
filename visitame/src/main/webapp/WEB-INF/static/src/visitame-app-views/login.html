@@ -281,6 +281,9 @@
 		console.log(this.numDocumento)
  		console.log(this.tipoDocumento)
 		console.log(this.tipoOperador.data.cdAlterno)
+		
+		console.log(this.ticket);
+		console.log(data.address);
  		
  		
 
@@ -293,7 +296,10 @@
 						"documentType" :  this.tipoDocumento.id,
 						"telefono" : this.numeroCelConstancia,
 						"email" : this.emailConstancia,
-						"tipoOperador" : this.tipoOperador.data.cdAlterno
+						"tipoOperador" : this.tipoOperador.data.cdAlterno,
+						"nroTicket" : this.ticket,
+						"direccion" : data.address
+						
 					}
 		   });
 

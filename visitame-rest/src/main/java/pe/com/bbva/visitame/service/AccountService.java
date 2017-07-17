@@ -32,7 +32,7 @@ public interface AccountService {
 	
 	Persona obtenerPersonaDoiNumdocumento(String doi , String numDoc) throws NegocioException;
 	
-	Map<String, Object> actualizarDatosContacto(String documentNumber, String documentType , String email, String telefono, String tipoTelefono) throws NegocioException;
+	Map<String, Object> actualizarDatosContacto(String documentNumber, String documentType , String email, String telefono, String tipoTelefono,String nroTicket,String direccion) throws NegocioException;
 	
 	Integer contarIntentosPorDia(Integer documentType , String documentNumber , Date fecha) throws NegocioException;
 	

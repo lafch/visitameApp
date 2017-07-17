@@ -248,7 +248,7 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 	@Override
 	public Map<String, Object> validarUsuario(String documentNumber, String documentType , String desDocumentType ,String captchaResponse ,String ipRemote, String codOficina) throws NegocioException {
 		
-		this.validarCaptcha(captchaResponse , ipRemote);
+		//this.validarCaptcha(captchaResponse , ipRemote);
 		Map<String, Object> result = new HashMap<String, Object>();		
 		CustomerDetail datosCustumer = getCustomer(documentNumber, documentType,documentNumber+".json");
 		
@@ -363,7 +363,7 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 	
 	@Override
 	public Map<String, Object> actualizarDatosContacto(String documentNumber, String documentType ,
-			String email, String telefono,String tipoOperador) throws NegocioException {
+			String email, String telefono,String tipoOperador,String nroTicket,String direccion) throws NegocioException {
 		
 		Map<String, Object> result = new HashMap<String, Object>();		
 			
@@ -399,7 +399,7 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 			distributionChannel.setRecipients(recipients);
 			envioSMSData.setDistributionChannel(distributionChannel);
 
-			this.prepararBodySMS(envioSMSData);
+			this.prepararBodySMS(envioSMSData, nroTicket, direccion);
 			//Envío de SMS de confirmación
 			envioSMSService.enviarSMSConfirmacion(envioSMSData);
 
@@ -416,19 +416,21 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		return result;
 	}
 	
-	private EnvioSMSData prepararBodySMS(EnvioSMSData envioSMSData){
+	private EnvioSMSData prepararBodySMS(EnvioSMSData envioSMSData,String nroTicket,String direccion){
 		
 		String titulo = Constantes.ETIQUETAS_ENVIO_SMS.TITULO_MENSAJE;
 		
 		envioSMSData.setTitle(titulo);
 		
-		Parametro mensajeDescarga = null;
+		/*Parametro mensajeDescarga = null;
 		try {
 			mensajeDescarga = configuracionService.obtenerParametro(Constantes.PARAMETRO.MENSAJE_CONFIRMACION);
 		} catch (NegocioException e) {
 			e.printStackTrace();
-		}
-		envioSMSData.setBody( mensajeDescarga.getTxValor());
+		}*/
+		
+		String mensaje = "BBVA Continental\r\nTicket generado "+nroTicket+". Hora de emisión 9:00am en la "+direccion+".Te esperamos. \r\n";
+		envioSMSData.setBody(mensaje);
 		
 		Type type = new Type();
 		type.setId(Constantes.ETIQUETAS_ENVIO_SMS.DISTRIBUTION_CHANNEL_TYPE_ID);
